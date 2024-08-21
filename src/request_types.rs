@@ -39,6 +39,10 @@ pub struct DeleteGuideHrefRequest {
     pub variant: GuideHrefVariantEnum,
 }
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
+pub struct DeleteAssetRequest {
+    pub asset_id: String,
+}
+#[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct DeleteServiceAccountRequest {
     pub service_account_id: String,
 }
@@ -158,10 +162,17 @@ pub struct GetGuideContentRequest {
     pub guide_id: String,
 }
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
+pub struct ListAssetsRequest {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page: Option<i64>,
+}
+#[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct GetUserProjectRoleRequest {
     pub project_type: ProjectTypeEnum,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub project_id_or_name: Option<String>,
+    pub project_id: Option<String>,
 }
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct UpdateApiLinkRequest {
@@ -195,6 +206,11 @@ pub struct UpdateGuideRequest {
     pub version_id: String,
     pub guide_id: String,
     pub data: UpdateGuide,
+}
+#[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
+pub struct UpdateAssetRequest {
+    pub asset_id: String,
+    pub data: UpdateAsset,
 }
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct CreateApiLinkRequest {

@@ -119,7 +119,20 @@ let response = client
         project_id_or_name: "string".to_string(),
         version_id: "string".to_string(),
         guide_id: "string".to_string(),
-        variant: GuideHrefVariantEnum::Prev,
+        variant: GuideHrefVariantEnum::Next,
+    });
+```
+# delete_asset
+Delete an asset in your organization
+```rust
+use sideko_rest_api::Client;
+use sideko_rest_api::request_types::*;
+let client = Client::default()
+    .with_api_key_auth(&std::env::var("API_KEY").expect("API key not defined"))
+    .with_cookie_auth(&std::env::var("API_KEY").expect("API key not defined"));
+let response = client
+    .delete_asset(DeleteAssetRequest {
+        asset_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(),
     });
 ```
 # delete_service_account
@@ -371,7 +384,7 @@ let response = client
     .list_deployments(ListDeploymentsRequest {
         project_id_or_name: "string".to_string(),
         limit: Some(123),
-        target: Some(DeploymentTargetEnum::Production),
+        target: Some(DeploymentTargetEnum::Preview),
     });
 ```
 # get_deployment
@@ -507,14 +520,19 @@ let client = Client::default()
     .with_cookie_auth(&std::env::var("API_KEY").expect("API key not defined"));
 let response = client.get_organization();
 ```
-# get_assets
+# list_assets
 Get all assets for an organization
 ```rust
 use sideko_rest_api::Client;
+use sideko_rest_api::request_types::*;
 let client = Client::default()
     .with_api_key_auth(&std::env::var("API_KEY").expect("API key not defined"))
     .with_cookie_auth(&std::env::var("API_KEY").expect("API key not defined"));
-let response = client.get_assets();
+let response = client
+    .list_assets(ListAssetsRequest {
+        name: Some("string".to_string()),
+        page: Some(123),
+    });
 ```
 # list_organization_members
 Get users in the organization
@@ -564,7 +582,7 @@ let client = Client::default()
 let response = client
     .get_user_project_role(GetUserProjectRoleRequest {
         project_type: ProjectTypeEnum::Api,
-        project_id_or_name: Some("string".to_string()),
+        project_id: Some("string".to_string()),
     });
 ```
 # get_service_accounts
@@ -590,6 +608,8 @@ let response = client
         link_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(),
         data: UpdateApiLink {
             api_version_id: Some("3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string()),
+            build_request_enabled: Some(true),
+            include_mock_server: Some(true),
             nav_label: Some("string".to_string()),
             policy: Some(ApiLinkPolicyEnum::Latest),
             slug: Some("string".to_string()),
@@ -711,6 +731,23 @@ let response = client
         },
     });
 ```
+# update_asset
+Update an asset in your organization
+```rust
+use sideko_rest_api::Client;
+use sideko_rest_api::request_types::*;
+use sideko_rest_api::schemas::*;
+let client = Client::default()
+    .with_api_key_auth(&std::env::var("API_KEY").expect("API key not defined"))
+    .with_cookie_auth(&std::env::var("API_KEY").expect("API key not defined"));
+let response = client
+    .update_asset(UpdateAssetRequest {
+        asset_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(),
+        data: UpdateAsset {
+            name: Some("string".to_string()),
+        },
+    });
+```
 # create_api_link
 
 ```rust
@@ -724,8 +761,10 @@ let response = client
     .create_api_link(CreateApiLinkRequest {
         data: NewApiLink {
             api_version_id: Some("3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string()),
+            build_request_enabled: Some(true),
             doc_version_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(),
             group_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(),
+            include_mock_server: Some(true),
             nav_label: "string".to_string(),
             policy: Union::LatestApiLinkPolicy(LatestApiLinkPolicy {
                 api_project_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(),
@@ -807,7 +846,7 @@ let response = client
     .grant_api_project_role(GrantApiProjectRoleRequest {
         project_id_or_name: "string".to_string(),
         data: NewProjectRole {
-            role: ProjectRoleEnum::Viewer,
+            role: ProjectRoleEnum::Admin,
             user_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(),
         },
     });
@@ -865,7 +904,7 @@ let response = client
         project_id_or_name: "string".to_string(),
         data: NewDeployment {
             doc_version_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(),
-            target: DeploymentTargetEnum::Production,
+            target: DeploymentTargetEnum::Preview,
         },
     });
 ```
@@ -882,7 +921,7 @@ let response = client
     .grant_doc_project_role(GrantDocProjectRoleRequest {
         project_id_or_name: "string".to_string(),
         data: NewProjectRole {
-            role: ProjectRoleEnum::Viewer,
+            role: ProjectRoleEnum::Admin,
             user_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(),
         },
     });
@@ -948,7 +987,7 @@ let response = client
     });
 ```
 # upload_assets
-Add a assets like logos to an organization
+Add a assets like logos or other media to an organization
 ```rust
 use sideko_rest_api::Client;
 use sideko_rest_api::request_types::*;
@@ -977,7 +1016,7 @@ let response = client
         data: SdkProject {
             api_project_version_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a"
                 .to_string(),
-            language: GenerationLanguageEnum::Python,
+            language: GenerationLanguageEnum::Go,
             repo_name: Some("my-api-pytho".to_string()),
             semver: "1.0.0".to_string(),
         },
@@ -997,7 +1036,7 @@ let response = client
         data: UpdateSdkProject {
             api_project_version_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a"
                 .to_string(),
-            language: GenerationLanguageEnum::Python,
+            language: GenerationLanguageEnum::Go,
             semver: "1.0.0".to_string(),
         },
     });
@@ -1015,7 +1054,7 @@ let response = client
     .stateless_generate_sdk(StatelessGenerateSdkRequest {
         data: StatelessGenerateSdk {
             base_url: Some("http://127.0.0.1:8080/api".to_string()),
-            language: GenerationLanguageEnum::Python,
+            language: GenerationLanguageEnum::Go,
             openapi: "openapi: 3.0.0".to_string(),
             package_name: Some("my_sdk".to_string()),
             tests_mock_server_url: Some("http://127.0.0.1:8080/mock".to_string()),
@@ -1054,7 +1093,7 @@ let response = client
             name: "Documentation Publisher Service Account".to_string(),
             project_roles: vec![
                 UserProjectRole { project_id_or_name : "string".to_string(),
-                project_type : ProjectTypeEnum::Api, role : ProjectRoleEnum::Viewer }
+                project_type : ProjectTypeEnum::Api, role : ProjectRoleEnum::Admin }
             ],
         },
     });

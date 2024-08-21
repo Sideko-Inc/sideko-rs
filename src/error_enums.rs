@@ -41,6 +41,11 @@ pub enum DeleteGuideErrors {
 pub enum DeleteGuideHrefErrors {
     ApiError(serde_json::Value),
 }
+/// Unifies the possible errors from delete_asset
+#[derive(Debug, Clone)]
+pub enum DeleteAssetErrors {
+    ApiError(serde_json::Value),
+}
 /// Unifies the possible errors from delete_service_account
 #[derive(Debug, Clone)]
 pub enum DeleteServiceAccountErrors {
@@ -193,9 +198,9 @@ pub enum GetGuideContentErrors {
 pub enum GetOrganizationErrors {
     ApiError(serde_json::Value),
 }
-/// Unifies the possible errors from get_assets
+/// Unifies the possible errors from list_assets
 #[derive(Debug, Clone)]
-pub enum GetAssetsErrors {
+pub enum ListAssetsErrors {
     ApiError(serde_json::Value),
 }
 /// Unifies the possible errors from list_organization_members
@@ -256,6 +261,11 @@ pub enum UpdateDocProjectErrors {
 /// Unifies the possible errors from update_guide
 #[derive(Debug, Clone)]
 pub enum UpdateGuideErrors {
+    ApiError(serde_json::Value),
+}
+/// Unifies the possible errors from update_asset
+#[derive(Debug, Clone)]
+pub enum UpdateAssetErrors {
     ApiError(serde_json::Value),
 }
 /// Unifies the possible errors from create_api_link

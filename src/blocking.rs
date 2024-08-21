@@ -344,6 +344,41 @@ impl Client {
             }
         }
     }
+    /// Delete an asset in your organization
+    pub fn delete_asset(
+        &self,
+        request: DeleteAssetRequest,
+    ) -> result::Result<serde_json::Value, error_enums::DeleteAssetErrors> {
+        let endpoint = format!("/organization/asset/{}", request.asset_id);
+        let url = format!("{}{}", self.base_url, endpoint);
+        let query_params: Vec<(&str, String)> = vec![];
+        let unauthed_builder = ReqwestClient::default()
+            .delete(&url)
+            .query(&query_params);
+        let authed_builder = self
+            .builder_with_auth(unauthed_builder, &["ApiKeyAuth", "CookieAuth"]);
+        let response = authed_builder.send().map_err(result::Error::Dispatch)?;
+        let status_code = response.status().as_u16();
+        match status_code {
+            204 => {
+                let response_text = response.text().unwrap_or_default();
+                if response_text.is_empty() {
+                    return Ok(serde_json::json!({}));
+                }
+                let data = serde_json::from_str::<serde_json::Value>(&response_text)
+                    .unwrap();
+                Ok(data)
+            }
+            _ => {
+                Err(result::Error::BlockingApiError {
+                    status_code,
+                    method: "".to_string(),
+                    url: url.to_string(),
+                    response,
+                })
+            }
+        }
+    }
     pub fn delete_service_account(
         &self,
         request: DeleteServiceAccountRequest,
@@ -1250,12 +1285,19 @@ impl Client {
         }
     }
     /// Get all assets for an organization
-    pub fn get_assets(
+    pub fn list_assets(
         &self,
-    ) -> result::Result<Vec<Asset>, error_enums::GetAssetsErrors> {
+        request: ListAssetsRequest,
+    ) -> result::Result<Vec<ListAssetsPage>, error_enums::ListAssetsErrors> {
         let endpoint = "/organization/asset";
         let url = format!("{}{}", self.base_url, endpoint);
-        let query_params: Vec<(&str, String)> = vec![];
+        let mut query_params: Vec<(&str, String)> = vec![];
+        if let Some(name) = request.name {
+            query_params.push(("name", name.to_string()));
+        }
+        if let Some(page) = request.page {
+            query_params.push(("page", page.to_string()));
+        }
         let unauthed_builder = ReqwestClient::default().get(&url).query(&query_params);
         let authed_builder = self
             .builder_with_auth(unauthed_builder, &["ApiKeyAuth", "CookieAuth"]);
@@ -1264,7 +1306,8 @@ impl Client {
         match status_code {
             200 => {
                 let response_text = response.text().unwrap_or_default();
-                let data = serde_json::from_str::<Vec<Asset>>(&response_text).unwrap();
+                let data = serde_json::from_str::<Vec<ListAssetsPage>>(&response_text)
+                    .unwrap();
                 Ok(data)
             }
             _ => {
@@ -1402,8 +1445,8 @@ impl Client {
         let url = format!("{}{}", self.base_url, endpoint);
         let mut query_params: Vec<(&str, String)> = vec![];
         query_params.push(("project_type", request.project_type.to_string()));
-        if let Some(project_id_or_name) = request.project_id_or_name {
-            query_params.push(("project_id_or_name", project_id_or_name.to_string()));
+        if let Some(project_id) = request.project_id {
+            query_params.push(("project_id", project_id.to_string()));
         }
         let unauthed_builder = ReqwestClient::default().get(&url).query(&query_params);
         let authed_builder = self
@@ -1647,6 +1690,40 @@ impl Client {
             200 => {
                 let response_text = response.text().unwrap_or_default();
                 let data = serde_json::from_str::<Guide>(&response_text).unwrap();
+                Ok(data)
+            }
+            _ => {
+                Err(result::Error::BlockingApiError {
+                    status_code,
+                    method: "".to_string(),
+                    url: url.to_string(),
+                    response,
+                })
+            }
+        }
+    }
+    /// Update an asset in your organization
+    pub fn update_asset(
+        &self,
+        request: UpdateAssetRequest,
+    ) -> result::Result<Asset, error_enums::UpdateAssetErrors> {
+        let endpoint = format!("/organization/asset/{}", request.asset_id);
+        let url = format!("{}{}", self.base_url, endpoint);
+        let query_params: Vec<(&str, String)> = vec![];
+        let unauthed_builder = ReqwestClient::default().patch(&url).query(&query_params);
+        let authed_builder = self
+            .builder_with_auth(unauthed_builder, &["ApiKeyAuth", "CookieAuth"]);
+        let request_body: serde_json::Value = serde_json::to_value(request.data)
+            .map_err(result::Error::Serialize)?;
+        let response = authed_builder
+            .json(&request_body)
+            .send()
+            .map_err(result::Error::Dispatch)?;
+        let status_code = response.status().as_u16();
+        match status_code {
+            200 => {
+                let response_text = response.text().unwrap_or_default();
+                let data = serde_json::from_str::<Asset>(&response_text).unwrap();
                 Ok(data)
             }
             _ => {
@@ -2071,7 +2148,7 @@ impl Client {
             }
         }
     }
-    /// Add a assets like logos to an organization
+    /// Add a assets like logos or other media to an organization
     pub fn upload_assets(
         &self,
         request: UploadAssetsRequest,
@@ -2381,1200 +2458,5 @@ impl Client {
                 })
             }
         }
-    }
-}
-#[cfg(test)]
-mod tests {
-    /// Generated by Sideko (sideko.dev)
-    use super::*;
-    #[test]
-    fn test_delete_api_link_204_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .delete_api_link(DeleteApiLinkRequest {
-                link_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(),
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_delete_api_link_group_204_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .delete_api_link_group(DeleteApiLinkGroupRequest {
-                group_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(),
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_delete_api_project_204_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .delete_api_project(DeleteApiProjectRequest {
-                project_id_or_name: "string".to_string(),
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_delete_api_project_role_204_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .delete_api_project_role(DeleteApiProjectRoleRequest {
-                project_id_or_name: "string".to_string(),
-                user_id: "string".to_string(),
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_delete_doc_project_204_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .delete_doc_project(DeleteDocProjectRequest {
-                project_id_or_name: "string".to_string(),
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_delete_doc_project_role_204_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .delete_doc_project_role(DeleteDocProjectRoleRequest {
-                project_id_or_name: "string".to_string(),
-                user_id: "string".to_string(),
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_delete_guide_204_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .delete_guide(DeleteGuideRequest {
-                project_id_or_name: "string".to_string(),
-                version_id: "string".to_string(),
-                guide_id: "string".to_string(),
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_delete_guide_href_204_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .delete_guide_href(DeleteGuideHrefRequest {
-                project_id_or_name: "string".to_string(),
-                version_id: "string".to_string(),
-                guide_id: "string".to_string(),
-                variant: GuideHrefVariantEnum::Prev,
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_delete_service_account_204_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .delete_service_account(DeleteServiceAccountRequest {
-                service_account_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a"
-                    .to_string(),
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_health_check_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client.health_check();
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_ping_check_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client.ping_check();
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_list_api_links_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .list_api_links(ListApiLinksRequest {
-                doc_version_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(),
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_get_api_link_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .get_api_link(GetApiLinkRequest {
-                link_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(),
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_list_api_link_groups_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .list_api_link_groups(ListApiLinkGroupsRequest {
-                doc_version_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(),
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_list_api_projects_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client.list_api_projects();
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_get_api_project_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .get_api_project(GetApiProjectRequest {
-                project_id_or_name: "string".to_string(),
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_list_api_project_members_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .list_api_project_members(ListApiProjectMembersRequest {
-                project_id_or_name: "string".to_string(),
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_list_api_versions_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .list_api_versions(ListApiVersionsRequest {
-                project_id_or_name: "string".to_string(),
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_get_api_version_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .get_api_version(GetApiVersionRequest {
-                project_id_or_name: "string".to_string(),
-                version_id_or_semver: "string".to_string(),
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_get_api_version_openapi_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .get_api_version_openapi(GetApiVersionOpenapiRequest {
-                project_id_or_name: "string".to_string(),
-                version_id_or_semver: "string".to_string(),
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_get_api_version_stats_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .get_api_version_stats(GetApiVersionStatsRequest {
-                project_id_or_name: "string".to_string(),
-                version_id_or_semver: "string".to_string(),
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_exchange_code_for_key_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .exchange_code_for_key(ExchangeCodeForKeyRequest {
-                code: "string".to_string(),
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_login_callback_303_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .login_callback(LoginCallbackRequest {
-                code: "string".to_string(),
-                ..Default::default()
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_login_url_303_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .login_url(LoginUrlRequest {
-                ..Default::default()
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_cli_check_updates_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .cli_check_updates(CliCheckUpdatesRequest {
-                cli_version: "0.1.0".to_string(),
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_list_doc_projects_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client.list_doc_projects();
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_get_doc_project_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .get_doc_project(GetDocProjectRequest {
-                project_id_or_name: "string".to_string(),
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_list_deployments_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .list_deployments(ListDeploymentsRequest {
-                project_id_or_name: "string".to_string(),
-                ..Default::default()
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_get_deployment_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .get_deployment(GetDeploymentRequest {
-                project_id_or_name: "string".to_string(),
-                deployment_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(),
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_list_doc_project_members_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .list_doc_project_members(ListDocProjectMembersRequest {
-                project_id_or_name: "string".to_string(),
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_check_preview_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .check_preview(CheckPreviewRequest {
-                project_id_or_name: "string".to_string(),
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_get_doc_project_theme_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .get_doc_project_theme(GetDocProjectThemeRequest {
-                project_id_or_name: "string".to_string(),
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_list_doc_versions_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .list_doc_versions(ListDocVersionsRequest {
-                project_id_or_name: "string".to_string(),
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_get_doc_version_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .get_doc_version(GetDocVersionRequest {
-                project_id_or_name: "string".to_string(),
-                version_id: "string".to_string(),
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_list_guides_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .list_guides(ListGuidesRequest {
-                project_id_or_name: "string".to_string(),
-                version_id: "string".to_string(),
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_get_guide_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .get_guide(GetGuideRequest {
-                project_id_or_name: "string".to_string(),
-                version_id: "string".to_string(),
-                guide_id: "string".to_string(),
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_get_guide_content_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .get_guide_content(GetGuideContentRequest {
-                project_id_or_name: "string".to_string(),
-                version_id: "string".to_string(),
-                guide_id: "string".to_string(),
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_get_organization_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client.get_organization();
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_get_assets_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client.get_assets();
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_list_organization_members_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client.list_organization_members();
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_get_organization_theme_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client.get_organization_theme();
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_get_current_user_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client.get_current_user();
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_get_api_key_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client.get_api_key();
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_get_user_project_role_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .get_user_project_role(GetUserProjectRoleRequest {
-                project_type: ProjectTypeEnum::Api,
-                ..Default::default()
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_get_service_accounts_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client.get_service_accounts();
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_update_api_link_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .update_api_link(UpdateApiLinkRequest {
-                link_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(),
-                data: UpdateApiLink {
-                    ..Default::default()
-                },
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_update_api_link_group_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .update_api_link_group(UpdateApiLinkGroupRequest {
-                group_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(),
-                data: UpdateApiLinkGroup {
-                    ..Default::default()
-                },
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_update_api_project_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .update_api_project(UpdateApiProjectRequest {
-                project_id_or_name: "string".to_string(),
-                data: UpdateApiProject {
-                    ..Default::default()
-                },
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_update_api_version_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .update_api_version(UpdateApiVersionRequest {
-                project_id_or_name: "string".to_string(),
-                version_id_or_semver: "string".to_string(),
-                data: UpdateApiVersion {
-                    ..Default::default()
-                },
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_update_doc_project_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .update_doc_project(UpdateDocProjectRequest {
-                project_id_or_name: "string".to_string(),
-                data: UpdateDocProject {
-                    ..Default::default()
-                },
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_update_guide_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .update_guide(UpdateGuideRequest {
-                project_id_or_name: "string".to_string(),
-                version_id: "string".to_string(),
-                guide_id: "string".to_string(),
-                data: UpdateGuide {
-                    ..Default::default()
-                },
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_create_api_link_201_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .create_api_link(CreateApiLinkRequest {
-                data: NewApiLink {
-                    doc_version_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a"
-                        .to_string(),
-                    group_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(),
-                    nav_label: "string".to_string(),
-                    policy: Union::LatestApiLinkPolicy(LatestApiLinkPolicy {
-                        api_project_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a"
-                            .to_string(),
-                        type_field: LatestApiLinkPolicyTypeEnum::Latest,
-                    }),
-                    slug: "string".to_string(),
-                    ..Default::default()
-                },
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_reorder_api_links_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .reorder_api_links(ReorderApiLinksRequest {
-                data: ApiReorder {
-                    doc_version_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a"
-                        .to_string(),
-                    groups: vec![
-                        ApiLinkGroupReorder { id :
-                        "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(), order :
-                        123 }
-                    ],
-                    links: vec![
-                        ApiLinkReorder { group_id :
-                        "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(), id :
-                        "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(), order :
-                        123 }
-                    ],
-                },
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_create_api_link_group_201_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .create_api_link_group(CreateApiLinkGroupRequest {
-                data: NewApiLinkGroup {
-                    doc_version_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a"
-                        .to_string(),
-                    nav_label: "string".to_string(),
-                    slug: "string".to_string(),
-                },
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_create_api_project_201_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .create_api_project(CreateApiProjectRequest {
-                data: NewApiProject {
-                    title: "my-api-spec".to_string(),
-                },
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_grant_api_project_role_201_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .grant_api_project_role(GrantApiProjectRoleRequest {
-                project_id_or_name: "string".to_string(),
-                data: NewProjectRole {
-                    role: ProjectRoleEnum::Viewer,
-                    user_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(),
-                },
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_create_api_version_201_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .create_api_version(CreateApiVersionRequest {
-                project_id_or_name: "string".to_string(),
-                data: NewApiVersion {
-                    openapi: "string".to_string(),
-                    semver: "string".to_string(),
-                    ..Default::default()
-                },
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_create_doc_project_201_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .create_doc_project(CreateDocProjectRequest {
-                data: NewDocProject {
-                    title: "my-company-docs".to_string(),
-                },
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_trigger_deployment_201_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .trigger_deployment(TriggerDeploymentRequest {
-                project_id_or_name: "string".to_string(),
-                data: NewDeployment {
-                    doc_version_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a"
-                        .to_string(),
-                    target: DeploymentTargetEnum::Production,
-                },
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_grant_doc_project_role_201_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .grant_doc_project_role(GrantDocProjectRoleRequest {
-                project_id_or_name: "string".to_string(),
-                data: NewProjectRole {
-                    role: ProjectRoleEnum::Viewer,
-                    user_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(),
-                },
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_create_guide_201_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .create_guide(CreateGuideRequest {
-                project_id_or_name: "string".to_string(),
-                version_id: "string".to_string(),
-                data: NewGuide {
-                    content: "string".to_string(),
-                    is_parent: true,
-                    nav_label: "string".to_string(),
-                    slug: "string".to_string(),
-                    ..Default::default()
-                },
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_reorder_guides_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .reorder_guides(ReorderGuidesRequest {
-                project_id_or_name: "string".to_string(),
-                version_id: "string".to_string(),
-                data: vec![
-                    ReorderGuide { id : "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a"
-                    .to_string(), order : 123, ..Default::default() }
-                ],
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_create_organization_201_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .create_organization(CreateOrganizationRequest {
-                data: NewOrganization {
-                    name: "string".to_string(),
-                    subdomain: "string".to_string(),
-                },
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_upload_assets_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .upload_assets(UploadAssetsRequest {
-                data: AssetUpload {
-                    file: "path/to/file.pdf".to_string(),
-                },
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_create_sdk_201_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .create_sdk(CreateSdkRequest {
-                data: SdkProject {
-                    api_project_version_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a"
-                        .to_string(),
-                    language: GenerationLanguageEnum::Python,
-                    semver: "1.0.0".to_string(),
-                    ..Default::default()
-                },
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_update_sdk_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .update_sdk(UpdateSdkRequest {
-                data: UpdateSdkProject {
-                    api_project_version_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a"
-                        .to_string(),
-                    language: GenerationLanguageEnum::Python,
-                    semver: "1.0.0".to_string(),
-                },
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_stateless_generate_sdk_201_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .stateless_generate_sdk(StatelessGenerateSdkRequest {
-                data: StatelessGenerateSdk {
-                    language: GenerationLanguageEnum::Python,
-                    openapi: "openapi: 3.0.0".to_string(),
-                    ..Default::default()
-                },
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_invite_user_201_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .invite_user(InviteUserRequest {
-                data: Invite {
-                    email: "user@example.com".to_string(),
-                    role: OrganizationRoleEnum::Admin,
-                },
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_create_service_account_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .create_service_account(CreateServiceAccountRequest {
-                data: CreateServiceAccount {
-                    name: "Documentation Publisher Service Account".to_string(),
-                    project_roles: vec![
-                        UserProjectRole { project_id_or_name : "string".to_string(),
-                        project_type : ProjectTypeEnum::Api, role :
-                        ProjectRoleEnum::Viewer }
-                    ],
-                },
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_vercel_webhook_202_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .vercel_webhook(VercelWebhookRequest {
-                data: serde_json::json!({}),
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_update_doc_project_theme_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .update_doc_project_theme(UpdateDocProjectThemeRequest {
-                project_id_or_name: "string".to_string(),
-                data: ThemeValues {
-                    ..Default::default()
-                },
-            });
-        assert!(response.is_ok());
-    }
-    #[test]
-    fn test_update_organization_theme_200_generated() {
-        let client = Client::default()
-            .with_api_key_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            )
-            .with_cookie_auth(
-                &std::env::var("API_KEY").expect("API key not defined"),
-            );
-        let response = client
-            .update_organization_theme(UpdateOrganizationThemeRequest {
-                data: ThemeValues {
-                    ..Default::default()
-                },
-            });
-        assert!(response.is_ok());
     }
 }

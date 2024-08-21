@@ -170,6 +170,13 @@ pub struct OrganizationFeatures {
     pub max_teamates: i64,
 }
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
+pub struct Pagination {
+    pub page: i64,
+    pub page_count: i64,
+    pub page_limit: i64,
+    pub total_count: i64,
+}
+#[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct OrganizationMember {
     pub avatar_url: String,
     pub email: String,
@@ -205,6 +212,10 @@ pub struct ServiceAccount {
 pub struct UpdateApiLink {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_version_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub build_request_enabled: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_mock_server: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub nav_label: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -272,6 +283,11 @@ pub struct UpdateGuide {
     pub prev_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub slug: Option<String>,
+}
+#[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
+pub struct UpdateAsset {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
 }
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct LatestApiLinkPolicy {
@@ -400,10 +416,12 @@ pub struct CreateServiceAccount {
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct ApiLink {
     pub api_version: ApiLinkApiVersion,
+    pub build_request_enabled: bool,
     pub created_at: String,
     pub doc_version: ApiLinkDocVersion,
     pub group_id: String,
     pub id: String,
+    pub include_mock_server: bool,
     pub nav_label: String,
     pub order: i64,
     pub policy: ApiLinkPolicyEnum,
@@ -446,6 +464,7 @@ pub struct Deployment {
     pub current_prod: bool,
     pub doc_version: DocVersion,
     pub id: String,
+    pub metadata: serde_json::Value,
     pub status: DeploymentStatusEnum,
     pub target: DeploymentTargetEnum,
 }
@@ -481,6 +500,11 @@ pub struct Organization {
     pub subdomain: String,
 }
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
+pub struct ListAssetsPage {
+    pub pagination: Pagination,
+    pub results: Vec<Asset>,
+}
+#[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct UpdateDocProjectSettings {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action_button: Option<UpdateDocProjectSettingsActionButton>,
@@ -491,8 +515,12 @@ pub struct UpdateDocProjectSettings {
 pub struct NewApiLink {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_version_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub build_request_enabled: Option<bool>,
     pub doc_version_id: String,
     pub group_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_mock_server: Option<bool>,
     pub nav_label: String,
     pub policy: Union,
     pub slug: String,
@@ -541,16 +569,16 @@ impl Default for Union {
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub enum GuideHrefVariantEnum {
     #[default]
-    #[serde(rename = "prev")]
-    Prev,
     #[serde(rename = "next")]
     Next,
+    #[serde(rename = "prev")]
+    Prev,
 }
 impl std::fmt::Display for GuideHrefVariantEnum {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let str_val = match self {
-            GuideHrefVariantEnum::Prev => "prev",
             GuideHrefVariantEnum::Next => "next",
+            GuideHrefVariantEnum::Prev => "prev",
         };
         write!(f, "{}", str_val)
     }
@@ -575,19 +603,19 @@ impl std::fmt::Display for ApiLinkPolicyEnum {
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub enum ProjectRoleEnum {
     #[default]
-    #[serde(rename = "viewer")]
-    Viewer,
-    #[serde(rename = "contributor")]
-    Contributor,
     #[serde(rename = "admin")]
     Admin,
+    #[serde(rename = "contributor")]
+    Contributor,
+    #[serde(rename = "viewer")]
+    Viewer,
 }
 impl std::fmt::Display for ProjectRoleEnum {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let str_val = match self {
-            ProjectRoleEnum::Viewer => "viewer",
-            ProjectRoleEnum::Contributor => "contributor",
             ProjectRoleEnum::Admin => "admin",
+            ProjectRoleEnum::Contributor => "contributor",
+            ProjectRoleEnum::Viewer => "viewer",
         };
         write!(f, "{}", str_val)
     }
@@ -595,19 +623,19 @@ impl std::fmt::Display for ProjectRoleEnum {
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub enum ValidationSeverityEnum {
     #[default]
+    #[serde(rename = "error")]
+    Error,
     #[serde(rename = "info")]
     Info,
     #[serde(rename = "warning")]
     Warning,
-    #[serde(rename = "error")]
-    Error,
 }
 impl std::fmt::Display for ValidationSeverityEnum {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let str_val = match self {
+            ValidationSeverityEnum::Error => "error",
             ValidationSeverityEnum::Info => "info",
             ValidationSeverityEnum::Warning => "warning",
-            ValidationSeverityEnum::Error => "error",
         };
         write!(f, "{}", str_val)
     }
@@ -615,34 +643,34 @@ impl std::fmt::Display for ValidationSeverityEnum {
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub enum ErrorCodeEnum {
     #[default]
-    #[serde(rename = "forbidden")]
-    Forbidden,
-    #[serde(rename = "unauthorized")]
-    Unauthorized,
-    #[serde(rename = "not_found")]
-    NotFound,
-    #[serde(rename = "internal_server_error")]
-    InternalServerError,
     #[serde(rename = "Bad Request")]
     BadRequest,
-    #[serde(rename = "unavailable_subdomain")]
-    UnavailableSubdomain,
+    #[serde(rename = "forbidden")]
+    Forbidden,
+    #[serde(rename = "internal_server_error")]
+    InternalServerError,
     #[serde(rename = "invalid_openapi")]
     InvalidOpenapi,
     #[serde(rename = "invalid_url")]
     InvalidUrl,
+    #[serde(rename = "not_found")]
+    NotFound,
+    #[serde(rename = "unauthorized")]
+    Unauthorized,
+    #[serde(rename = "unavailable_subdomain")]
+    UnavailableSubdomain,
 }
 impl std::fmt::Display for ErrorCodeEnum {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let str_val = match self {
-            ErrorCodeEnum::Forbidden => "forbidden",
-            ErrorCodeEnum::Unauthorized => "unauthorized",
-            ErrorCodeEnum::NotFound => "not_found",
-            ErrorCodeEnum::InternalServerError => "internal_server_error",
             ErrorCodeEnum::BadRequest => "Bad Request",
-            ErrorCodeEnum::UnavailableSubdomain => "unavailable_subdomain",
+            ErrorCodeEnum::Forbidden => "forbidden",
+            ErrorCodeEnum::InternalServerError => "internal_server_error",
             ErrorCodeEnum::InvalidOpenapi => "invalid_openapi",
             ErrorCodeEnum::InvalidUrl => "invalid_url",
+            ErrorCodeEnum::NotFound => "not_found",
+            ErrorCodeEnum::Unauthorized => "unauthorized",
+            ErrorCodeEnum::UnavailableSubdomain => "unavailable_subdomain",
         };
         write!(f, "{}", str_val)
     }
@@ -652,17 +680,17 @@ pub enum CliUpdateSeverityEnum {
     #[default]
     #[serde(rename = "info")]
     Info,
-    #[serde(rename = "suggested")]
-    Suggested,
     #[serde(rename = "required")]
     Required,
+    #[serde(rename = "suggested")]
+    Suggested,
 }
 impl std::fmt::Display for CliUpdateSeverityEnum {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let str_val = match self {
             CliUpdateSeverityEnum::Info => "info",
-            CliUpdateSeverityEnum::Suggested => "suggested",
             CliUpdateSeverityEnum::Required => "required",
+            CliUpdateSeverityEnum::Suggested => "suggested",
         };
         write!(f, "{}", str_val)
     }
@@ -670,16 +698,16 @@ impl std::fmt::Display for CliUpdateSeverityEnum {
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub enum DeploymentTargetEnum {
     #[default]
-    #[serde(rename = "Production")]
-    Production,
     #[serde(rename = "Preview")]
     Preview,
+    #[serde(rename = "Production")]
+    Production,
 }
 impl std::fmt::Display for DeploymentTargetEnum {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let str_val = match self {
-            DeploymentTargetEnum::Production => "Production",
             DeploymentTargetEnum::Preview => "Preview",
+            DeploymentTargetEnum::Production => "Production",
         };
         write!(f, "{}", str_val)
     }
@@ -689,17 +717,17 @@ pub enum DocVersionStatusEnum {
     #[default]
     #[serde(rename = "Draft")]
     Draft,
-    #[serde(rename = "Publishing")]
-    Publishing,
     #[serde(rename = "Published")]
     Published,
+    #[serde(rename = "Publishing")]
+    Publishing,
 }
 impl std::fmt::Display for DocVersionStatusEnum {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let str_val = match self {
             DocVersionStatusEnum::Draft => "Draft",
-            DocVersionStatusEnum::Publishing => "Publishing",
             DocVersionStatusEnum::Published => "Published",
+            DocVersionStatusEnum::Publishing => "Publishing",
         };
         write!(f, "{}", str_val)
     }
@@ -738,17 +766,17 @@ pub enum ThemeOwnerEnum {
     #[default]
     #[serde(rename = "default")]
     Default,
-    #[serde(rename = "self")]
-    _Self,
     #[serde(rename = "organization")]
     Organization,
+    #[serde(rename = "self")]
+    _Self,
 }
 impl std::fmt::Display for ThemeOwnerEnum {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let str_val = match self {
             ThemeOwnerEnum::Default => "default",
-            ThemeOwnerEnum::_Self => "self",
             ThemeOwnerEnum::Organization => "organization",
+            ThemeOwnerEnum::_Self => "self",
         };
         write!(f, "{}", str_val)
     }
@@ -821,24 +849,24 @@ impl std::fmt::Display for PinnedApiLinkPolicyTypeEnum {
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub enum GenerationLanguageEnum {
     #[default]
-    #[serde(rename = "python")]
-    Python,
     #[serde(rename = "go")]
     Go,
-    #[serde(rename = "rust")]
-    Rust,
+    #[serde(rename = "python")]
+    Python,
     #[serde(rename = "ruby")]
     Ruby,
+    #[serde(rename = "rust")]
+    Rust,
     #[serde(rename = "typescript")]
     Typescript,
 }
 impl std::fmt::Display for GenerationLanguageEnum {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let str_val = match self {
-            GenerationLanguageEnum::Python => "python",
             GenerationLanguageEnum::Go => "go",
-            GenerationLanguageEnum::Rust => "rust",
+            GenerationLanguageEnum::Python => "python",
             GenerationLanguageEnum::Ruby => "ruby",
+            GenerationLanguageEnum::Rust => "rust",
             GenerationLanguageEnum::Typescript => "typescript",
         };
         write!(f, "{}", str_val)
