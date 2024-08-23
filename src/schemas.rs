@@ -2,6 +2,12 @@ pub struct BinaryResponse {
     pub content: bytes::Bytes,
 }
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
+pub struct Error {
+    pub error: ErrorErrorEnum,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+}
+#[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct GetHealthResponse {
     pub ok: bool,
 }
@@ -68,11 +74,6 @@ pub struct Stats {
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct UserApiKey {
     pub api_key: String,
-}
-#[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
-pub struct Error {
-    pub description: String,
-    pub error: ErrorCodeEnum,
 }
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct CliUpdate {
@@ -184,6 +185,13 @@ pub struct OrganizationMember {
     pub id: String,
     pub last_name: String,
     pub role: OrganizationRoleEnum,
+}
+#[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
+pub struct SdkProject {
+    pub api_project_version_id: String,
+    pub language: GenerationLanguageEnum,
+    pub name: String,
+    pub semver: String,
 }
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct User {
@@ -371,22 +379,8 @@ pub struct NewOrganization {
     pub subdomain: String,
 }
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
-pub struct AssetUpload {
+pub struct File {
     pub file: String,
-}
-#[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
-pub struct SdkProject {
-    pub api_project_version_id: String,
-    pub language: GenerationLanguageEnum,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub repo_name: Option<String>,
-    pub semver: String,
-}
-#[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
-pub struct UpdateSdkProject {
-    pub api_project_version_id: String,
-    pub language: GenerationLanguageEnum,
-    pub semver: String,
 }
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct NewSdkResponse {
@@ -567,6 +561,44 @@ impl Default for Union {
     }
 }
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
+pub enum ErrorErrorEnum {
+    #[default]
+    #[serde(rename = "Bad Request")]
+    BadRequest,
+    #[serde(rename = "forbidden")]
+    Forbidden,
+    #[serde(rename = "insufficient_features")]
+    InsufficientFeatures,
+    #[serde(rename = "internal_server_error")]
+    InternalServerError,
+    #[serde(rename = "invalid_openapi")]
+    InvalidOpenapi,
+    #[serde(rename = "invalid_url")]
+    InvalidUrl,
+    #[serde(rename = "not_found")]
+    NotFound,
+    #[serde(rename = "unauthorized")]
+    Unauthorized,
+    #[serde(rename = "unavailable_subdomain")]
+    UnavailableSubdomain,
+}
+impl std::fmt::Display for ErrorErrorEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let str_val = match self {
+            ErrorErrorEnum::BadRequest => "Bad Request",
+            ErrorErrorEnum::Forbidden => "forbidden",
+            ErrorErrorEnum::InsufficientFeatures => "insufficient_features",
+            ErrorErrorEnum::InternalServerError => "internal_server_error",
+            ErrorErrorEnum::InvalidOpenapi => "invalid_openapi",
+            ErrorErrorEnum::InvalidUrl => "invalid_url",
+            ErrorErrorEnum::NotFound => "not_found",
+            ErrorErrorEnum::Unauthorized => "unauthorized",
+            ErrorErrorEnum::UnavailableSubdomain => "unavailable_subdomain",
+        };
+        write!(f, "{}", str_val)
+    }
+}
+#[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub enum GuideHrefVariantEnum {
     #[default]
     #[serde(rename = "next")]
@@ -636,41 +668,6 @@ impl std::fmt::Display for ValidationSeverityEnum {
             ValidationSeverityEnum::Error => "error",
             ValidationSeverityEnum::Info => "info",
             ValidationSeverityEnum::Warning => "warning",
-        };
-        write!(f, "{}", str_val)
-    }
-}
-#[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
-pub enum ErrorCodeEnum {
-    #[default]
-    #[serde(rename = "Bad Request")]
-    BadRequest,
-    #[serde(rename = "forbidden")]
-    Forbidden,
-    #[serde(rename = "internal_server_error")]
-    InternalServerError,
-    #[serde(rename = "invalid_openapi")]
-    InvalidOpenapi,
-    #[serde(rename = "invalid_url")]
-    InvalidUrl,
-    #[serde(rename = "not_found")]
-    NotFound,
-    #[serde(rename = "unauthorized")]
-    Unauthorized,
-    #[serde(rename = "unavailable_subdomain")]
-    UnavailableSubdomain,
-}
-impl std::fmt::Display for ErrorCodeEnum {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let str_val = match self {
-            ErrorCodeEnum::BadRequest => "Bad Request",
-            ErrorCodeEnum::Forbidden => "forbidden",
-            ErrorCodeEnum::InternalServerError => "internal_server_error",
-            ErrorCodeEnum::InvalidOpenapi => "invalid_openapi",
-            ErrorCodeEnum::InvalidUrl => "invalid_url",
-            ErrorCodeEnum::NotFound => "not_found",
-            ErrorCodeEnum::Unauthorized => "unauthorized",
-            ErrorCodeEnum::UnavailableSubdomain => "unavailable_subdomain",
         };
         write!(f, "{}", str_val)
     }
@@ -802,6 +799,32 @@ impl std::fmt::Display for OrganizationRoleEnum {
     }
 }
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
+pub enum GenerationLanguageEnum {
+    #[default]
+    #[serde(rename = "go")]
+    Go,
+    #[serde(rename = "python")]
+    Python,
+    #[serde(rename = "ruby")]
+    Ruby,
+    #[serde(rename = "rust")]
+    Rust,
+    #[serde(rename = "typescript")]
+    Typescript,
+}
+impl std::fmt::Display for GenerationLanguageEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let str_val = match self {
+            GenerationLanguageEnum::Go => "go",
+            GenerationLanguageEnum::Python => "python",
+            GenerationLanguageEnum::Ruby => "ruby",
+            GenerationLanguageEnum::Rust => "rust",
+            GenerationLanguageEnum::Typescript => "typescript",
+        };
+        write!(f, "{}", str_val)
+    }
+}
+#[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub enum ProjectTypeEnum {
     #[default]
     #[serde(rename = "api")]
@@ -842,32 +865,6 @@ impl std::fmt::Display for PinnedApiLinkPolicyTypeEnum {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let str_val = match self {
             PinnedApiLinkPolicyTypeEnum::Pinned => "pinned",
-        };
-        write!(f, "{}", str_val)
-    }
-}
-#[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
-pub enum GenerationLanguageEnum {
-    #[default]
-    #[serde(rename = "go")]
-    Go,
-    #[serde(rename = "python")]
-    Python,
-    #[serde(rename = "ruby")]
-    Ruby,
-    #[serde(rename = "rust")]
-    Rust,
-    #[serde(rename = "typescript")]
-    Typescript,
-}
-impl std::fmt::Display for GenerationLanguageEnum {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let str_val = match self {
-            GenerationLanguageEnum::Go => "go",
-            GenerationLanguageEnum::Python => "python",
-            GenerationLanguageEnum::Ruby => "ruby",
-            GenerationLanguageEnum::Rust => "rust",
-            GenerationLanguageEnum::Typescript => "typescript",
         };
         write!(f, "{}", str_val)
     }

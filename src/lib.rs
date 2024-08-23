@@ -103,6 +103,46 @@ impl Client {
                     .unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteApiLinkErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteApiLinkErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteApiLinkErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteApiLinkErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -137,6 +177,46 @@ impl Client {
                     .unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteApiLinkGroupErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteApiLinkGroupErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteApiLinkGroupErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteApiLinkGroupErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -170,6 +250,46 @@ impl Client {
                 let data = serde_json::from_str::<serde_json::Value>(&response_text)
                     .unwrap();
                 Ok(data)
+            }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteApiProjectErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteApiProjectErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteApiProjectErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteApiProjectErrors::Status500(data),
+                })
             }
             _ => {
                 Err(result::Error::ApiError {
@@ -206,6 +326,46 @@ impl Client {
                 let data = serde_json::from_str::<serde_json::Value>(&response_text)
                     .unwrap();
                 Ok(data)
+            }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteApiProjectRoleErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteApiProjectRoleErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteApiProjectRoleErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteApiProjectRoleErrors::Status500(data),
+                })
             }
             _ => {
                 Err(result::Error::ApiError {
@@ -277,6 +437,46 @@ impl Client {
                     .unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteDocProjectRoleErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteDocProjectRoleErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteDocProjectRoleErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteDocProjectRoleErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -313,6 +513,46 @@ impl Client {
                 let data = serde_json::from_str::<serde_json::Value>(&response_text)
                     .unwrap();
                 Ok(data)
+            }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteGuideErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteGuideErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteGuideErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteGuideErrors::Status500(data),
+                })
             }
             _ => {
                 Err(result::Error::ApiError {
@@ -352,6 +592,46 @@ impl Client {
                     .unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteGuideHrefErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteGuideHrefErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteGuideHrefErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteGuideHrefErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -387,6 +667,46 @@ impl Client {
                     .unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteAssetErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteAssetErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteAssetErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteAssetErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -420,6 +740,46 @@ impl Client {
                 let data = serde_json::from_str::<serde_json::Value>(&response_text)
                     .unwrap();
                 Ok(data)
+            }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteServiceAccountErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteServiceAccountErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteServiceAccountErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "DELETE".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::DeleteServiceAccountErrors::Status500(data),
+                })
             }
             _ => {
                 Err(result::Error::ApiError {
@@ -505,6 +865,46 @@ impl Client {
                 let data = serde_json::from_str::<Vec<ApiLink>>(&response_text).unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListApiLinksErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListApiLinksErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListApiLinksErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListApiLinksErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -532,6 +932,46 @@ impl Client {
                 let response_text = response.text().await.unwrap_or_default();
                 let data = serde_json::from_str::<ApiLink>(&response_text).unwrap();
                 Ok(data)
+            }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetApiLinkErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetApiLinkErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetApiLinkErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetApiLinkErrors::Status500(data),
+                })
             }
             _ => {
                 Err(result::Error::ApiError {
@@ -563,6 +1003,46 @@ impl Client {
                     .unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListApiLinkGroupsErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListApiLinkGroupsErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListApiLinkGroupsErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListApiLinkGroupsErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -591,6 +1071,46 @@ impl Client {
                     .unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListApiProjectsErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListApiProjectsErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListApiProjectsErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListApiProjectsErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -618,6 +1138,46 @@ impl Client {
                 let response_text = response.text().await.unwrap_or_default();
                 let data = serde_json::from_str::<ApiProject>(&response_text).unwrap();
                 Ok(data)
+            }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetApiProjectErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetApiProjectErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetApiProjectErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetApiProjectErrors::Status500(data),
+                })
             }
             _ => {
                 Err(result::Error::ApiError {
@@ -648,6 +1208,46 @@ impl Client {
                     .unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListApiProjectMembersErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListApiProjectMembersErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListApiProjectMembersErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListApiProjectMembersErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -676,6 +1276,46 @@ impl Client {
                 let data = serde_json::from_str::<Vec<ApiVersion>>(&response_text)
                     .unwrap();
                 Ok(data)
+            }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListApiVersionsErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListApiVersionsErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListApiVersionsErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListApiVersionsErrors::Status500(data),
+                })
             }
             _ => {
                 Err(result::Error::ApiError {
@@ -708,6 +1348,46 @@ impl Client {
                 let data = serde_json::from_str::<ApiVersion>(&response_text).unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetApiVersionErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetApiVersionErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetApiVersionErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetApiVersionErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -738,6 +1418,46 @@ impl Client {
                 let response_text = response.text().await.unwrap_or_default();
                 let data = serde_json::from_str::<OpenApi>(&response_text).unwrap();
                 Ok(data)
+            }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetApiVersionOpenapiErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetApiVersionOpenapiErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetApiVersionOpenapiErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetApiVersionOpenapiErrors::Status500(data),
+                })
             }
             _ => {
                 Err(result::Error::ApiError {
@@ -770,6 +1490,46 @@ impl Client {
                 let data = serde_json::from_str::<Stats>(&response_text).unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetApiVersionStatsErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetApiVersionStatsErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetApiVersionStatsErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetApiVersionStatsErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -797,6 +1557,46 @@ impl Client {
                 let response_text = response.text().await.unwrap_or_default();
                 let data = serde_json::from_str::<UserApiKey>(&response_text).unwrap();
                 Ok(data)
+            }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ExchangeCodeForKeyErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ExchangeCodeForKeyErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ExchangeCodeForKeyErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ExchangeCodeForKeyErrors::Status500(data),
+                })
             }
             _ => {
                 Err(result::Error::ApiError {
@@ -902,6 +1702,46 @@ impl Client {
                     .unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CliCheckUpdatesErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CliCheckUpdatesErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CliCheckUpdatesErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CliCheckUpdatesErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -930,6 +1770,46 @@ impl Client {
                     .unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListDocProjectsErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListDocProjectsErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListDocProjectsErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListDocProjectsErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -957,6 +1837,46 @@ impl Client {
                 let response_text = response.text().await.unwrap_or_default();
                 let data = serde_json::from_str::<DocProject>(&response_text).unwrap();
                 Ok(data)
+            }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetDocProjectErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetDocProjectErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetDocProjectErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetDocProjectErrors::Status500(data),
+                })
             }
             _ => {
                 Err(result::Error::ApiError {
@@ -994,6 +1914,46 @@ impl Client {
                     .unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListDeploymentsErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListDeploymentsErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListDeploymentsErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListDeploymentsErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -1026,6 +1986,46 @@ impl Client {
                 let data = serde_json::from_str::<Deployment>(&response_text).unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetDeploymentErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetDeploymentErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetDeploymentErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetDeploymentErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -1055,6 +2055,46 @@ impl Client {
                     .unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListDocProjectMembersErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListDocProjectMembersErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListDocProjectMembersErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListDocProjectMembersErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -1083,6 +2123,46 @@ impl Client {
                 let data = serde_json::from_str::<bool>(&response_text).unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CheckPreviewErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CheckPreviewErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CheckPreviewErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CheckPreviewErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -1110,6 +2190,46 @@ impl Client {
                 let response_text = response.text().await.unwrap_or_default();
                 let data = serde_json::from_str::<Theme>(&response_text).unwrap();
                 Ok(data)
+            }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetDocProjectThemeErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetDocProjectThemeErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetDocProjectThemeErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetDocProjectThemeErrors::Status500(data),
+                })
             }
             _ => {
                 Err(result::Error::ApiError {
@@ -1140,6 +2260,46 @@ impl Client {
                     .unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListDocVersionsErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListDocVersionsErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListDocVersionsErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListDocVersionsErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -1169,6 +2329,46 @@ impl Client {
                 let response_text = response.text().await.unwrap_or_default();
                 let data = serde_json::from_str::<DocVersion>(&response_text).unwrap();
                 Ok(data)
+            }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetDocVersionErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetDocVersionErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetDocVersionErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetDocVersionErrors::Status500(data),
+                })
             }
             _ => {
                 Err(result::Error::ApiError {
@@ -1202,6 +2402,46 @@ impl Client {
                     .unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListGuidesErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListGuidesErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListGuidesErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListGuidesErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -1233,6 +2473,46 @@ impl Client {
                 let data = serde_json::from_str::<Guide>(&response_text).unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetGuideErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetGuideErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetGuideErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetGuideErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -1263,6 +2543,46 @@ impl Client {
                 let response_text = response.text().await.unwrap_or_default();
                 let data = serde_json::from_str::<GuideContent>(&response_text).unwrap();
                 Ok(data)
+            }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetGuideContentErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetGuideContentErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetGuideContentErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetGuideContentErrors::Status500(data),
+                })
             }
             _ => {
                 Err(result::Error::ApiError {
@@ -1328,6 +2648,46 @@ impl Client {
                     .unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListAssetsErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListAssetsErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListAssetsErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListAssetsErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -1362,6 +2722,46 @@ impl Client {
                     .unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListOrganizationMembersErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListOrganizationMembersErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListOrganizationMembersErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ListOrganizationMembersErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -1388,6 +2788,73 @@ impl Client {
             200 => {
                 let response_text = response.text().await.unwrap_or_default();
                 let data = serde_json::from_str::<Theme>(&response_text).unwrap();
+                Ok(data)
+            }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetOrganizationThemeErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetOrganizationThemeErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetOrganizationThemeErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetOrganizationThemeErrors::Status500(data),
+                })
+            }
+            _ => {
+                Err(result::Error::ApiError {
+                    status_code,
+                    method: "".to_string(),
+                    url: url.to_string(),
+                    response,
+                })
+            }
+        }
+    }
+    pub async fn list_sdks(
+        &self,
+    ) -> result::Result<SdkProject, error_enums::ListSdksErrors> {
+        let endpoint = "/sdk";
+        let url = format!("{}{}", self.base_url, endpoint);
+        let query_params: Vec<(&str, String)> = vec![];
+        let unauthed_builder = ReqwestClient::default().get(&url).query(&query_params);
+        let authed_builder = self
+            .builder_with_auth(unauthed_builder, &["ApiKeyAuth", "CookieAuth"]);
+        let response = authed_builder.send().await.map_err(result::Error::Dispatch)?;
+        let status_code = response.status().as_u16();
+        match status_code {
+            200 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<SdkProject>(&response_text).unwrap();
                 Ok(data)
             }
             _ => {
@@ -1417,6 +2884,46 @@ impl Client {
                 let data = serde_json::from_str::<User>(&response_text).unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetCurrentUserErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetCurrentUserErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetCurrentUserErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetCurrentUserErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -1443,6 +2950,46 @@ impl Client {
                 let response_text = response.text().await.unwrap_or_default();
                 let data = serde_json::from_str::<UserApiKey>(&response_text).unwrap();
                 Ok(data)
+            }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetApiKeyErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetApiKeyErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetApiKeyErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetApiKeyErrors::Status500(data),
+                })
             }
             _ => {
                 Err(result::Error::ApiError {
@@ -1478,6 +3025,46 @@ impl Client {
                     .unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetUserProjectRoleErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetUserProjectRoleErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetUserProjectRoleErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetUserProjectRoleErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -1505,6 +3092,46 @@ impl Client {
                 let data = serde_json::from_str::<Vec<ServiceAccount>>(&response_text)
                     .unwrap();
                 Ok(data)
+            }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetServiceAccountsErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetServiceAccountsErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetServiceAccountsErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "GET".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GetServiceAccountsErrors::Status500(data),
+                })
             }
             _ => {
                 Err(result::Error::ApiError {
@@ -1540,6 +3167,46 @@ impl Client {
                 let data = serde_json::from_str::<ApiLink>(&response_text).unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PATCH".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateApiLinkErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PATCH".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateApiLinkErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PATCH".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateApiLinkErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PATCH".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateApiLinkErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -1574,6 +3241,46 @@ impl Client {
                 let data = serde_json::from_str::<ApiLinkGroup>(&response_text).unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PATCH".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateApiLinkGroupErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PATCH".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateApiLinkGroupErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PATCH".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateApiLinkGroupErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PATCH".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateApiLinkGroupErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -1607,6 +3314,46 @@ impl Client {
                 let response_text = response.text().await.unwrap_or_default();
                 let data = serde_json::from_str::<ApiProject>(&response_text).unwrap();
                 Ok(data)
+            }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PATCH".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateApiProjectErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PATCH".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateApiProjectErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PATCH".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateApiProjectErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PATCH".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateApiProjectErrors::Status500(data),
+                })
             }
             _ => {
                 Err(result::Error::ApiError {
@@ -1645,6 +3392,46 @@ impl Client {
                 let data = serde_json::from_str::<ApiVersion>(&response_text).unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PATCH".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateApiVersionErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PATCH".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateApiVersionErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PATCH".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateApiVersionErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PATCH".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateApiVersionErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -1678,6 +3465,46 @@ impl Client {
                 let response_text = response.text().await.unwrap_or_default();
                 let data = serde_json::from_str::<DocProject>(&response_text).unwrap();
                 Ok(data)
+            }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PATCH".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateDocProjectErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PATCH".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateDocProjectErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PATCH".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateDocProjectErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PATCH".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateDocProjectErrors::Status500(data),
+                })
             }
             _ => {
                 Err(result::Error::ApiError {
@@ -1716,6 +3543,46 @@ impl Client {
                 let data = serde_json::from_str::<Guide>(&response_text).unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PATCH".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateGuideErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PATCH".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateGuideErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PATCH".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateGuideErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PATCH".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateGuideErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -1751,6 +3618,46 @@ impl Client {
                 let data = serde_json::from_str::<Asset>(&response_text).unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PATCH".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateAssetErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PATCH".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateAssetErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PATCH".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateAssetErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PATCH".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateAssetErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -1784,6 +3691,46 @@ impl Client {
                 let response_text = response.text().await.unwrap_or_default();
                 let data = serde_json::from_str::<ApiLink>(&response_text).unwrap();
                 Ok(data)
+            }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateApiLinkErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateApiLinkErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateApiLinkErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateApiLinkErrors::Status500(data),
+                })
             }
             _ => {
                 Err(result::Error::ApiError {
@@ -1819,6 +3766,46 @@ impl Client {
                 let data = serde_json::from_str::<ApiReorder>(&response_text).unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ReorderApiLinksErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ReorderApiLinksErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ReorderApiLinksErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ReorderApiLinksErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -1853,6 +3840,46 @@ impl Client {
                 let data = serde_json::from_str::<ApiLinkGroup>(&response_text).unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateApiLinkGroupErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateApiLinkGroupErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateApiLinkGroupErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateApiLinkGroupErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -1886,6 +3913,46 @@ impl Client {
                 let response_text = response.text().await.unwrap_or_default();
                 let data = serde_json::from_str::<ApiProject>(&response_text).unwrap();
                 Ok(data)
+            }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateApiProjectErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateApiProjectErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateApiProjectErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateApiProjectErrors::Status500(data),
+                })
             }
             _ => {
                 Err(result::Error::ApiError {
@@ -1922,6 +3989,46 @@ impl Client {
                     .unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GrantApiProjectRoleErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GrantApiProjectRoleErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GrantApiProjectRoleErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GrantApiProjectRoleErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -1956,6 +4063,46 @@ impl Client {
                 let data = serde_json::from_str::<ApiVersion>(&response_text).unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateApiVersionErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateApiVersionErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateApiVersionErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateApiVersionErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -1989,6 +4136,46 @@ impl Client {
                 let response_text = response.text().await.unwrap_or_default();
                 let data = serde_json::from_str::<DocProject>(&response_text).unwrap();
                 Ok(data)
+            }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateDocProjectErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateDocProjectErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateDocProjectErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateDocProjectErrors::Status500(data),
+                })
             }
             _ => {
                 Err(result::Error::ApiError {
@@ -2025,6 +4212,46 @@ impl Client {
                 let data = serde_json::from_str::<Deployment>(&response_text).unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::TriggerDeploymentErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::TriggerDeploymentErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::TriggerDeploymentErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::TriggerDeploymentErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -2059,6 +4286,46 @@ impl Client {
                 let data = serde_json::from_str::<serde_json::Value>(&response_text)
                     .unwrap();
                 Ok(data)
+            }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GrantDocProjectRoleErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GrantDocProjectRoleErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GrantDocProjectRoleErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::GrantDocProjectRoleErrors::Status500(data),
+                })
             }
             _ => {
                 Err(result::Error::ApiError {
@@ -2097,6 +4364,46 @@ impl Client {
                 let data = serde_json::from_str::<Guide>(&response_text).unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateGuideErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateGuideErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateGuideErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateGuideErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -2134,6 +4441,46 @@ impl Client {
                 let data = serde_json::from_str::<Vec<GuideWithChildren>>(&response_text)
                     .unwrap();
                 Ok(data)
+            }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ReorderGuidesErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ReorderGuidesErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ReorderGuidesErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::ReorderGuidesErrors::Status500(data),
+                })
             }
             _ => {
                 Err(result::Error::ApiError {
@@ -2174,6 +4521,46 @@ impl Client {
                 >(&response_text)
                     .unwrap();
                 Ok(data)
+            }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateOrganizationErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateOrganizationErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateOrganizationErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateOrganizationErrors::Status500(data),
+                })
             }
             _ => {
                 Err(result::Error::ApiError {
@@ -2216,6 +4603,46 @@ impl Client {
                 let data = serde_json::from_str::<Vec<Asset>>(&response_text).unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UploadAssetsErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UploadAssetsErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UploadAssetsErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UploadAssetsErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -2255,6 +4682,46 @@ impl Client {
                 };
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateSdkErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateSdkErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateSdkErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateSdkErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -2269,16 +4736,29 @@ impl Client {
         &self,
         request: UpdateSdkRequest,
     ) -> result::Result<NewSdkResponse, error_enums::UpdateSdkErrors> {
-        let endpoint = "/sdk/new_version";
+        let endpoint = format!("/sdk/{}/{}", request.name, request.semver);
         let url = format!("{}{}", self.base_url, endpoint);
-        let query_params: Vec<(&str, String)> = vec![];
+        let mut query_params: Vec<(&str, String)> = vec![];
+        if let Some(api_version_id_or_semver) = request.api_version_id_or_semver {
+            query_params
+                .push((
+                    "api_version_id_or_semver",
+                    api_version_id_or_semver.to_string(),
+                ));
+        }
         let unauthed_builder = ReqwestClient::default().post(&url).query(&query_params);
         let authed_builder = self
             .builder_with_auth(unauthed_builder, &["ApiKeyAuth", "CookieAuth"]);
-        let request_body: serde_json::Value = serde_json::to_value(request.data)
-            .map_err(result::Error::Serialize)?;
+        let mut form_data_body = reqwest_multipart::Form::new();
+        form_data_body = form_data_body
+            .part(
+                "file",
+                self
+                    .async_multipart_file(&request.data.file)
+                    .map_err(result::Error::File)?,
+            );
         let response = authed_builder
-            .json(&request_body)
+            .multipart(form_data_body)
             .send()
             .await
             .map_err(result::Error::Dispatch)?;
@@ -2289,6 +4769,46 @@ impl Client {
                 let data = serde_json::from_str::<NewSdkResponse>(&response_text)
                     .unwrap();
                 Ok(data)
+            }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateSdkErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateSdkErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateSdkErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateSdkErrors::Status500(data),
+                })
             }
             _ => {
                 Err(result::Error::ApiError {
@@ -2329,6 +4849,46 @@ impl Client {
                 };
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::StatelessGenerateSdkErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::StatelessGenerateSdkErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::StatelessGenerateSdkErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::StatelessGenerateSdkErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -2364,6 +4924,46 @@ impl Client {
                     .unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::InviteUserErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::InviteUserErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::InviteUserErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::InviteUserErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -2397,6 +4997,46 @@ impl Client {
                 let response_text = response.text().await.unwrap_or_default();
                 let data = serde_json::from_str::<UserApiKey>(&response_text).unwrap();
                 Ok(data)
+            }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateServiceAccountErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateServiceAccountErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateServiceAccountErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "POST".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::CreateServiceAccountErrors::Status500(data),
+                })
             }
             _ => {
                 Err(result::Error::ApiError {
@@ -2467,6 +5107,46 @@ impl Client {
                 let data = serde_json::from_str::<Theme>(&response_text).unwrap();
                 Ok(data)
             }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PUT".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateDocProjectThemeErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PUT".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateDocProjectThemeErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PUT".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateDocProjectThemeErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PUT".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateDocProjectThemeErrors::Status500(data),
+                })
+            }
             _ => {
                 Err(result::Error::ApiError {
                     status_code,
@@ -2501,6 +5181,46 @@ impl Client {
                 let response_text = response.text().await.unwrap_or_default();
                 let data = serde_json::from_str::<Theme>(&response_text).unwrap();
                 Ok(data)
+            }
+            400 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PUT".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateOrganizationThemeErrors::Status400(data),
+                })
+            }
+            401 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PUT".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateOrganizationThemeErrors::Status401(data),
+                })
+            }
+            404 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PUT".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateOrganizationThemeErrors::Status404(data),
+                })
+            }
+            500 => {
+                let response_text = response.text().await.unwrap_or_default();
+                let data = serde_json::from_str::<Error>(&response_text).unwrap();
+                Err(result::Error::Response {
+                    status_code,
+                    method: "PUT".to_string(),
+                    url: url.to_string(),
+                    data: error_enums::UpdateOrganizationThemeErrors::Status500(data),
+                })
             }
             _ => {
                 Err(result::Error::ApiError {

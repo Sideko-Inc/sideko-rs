@@ -270,7 +270,7 @@ pub struct CreateOrganizationRequest {
 }
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct UploadAssetsRequest {
-    pub data: AssetUpload,
+    pub data: File,
 }
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct CreateSdkRequest {
@@ -278,7 +278,11 @@ pub struct CreateSdkRequest {
 }
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct UpdateSdkRequest {
-    pub data: UpdateSdkProject,
+    pub name: String,
+    pub semver: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_version_id_or_semver: Option<String>,
+    pub data: File,
 }
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct StatelessGenerateSdkRequest {
