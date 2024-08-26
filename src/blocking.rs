@@ -2683,8 +2683,11 @@ impl Client {
             }),
         }
     }
-    pub fn list_sdks(&self) -> result::Result<Vec<SdkProject>, error_enums::ListSdksErrors> {
-        let endpoint = "/sdk";
+    pub fn list_sdks(
+        &self,
+        request: ListSdksRequest,
+    ) -> result::Result<Vec<SdkProject>, error_enums::ListSdksErrors> {
+        let endpoint = format!("/sdk/{}", request.api_id_or_name);
         let url = format!("{}{}", self.base_url, endpoint);
         let query_params: Vec<(&str, String)> = vec![];
         let unauthed_builder = ReqwestClient::default().get(&url).query(&query_params);

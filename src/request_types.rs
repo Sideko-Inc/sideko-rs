@@ -169,6 +169,10 @@ pub struct ListAssetsRequest {
     pub page: Option<i64>,
 }
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
+pub struct ListSdksRequest {
+    pub api_id_or_name: String,
+}
+#[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct GetUserProjectRoleRequest {
     pub project_type: ProjectTypeEnum,
     #[serde(skip_serializing_if = "Option::is_none")]
