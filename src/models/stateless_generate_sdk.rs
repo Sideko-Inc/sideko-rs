@@ -8,14 +8,12 @@ pub struct StatelessGenerateSdk {
     #[cfg_attr(feature = "cli", arg(id = "language", long = "language"))]
     pub language: crate::models::GenerationLanguageEnum,
     #[cfg_attr(feature = "cli", arg(id = "openapi", long = "openapi"))]
-    pub openapi: String,
+    #[cfg_attr(
+        feature = "cli",
+        arg(value_parser = crate::core::clap::parse_upload_file)
+    )]
+    pub openapi: crate::UploadFile,
     #[cfg_attr(feature = "cli", arg(id = "package-name", long = "package-name"))]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub package_name: Option<String>,
-    #[cfg_attr(
-        feature = "cli",
-        arg(id = "tests-mock-server-url", long = "tests-mock-server-url")
-    )]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub tests_mock_server_url: Option<String>,
 }

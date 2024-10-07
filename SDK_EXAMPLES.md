@@ -1541,9 +1541,9 @@ let res = client
         data: sideko_rest_api::models::StatelessGenerateSdk {
             base_url: Some("http://127.0.0.1:8080/api".to_string()),
             language: sideko_rest_api::models::GenerationLanguageEnum::Go,
-            openapi: "openapi: 3.0.0".to_string(),
+            openapi: sideko_rest_api::UploadFile::from_path("tests/file.pdf")
+                .unwrap(),
             package_name: Some("my_sdk".to_string()),
-            tests_mock_server_url: Some("http://127.0.0.1:8080/mock".to_string()),
         },
     })
     .await;

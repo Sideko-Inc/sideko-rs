@@ -1,6 +1,6 @@
 [package]
 name = "sideko_rest_api"
-version = "0.2.0-rc.3"
+version = "0.2.0-rc.4"
 edition = "2021"
 description = "Rust API Client for sideko_rest_api"
 license = "MIT"

@@ -2034,7 +2034,7 @@ enum SidekoCommand {
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api stateless-generate-sdk --base-url http://127.0.0.1:8080/api --language go --openapi 'openapi: 3.0.0' --package-name my_sdk --tests-mock-server-url http://127.0.0.1:8080/mock`
+    /// **Example:** `sideko-rest-api stateless-generate-sdk --base-url http://127.0.0.1:8080/api --language go --openapi ./tests/file.pdf --package-name my_sdk`
     #[command(name = "stateless-generate-sdk")]
     StatelessGenerateSdk(sideko_rest_api::StatelessGenerateSdkRequest),
     /// command
@@ -5525,11 +5525,9 @@ mod cli_tests {
                         "--language",
                         "go",
                         "--openapi",
-                        "'openapi: 3.0.0'",
+                        "./tests/file.pdf",
                         "--package-name",
                         "my_sdk",
-                        "--tests-mock-server-url",
-                        "http://127.0.0.1:8080/mock",
                     ]
                         .join(" "),
                 ),
