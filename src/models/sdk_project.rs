@@ -2,11 +2,8 @@
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct SdkProject {
-    #[cfg_attr(
-        feature = "cli",
-        arg(id = "api-project-version-id", long = "api-project-version-id")
-    )]
-    pub api_project_version_id: String,
+    #[cfg_attr(feature = "cli", arg(id = "api-id", long = "api-id"))]
+    pub api_id: String,
     #[cfg_attr(feature = "cli", arg(id = "language", long = "language"))]
     pub language: crate::models::GenerationLanguageEnum,
     #[cfg_attr(feature = "cli", arg(id = "name", long = "name"))]

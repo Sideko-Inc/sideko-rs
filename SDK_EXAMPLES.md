@@ -1489,8 +1489,7 @@ let client = sideko_rest_api::Client::default()
 let res = client
     .create_sdk(sideko_rest_api::CreateSdkRequest {
         data: sideko_rest_api::models::SdkProject {
-            api_project_version_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a"
-                .to_string(),
+            api_id: "my-api".to_string(),
             language: sideko_rest_api::models::GenerationLanguageEnum::Go,
             name: "my-api-python".to_string(),
             semver: "1.0.0".to_string(),

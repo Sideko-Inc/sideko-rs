@@ -2020,7 +2020,7 @@ enum SidekoCommand {
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api create-sdk --api-project-version-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --language go --name my-api-python --semver 1.0.0`
+    /// **Example:** `sideko-rest-api create-sdk --api-id my-api --language go --name my-api-python --semver 1.0.0`
     #[command(name = "create-sdk")]
     CreateSdk(sideko_rest_api::CreateSdkRequest),
     /// command
@@ -5410,8 +5410,8 @@ mod cli_tests {
                     &[
                         "sideko-rest-api",
                         "create-sdk",
-                        "--api-project-version-id",
-                        "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
+                        "--api-id",
+                        "my-api",
                         "--language",
                         "go",
                         "--name",
