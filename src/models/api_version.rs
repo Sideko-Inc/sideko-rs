@@ -4,7 +4,6 @@
 pub enum ApiVersion {
     StrEnum(crate::models::VersionTypeEnum),
     Str(String),
-    Str(String),
 }
 impl Default for ApiVersion {
     fn default() -> Self {
