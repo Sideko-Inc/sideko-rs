@@ -6,18 +6,6 @@ impl ApiClient {
     pub(crate) fn new(base_client: crate::core::base_client::BaseClient) -> Self {
         Self { base_client }
     }
-    pub fn role(&self) -> crate::resources::api::role::resource_client::RoleClient {
-        crate::resources::api::role::resource_client::RoleClient::new(
-            self.base_client.clone(),
-        )
-    }
-    pub fn members(
-        &self,
-    ) -> crate::resources::api::members::resource_client::MembersClient {
-        crate::resources::api::members::resource_client::MembersClient::new(
-            self.base_client.clone(),
-        )
-    }
     pub fn spec(&self) -> crate::resources::api::spec::resource_client::SpecClient {
         crate::resources::api::spec::resource_client::SpecClient::new(
             self.base_client.clone(),
@@ -28,7 +16,7 @@ impl ApiClient {
         &self,
         request: super::request_types::DeleteRequest,
     ) -> crate::SdkResult<()> {
-        let url = self.base_client.build_url(&format!("/api/{}", & request.id));
+        let url = self.base_client.build_url(&format!("/api/{}", & request.api_name));
         let mut builder = reqwest::Client::default().delete(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         builder = self
@@ -55,7 +43,7 @@ impl ApiClient {
         &self,
         request: super::request_types::GetRequest,
     ) -> crate::SdkResult<crate::models::Api> {
-        let url = self.base_client.build_url(&format!("/api/{}", & request.id));
+        let url = self.base_client.build_url(&format!("/api/{}", & request.api_name));
         let mut builder = reqwest::Client::default().get(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         builder = self
@@ -70,7 +58,7 @@ impl ApiClient {
         &self,
         request: super::request_types::PatchRequest,
     ) -> crate::SdkResult<crate::models::Api> {
-        let url = self.base_client.build_url(&format!("/api/{}", & request.id));
+        let url = self.base_client.build_url(&format!("/api/{}", & request.api_name));
         let mut builder = reqwest::Client::default().patch(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         builder = builder.header("content-type", "application/json");

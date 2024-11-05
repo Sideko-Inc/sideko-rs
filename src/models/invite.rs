@@ -4,6 +4,9 @@
 pub struct Invite {
     #[cfg_attr(feature = "cli", arg(id = "email", long = "email"))]
     pub email: String,
-    #[cfg_attr(feature = "cli", arg(id = "role", long = "role"))]
-    pub role: crate::models::OrganizationRoleEnum,
+    #[cfg_attr(
+        feature = "cli",
+        arg(id = "role-definition-id", long = "role-definition-id")
+    )]
+    pub role_definition_id: crate::models::RoleDefinitionIdEnum,
 }

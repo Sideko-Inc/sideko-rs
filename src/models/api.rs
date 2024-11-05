@@ -6,4 +6,6 @@ pub struct Api {
     pub created_at: String,
     #[cfg_attr(feature = "cli", arg(id = "id", long = "id"))]
     pub id: String,
+    #[cfg_attr(feature = "cli", arg(id = "name", long = "name"))]
+    pub name: String,
 }

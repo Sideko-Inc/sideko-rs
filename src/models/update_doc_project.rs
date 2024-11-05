@@ -11,6 +11,9 @@ pub struct UpdateDocProject {
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logos: Option<crate::models::UpdateDocProjectLogos>,
+    #[cfg_attr(feature = "cli", arg(id = "name", long = "name"))]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
     #[cfg_attr(feature = "cli", arg(id = "settings", long = "settings"))]
     #[cfg_attr(
         feature = "cli",
@@ -20,7 +23,4 @@ pub struct UpdateDocProject {
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub settings: Option<crate::models::UpdateDocProjectSettings>,
-    #[cfg_attr(feature = "cli", arg(id = "title", long = "title"))]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub title: Option<String>,
 }

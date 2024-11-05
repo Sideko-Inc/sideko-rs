@@ -4,11 +4,12 @@
 pub struct DocProject {
     #[cfg_attr(feature = "cli", arg(id = "created-at", long = "created-at"))]
     pub created_at: String,
+    #[cfg_attr(feature = "cli", arg(id = "current-version", long = "current-version"))]
     #[cfg_attr(
         feature = "cli",
-        arg(id = "current-version-id", long = "current-version-id")
+        arg(value_parser = crate::core::clap::parse_json::<crate::models::DocVersion>)
     )]
-    pub current_version_id: String,
+    pub current_version: crate::models::DocVersion,
     #[cfg_attr(feature = "cli", arg(id = "domains", long = "domains"))]
     #[cfg_attr(
         feature = "cli",
@@ -27,6 +28,8 @@ pub struct DocProject {
         )
     )]
     pub logos: crate::models::DocProjectLogos,
+    #[cfg_attr(feature = "cli", arg(id = "name", long = "name"))]
+    pub name: String,
     #[cfg_attr(feature = "cli", arg(id = "settings", long = "settings"))]
     #[cfg_attr(
         feature = "cli",
@@ -35,6 +38,4 @@ pub struct DocProject {
         )
     )]
     pub settings: crate::models::DocProjectSettings,
-    #[cfg_attr(feature = "cli", arg(id = "title", long = "title"))]
-    pub title: String,
 }

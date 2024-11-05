@@ -2,7 +2,7 @@
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct UpdateApi {
-    #[cfg_attr(feature = "cli", arg(id = "id", long = "id"))]
+    #[cfg_attr(feature = "cli", arg(id = "name", long = "name"))]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub id: Option<String>,
+    pub name: Option<String>,
 }

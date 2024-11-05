@@ -2,10 +2,16 @@
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct ApiSpec {
-    #[cfg_attr(feature = "cli", arg(id = "api-id", long = "api-id"))]
-    pub api_id: String,
+    #[cfg_attr(feature = "cli", arg(id = "api", long = "api"))]
+    #[cfg_attr(
+        feature = "cli",
+        arg(value_parser = crate::core::clap::parse_json::<crate::models::Api>)
+    )]
+    pub api: crate::models::Api,
     #[cfg_attr(feature = "cli", arg(id = "created-at", long = "created-at"))]
     pub created_at: String,
+    #[cfg_attr(feature = "cli", arg(id = "id", long = "id"))]
+    pub id: String,
     #[cfg_attr(feature = "cli", arg(id = "mock-server", long = "mock-server"))]
     #[cfg_attr(
         feature = "cli",

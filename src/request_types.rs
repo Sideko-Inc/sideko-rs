@@ -2,58 +2,46 @@
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct DeleteApiLinkRequest {
-    #[cfg_attr(feature = "cli", arg(id = "link-id", long = "link-id"))]
-    pub link_id: String,
+    #[cfg_attr(feature = "cli", arg(id = "id", long = "id"))]
+    pub id: String,
 }
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct DeleteApiLinkGroupRequest {
-    #[cfg_attr(feature = "cli", arg(id = "group-id", long = "group-id"))]
-    pub group_id: String,
+    #[cfg_attr(feature = "cli", arg(id = "id", long = "id"))]
+    pub id: String,
 }
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct DeleteDocProjectRequest {
-    #[cfg_attr(
-        feature = "cli",
-        arg(id = "project-id-or-name", long = "project-id-or-name")
-    )]
-    pub project_id_or_name: String,
-}
-#[cfg_attr(feature = "cli", derive(clap::Args))]
-#[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
-pub struct DeleteDocProjectRoleRequest {
-    #[cfg_attr(
-        feature = "cli",
-        arg(id = "project-id-or-name", long = "project-id-or-name")
-    )]
-    pub project_id_or_name: String,
-    #[cfg_attr(feature = "cli", arg(id = "user-id", long = "user-id"))]
-    pub user_id: String,
+    #[cfg_attr(feature = "cli", arg(id = "doc-name", long = "doc-name"))]
+    pub doc_name: String,
 }
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct DeleteGuideRequest {
+    #[cfg_attr(feature = "cli", arg(id = "doc-name", long = "doc-name"))]
+    pub doc_name: String,
+    #[cfg_attr(feature = "cli", arg(id = "doc-version", long = "doc-version"))]
     #[cfg_attr(
         feature = "cli",
-        arg(id = "project-id-or-name", long = "project-id-or-name")
+        arg(value_parser = crate::core::clap::parse_json::<crate::models::IdOrInt>)
     )]
-    pub project_id_or_name: String,
-    #[cfg_attr(feature = "cli", arg(id = "version-id", long = "version-id"))]
-    pub version_id: String,
+    pub doc_version: crate::models::IdOrInt,
     #[cfg_attr(feature = "cli", arg(id = "guide-id", long = "guide-id"))]
     pub guide_id: String,
 }
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct DeleteGuideHrefRequest {
+    #[cfg_attr(feature = "cli", arg(id = "doc-name", long = "doc-name"))]
+    pub doc_name: String,
+    #[cfg_attr(feature = "cli", arg(id = "doc-version", long = "doc-version"))]
     #[cfg_attr(
         feature = "cli",
-        arg(id = "project-id-or-name", long = "project-id-or-name")
+        arg(value_parser = crate::core::clap::parse_json::<crate::models::IdOrInt>)
     )]
-    pub project_id_or_name: String,
-    #[cfg_attr(feature = "cli", arg(id = "version-id", long = "version-id"))]
-    pub version_id: String,
+    pub doc_version: crate::models::IdOrInt,
     #[cfg_attr(feature = "cli", arg(id = "guide-id", long = "guide-id"))]
     pub guide_id: String,
     #[cfg_attr(feature = "cli", arg(id = "variant", long = "variant"))]
@@ -62,43 +50,40 @@ pub struct DeleteGuideHrefRequest {
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct DeleteAssetRequest {
-    #[cfg_attr(feature = "cli", arg(id = "asset-id", long = "asset-id"))]
-    pub asset_id: String,
+    #[cfg_attr(feature = "cli", arg(id = "id", long = "id"))]
+    pub id: String,
 }
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct DeleteServiceAccountRequest {
-    #[cfg_attr(
-        feature = "cli",
-        arg(id = "service-account-id", long = "service-account-id")
-    )]
-    pub service_account_id: String,
-}
-#[cfg_attr(feature = "cli", derive(clap::Args))]
-#[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
-pub struct GetApiVersionStatsRequest {
     #[cfg_attr(feature = "cli", arg(id = "id", long = "id"))]
     pub id: String,
-    #[cfg_attr(feature = "cli", arg(id = "version", long = "version"))]
-    pub version: String,
 }
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct ListApiLinksRequest {
-    #[cfg_attr(feature = "cli", arg(id = "doc-version-id", long = "doc-version-id"))]
-    pub doc_version_id: String,
+    #[cfg_attr(feature = "cli", arg(id = "doc-version", long = "doc-version"))]
+    #[cfg_attr(
+        feature = "cli",
+        arg(value_parser = crate::core::clap::parse_json::<crate::models::IdOrInt>)
+    )]
+    pub doc_version: crate::models::IdOrInt,
 }
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct GetApiLinkRequest {
-    #[cfg_attr(feature = "cli", arg(id = "link-id", long = "link-id"))]
-    pub link_id: String,
+    #[cfg_attr(feature = "cli", arg(id = "id", long = "id"))]
+    pub id: String,
 }
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct ListApiLinkGroupsRequest {
-    #[cfg_attr(feature = "cli", arg(id = "doc-version-id", long = "doc-version-id"))]
-    pub doc_version_id: String,
+    #[cfg_attr(feature = "cli", arg(id = "doc-version", long = "doc-version"))]
+    #[cfg_attr(
+        feature = "cli",
+        arg(value_parser = crate::core::clap::parse_json::<crate::models::IdOrInt>)
+    )]
+    pub doc_version: crate::models::IdOrInt,
 }
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
@@ -134,20 +119,14 @@ pub struct CliCheckUpdatesRequest {
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct GetDocProjectRequest {
-    #[cfg_attr(
-        feature = "cli",
-        arg(id = "project-id-or-name", long = "project-id-or-name")
-    )]
-    pub project_id_or_name: String,
+    #[cfg_attr(feature = "cli", arg(id = "doc-name", long = "doc-name"))]
+    pub doc_name: String,
 }
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct ListDeploymentsRequest {
-    #[cfg_attr(
-        feature = "cli",
-        arg(id = "project-id-or-name", long = "project-id-or-name")
-    )]
-    pub project_id_or_name: String,
+    #[cfg_attr(feature = "cli", arg(id = "doc-name", long = "doc-name"))]
+    pub doc_name: String,
     #[cfg_attr(feature = "cli", arg(id = "limit", long = "limit"))]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
@@ -158,86 +137,72 @@ pub struct ListDeploymentsRequest {
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct GetDeploymentRequest {
-    #[cfg_attr(
-        feature = "cli",
-        arg(id = "project-id-or-name", long = "project-id-or-name")
-    )]
-    pub project_id_or_name: String,
+    #[cfg_attr(feature = "cli", arg(id = "doc-name", long = "doc-name"))]
+    pub doc_name: String,
     #[cfg_attr(feature = "cli", arg(id = "deployment-id", long = "deployment-id"))]
     pub deployment_id: String,
 }
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
-pub struct ListDocProjectMembersRequest {
-    #[cfg_attr(
-        feature = "cli",
-        arg(id = "project-id-or-name", long = "project-id-or-name")
-    )]
-    pub project_id_or_name: String,
-}
-#[cfg_attr(feature = "cli", derive(clap::Args))]
-#[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct GetDocProjectThemeRequest {
-    #[cfg_attr(
-        feature = "cli",
-        arg(id = "project-id-or-name", long = "project-id-or-name")
-    )]
-    pub project_id_or_name: String,
+    #[cfg_attr(feature = "cli", arg(id = "doc-name", long = "doc-name"))]
+    pub doc_name: String,
 }
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct ListDocVersionsRequest {
-    #[cfg_attr(
-        feature = "cli",
-        arg(id = "project-id-or-name", long = "project-id-or-name")
-    )]
-    pub project_id_or_name: String,
+    #[cfg_attr(feature = "cli", arg(id = "doc-name", long = "doc-name"))]
+    pub doc_name: String,
 }
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct GetDocVersionRequest {
+    #[cfg_attr(feature = "cli", arg(id = "doc-name", long = "doc-name"))]
+    pub doc_name: String,
+    #[cfg_attr(feature = "cli", arg(id = "doc-version", long = "doc-version"))]
     #[cfg_attr(
         feature = "cli",
-        arg(id = "project-id-or-name", long = "project-id-or-name")
+        arg(value_parser = crate::core::clap::parse_json::<crate::models::IdOrInt>)
     )]
-    pub project_id_or_name: String,
-    #[cfg_attr(feature = "cli", arg(id = "version-id", long = "version-id"))]
-    pub version_id: String,
+    pub doc_version: crate::models::IdOrInt,
 }
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct ListGuidesRequest {
+    #[cfg_attr(feature = "cli", arg(id = "doc-name", long = "doc-name"))]
+    pub doc_name: String,
+    #[cfg_attr(feature = "cli", arg(id = "doc-version", long = "doc-version"))]
     #[cfg_attr(
         feature = "cli",
-        arg(id = "project-id-or-name", long = "project-id-or-name")
+        arg(value_parser = crate::core::clap::parse_json::<crate::models::IdOrInt>)
     )]
-    pub project_id_or_name: String,
-    #[cfg_attr(feature = "cli", arg(id = "version-id", long = "version-id"))]
-    pub version_id: String,
+    pub doc_version: crate::models::IdOrInt,
 }
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct GetGuideRequest {
+    #[cfg_attr(feature = "cli", arg(id = "doc-name", long = "doc-name"))]
+    pub doc_name: String,
+    #[cfg_attr(feature = "cli", arg(id = "doc-version", long = "doc-version"))]
     #[cfg_attr(
         feature = "cli",
-        arg(id = "project-id-or-name", long = "project-id-or-name")
+        arg(value_parser = crate::core::clap::parse_json::<crate::models::IdOrInt>)
     )]
-    pub project_id_or_name: String,
-    #[cfg_attr(feature = "cli", arg(id = "version-id", long = "version-id"))]
-    pub version_id: String,
+    pub doc_version: crate::models::IdOrInt,
     #[cfg_attr(feature = "cli", arg(id = "guide-id", long = "guide-id"))]
     pub guide_id: String,
 }
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct GetGuideContentRequest {
+    #[cfg_attr(feature = "cli", arg(id = "doc-name", long = "doc-name"))]
+    pub doc_name: String,
+    #[cfg_attr(feature = "cli", arg(id = "doc-version", long = "doc-version"))]
     #[cfg_attr(
         feature = "cli",
-        arg(id = "project-id-or-name", long = "project-id-or-name")
+        arg(value_parser = crate::core::clap::parse_json::<crate::models::IdOrInt>)
     )]
-    pub project_id_or_name: String,
-    #[cfg_attr(feature = "cli", arg(id = "version-id", long = "version-id"))]
-    pub version_id: String,
+    pub doc_version: crate::models::IdOrInt,
     #[cfg_attr(feature = "cli", arg(id = "guide-id", long = "guide-id"))]
     pub guide_id: String,
 }
@@ -253,56 +218,45 @@ pub struct ListAssetsRequest {
 }
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
-pub struct ListSdksRequest {
-    #[cfg_attr(feature = "cli", arg(id = "api-id", long = "api-id"))]
-    pub api_id: String,
-}
-#[cfg_attr(feature = "cli", derive(clap::Args))]
-#[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
-pub struct GetUserProjectRoleRequest {
-    #[cfg_attr(feature = "cli", arg(id = "project-type", long = "project-type"))]
-    pub project_type: crate::models::ProjectTypeEnum,
-    #[cfg_attr(feature = "cli", arg(id = "project-id", long = "project-id"))]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub project_id: Option<String>,
+pub struct GetServiceAccountRequest {
+    #[cfg_attr(feature = "cli", arg(id = "id", long = "id"))]
+    pub id: String,
 }
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct UpdateApiLinkRequest {
-    #[cfg_attr(feature = "cli", arg(id = "link-id", long = "link-id"))]
-    pub link_id: String,
+    #[cfg_attr(feature = "cli", arg(id = "id", long = "id"))]
+    pub id: String,
     #[cfg_attr(feature = "cli", command(flatten))]
     pub data: crate::models::UpdateApiLink,
 }
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct UpdateApiLinkGroupRequest {
-    #[cfg_attr(feature = "cli", arg(id = "group-id", long = "group-id"))]
-    pub group_id: String,
+    #[cfg_attr(feature = "cli", arg(id = "id", long = "id"))]
+    pub id: String,
     #[cfg_attr(feature = "cli", command(flatten))]
     pub data: crate::models::UpdateApiLinkGroup,
 }
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct UpdateDocProjectRequest {
-    #[cfg_attr(
-        feature = "cli",
-        arg(id = "project-id-or-name", long = "project-id-or-name")
-    )]
-    pub project_id_or_name: String,
+    #[cfg_attr(feature = "cli", arg(id = "doc-name", long = "doc-name"))]
+    pub doc_name: String,
     #[cfg_attr(feature = "cli", command(flatten))]
     pub data: crate::models::UpdateDocProject,
 }
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct UpdateGuideRequest {
+    #[cfg_attr(feature = "cli", arg(id = "doc-name", long = "doc-name"))]
+    pub doc_name: String,
+    #[cfg_attr(feature = "cli", arg(id = "doc-version", long = "doc-version"))]
     #[cfg_attr(
         feature = "cli",
-        arg(id = "project-id-or-name", long = "project-id-or-name")
+        arg(value_parser = crate::core::clap::parse_json::<crate::models::IdOrInt>)
     )]
-    pub project_id_or_name: String,
-    #[cfg_attr(feature = "cli", arg(id = "version-id", long = "version-id"))]
-    pub version_id: String,
+    pub doc_version: crate::models::IdOrInt,
     #[cfg_attr(feature = "cli", arg(id = "guide-id", long = "guide-id"))]
     pub guide_id: String,
     #[cfg_attr(feature = "cli", command(flatten))]
@@ -311,8 +265,8 @@ pub struct UpdateGuideRequest {
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct UpdateAssetRequest {
-    #[cfg_attr(feature = "cli", arg(id = "asset-id", long = "asset-id"))]
-    pub asset_id: String,
+    #[cfg_attr(feature = "cli", arg(id = "id", long = "id"))]
+    pub id: String,
     #[cfg_attr(feature = "cli", command(flatten))]
     pub data: crate::models::UpdateAsset,
 }
@@ -343,48 +297,36 @@ pub struct CreateDocProjectRequest {
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct TriggerDeploymentRequest {
-    #[cfg_attr(
-        feature = "cli",
-        arg(id = "project-id-or-name", long = "project-id-or-name")
-    )]
-    pub project_id_or_name: String,
+    #[cfg_attr(feature = "cli", arg(id = "doc-name", long = "doc-name"))]
+    pub doc_name: String,
     #[cfg_attr(feature = "cli", command(flatten))]
     pub data: crate::models::NewDeployment,
 }
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
-pub struct GrantDocProjectRoleRequest {
-    #[cfg_attr(
-        feature = "cli",
-        arg(id = "project-id-or-name", long = "project-id-or-name")
-    )]
-    pub project_id_or_name: String,
-    #[cfg_attr(feature = "cli", command(flatten))]
-    pub data: crate::models::NewProjectRole,
-}
-#[cfg_attr(feature = "cli", derive(clap::Args))]
-#[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct CreateGuideRequest {
+    #[cfg_attr(feature = "cli", arg(id = "doc-name", long = "doc-name"))]
+    pub doc_name: String,
+    #[cfg_attr(feature = "cli", arg(id = "doc-version", long = "doc-version"))]
     #[cfg_attr(
         feature = "cli",
-        arg(id = "project-id-or-name", long = "project-id-or-name")
+        arg(value_parser = crate::core::clap::parse_json::<crate::models::IdOrInt>)
     )]
-    pub project_id_or_name: String,
-    #[cfg_attr(feature = "cli", arg(id = "version-id", long = "version-id"))]
-    pub version_id: String,
+    pub doc_version: crate::models::IdOrInt,
     #[cfg_attr(feature = "cli", command(flatten))]
     pub data: crate::models::NewGuide,
 }
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct ReorderGuidesRequest {
+    #[cfg_attr(feature = "cli", arg(id = "doc-name", long = "doc-name"))]
+    pub doc_name: String,
+    #[cfg_attr(feature = "cli", arg(id = "doc-version", long = "doc-version"))]
     #[cfg_attr(
         feature = "cli",
-        arg(id = "project-id-or-name", long = "project-id-or-name")
+        arg(value_parser = crate::core::clap::parse_json::<crate::models::IdOrInt>)
     )]
-    pub project_id_or_name: String,
-    #[cfg_attr(feature = "cli", arg(id = "version-id", long = "version-id"))]
-    pub version_id: String,
+    pub doc_version: crate::models::IdOrInt,
     #[cfg_attr(feature = "cli", arg(id = "data", long = "data"))]
     #[cfg_attr(
         feature = "cli",
@@ -407,31 +349,6 @@ pub struct UploadAssetsRequest {
 }
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
-pub struct CreateSdkRequest {
-    #[cfg_attr(feature = "cli", command(flatten))]
-    pub data: crate::models::SdkProject,
-}
-#[cfg_attr(feature = "cli", derive(clap::Args))]
-#[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
-pub struct UpdateSdkRequest {
-    #[cfg_attr(feature = "cli", arg(id = "name", long = "name"))]
-    pub name: String,
-    #[cfg_attr(feature = "cli", arg(id = "semver", long = "semver"))]
-    pub semver: String,
-    #[cfg_attr(feature = "cli", arg(id = "api-version", long = "api-version"))]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub api_version: Option<String>,
-    #[cfg_attr(feature = "cli", command(flatten))]
-    pub data: crate::models::File,
-}
-#[cfg_attr(feature = "cli", derive(clap::Args))]
-#[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
-pub struct StatelessGenerateSdkRequest {
-    #[cfg_attr(feature = "cli", command(flatten))]
-    pub data: crate::models::StatelessGenerateSdk,
-}
-#[cfg_attr(feature = "cli", derive(clap::Args))]
-#[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct InviteUserRequest {
     #[cfg_attr(feature = "cli", command(flatten))]
     pub data: crate::models::Invite,
@@ -440,16 +357,13 @@ pub struct InviteUserRequest {
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct CreateServiceAccountRequest {
     #[cfg_attr(feature = "cli", command(flatten))]
-    pub data: crate::models::CreateServiceAccount,
+    pub data: crate::models::NewServiceAccount,
 }
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct UpdateDocProjectThemeRequest {
-    #[cfg_attr(
-        feature = "cli",
-        arg(id = "project-id-or-name", long = "project-id-or-name")
-    )]
-    pub project_id_or_name: String,
+    #[cfg_attr(feature = "cli", arg(id = "doc-name", long = "doc-name"))]
+    pub doc_name: String,
     #[cfg_attr(feature = "cli", command(flatten))]
     pub data: crate::models::ThemeValues,
 }

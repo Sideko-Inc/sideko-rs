@@ -18,7 +18,7 @@ pub struct UpdateApiSpec {
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub openapi: Option<crate::UploadFile>,
-    #[cfg_attr(feature = "cli", arg(id = "semver", long = "semver"))]
+    #[cfg_attr(feature = "cli", arg(id = "version", long = "version"))]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub semver: Option<String>,
+    pub version: Option<String>,
 }

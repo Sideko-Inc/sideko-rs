@@ -3,8 +3,14 @@
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct UpdateApiLink {
     #[cfg_attr(feature = "cli", arg(id = "api-version", long = "api-version"))]
+    #[cfg_attr(
+        feature = "cli",
+        arg(
+            value_parser = crate::core::clap::parse_json::<crate::models::UpdateApiLinkApiVersion>
+        )
+    )]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub api_version: Option<String>,
+    pub api_version: Option<crate::models::UpdateApiLinkApiVersion>,
     #[cfg_attr(
         feature = "cli",
         arg(id = "build-request-enabled", long = "build-request-enabled")

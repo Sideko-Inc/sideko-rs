@@ -7,7 +7,7 @@ pub(crate) struct BaseClient {
 impl BaseClient {
     pub fn build_url(&self, endpoint: &str) -> String {
         let base = self.base_url.to_string();
-        format!("{}/{}", base.trim_end_matches("/"), endpoint.trim_start_matches("/"))
+        format!("{}/{}", base.trim_end_matches('/'), endpoint.trim_start_matches('/'))
     }
     #[allow(unused)]
     pub fn apply_auths_to_builder(

@@ -2,20 +2,20 @@
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct DeleteRequest {
-    #[cfg_attr(feature = "cli", arg(id = "id", long = "id"))]
-    pub id: String,
+    #[cfg_attr(feature = "cli", arg(id = "api-name", long = "api-name"))]
+    pub api_name: String,
 }
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct GetRequest {
-    #[cfg_attr(feature = "cli", arg(id = "id", long = "id"))]
-    pub id: String,
+    #[cfg_attr(feature = "cli", arg(id = "api-name", long = "api-name"))]
+    pub api_name: String,
 }
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct PatchRequest {
-    #[cfg_attr(feature = "cli", arg(id = "id", long = "id"))]
-    pub id: String,
+    #[cfg_attr(feature = "cli", arg(id = "api-name", long = "api-name"))]
+    pub api_name: String,
     #[cfg_attr(feature = "cli", command(flatten))]
     pub data: crate::models::UpdateApi,
 }

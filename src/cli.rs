@@ -58,7 +58,7 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
             log::info!("API returned no content");
         }
         SidekoCommand::ApiSubcommand(
-            ApiSubcommand::ApiRoleSubcommand(ApiRoleSubcommand::Delete(req)),
+            ApiSubcommand::ApiSpecSubcommand(ApiSpecSubcommand::Delete(req)),
         ) => {
             let mut client = sideko_rest_api::Client::default();
             if let Ok(base_url) = std::env::var(base_url_env_var) {
@@ -73,7 +73,7 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
                 log::debug!("Adding api-key auth 'CookieAuth' (key=\"****\")");
                 client = client.with_cookie_auth(&val);
             }
-            client.api().role().delete(req).await?;
+            client.api().spec().delete(req).await?;
             log::info!("API returned no content");
         }
         SidekoCommand::DeleteApiLink(req) => {
@@ -127,23 +127,6 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
             client.delete_doc_project(req).await?;
             log::info!("API returned no content");
         }
-        SidekoCommand::DeleteDocProjectRole(req) => {
-            let mut client = sideko_rest_api::Client::default();
-            if let Ok(base_url) = std::env::var(base_url_env_var) {
-                client = client.with_base_url(&base_url);
-                log::debug!("Using custom base url: {base_url}");
-            }
-            if let Ok(val) = std::env::var("SIDEKO_REST_API_API_KEY_AUTH") {
-                log::debug!("Adding api-key auth 'ApiKeyAuth' (key=\"****\")");
-                client = client.with_api_key_auth(&val);
-            }
-            if let Ok(val) = std::env::var("SIDEKO_REST_API_COOKIE_AUTH") {
-                log::debug!("Adding api-key auth 'CookieAuth' (key=\"****\")");
-                client = client.with_cookie_auth(&val);
-            }
-            client.delete_doc_project_role(req).await?;
-            log::info!("API returned no content");
-        }
         SidekoCommand::DeleteGuide(req) => {
             let mut client = sideko_rest_api::Client::default();
             if let Ok(base_url) = std::env::var(base_url_env_var) {
@@ -193,6 +176,23 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
                 client = client.with_cookie_auth(&val);
             }
             client.delete_asset(req).await?;
+            log::info!("API returned no content");
+        }
+        SidekoCommand::RoleSubcommand(RoleSubcommand::Delete(req)) => {
+            let mut client = sideko_rest_api::Client::default();
+            if let Ok(base_url) = std::env::var(base_url_env_var) {
+                client = client.with_base_url(&base_url);
+                log::debug!("Using custom base url: {base_url}");
+            }
+            if let Ok(val) = std::env::var("SIDEKO_REST_API_API_KEY_AUTH") {
+                log::debug!("Adding api-key auth 'ApiKeyAuth' (key=\"****\")");
+                client = client.with_api_key_auth(&val);
+            }
+            if let Ok(val) = std::env::var("SIDEKO_REST_API_COOKIE_AUTH") {
+                log::debug!("Adding api-key auth 'CookieAuth' (key=\"****\")");
+                client = client.with_cookie_auth(&val);
+            }
+            client.role().delete(req).await?;
             log::info!("API returned no content");
         }
         SidekoCommand::DeleteServiceAccount(req) => {
@@ -253,28 +253,6 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
             );
         }
         SidekoCommand::ApiSubcommand(
-            ApiSubcommand::ApiMembersSubcommand(ApiMembersSubcommand::List(req)),
-        ) => {
-            let mut client = sideko_rest_api::Client::default();
-            if let Ok(base_url) = std::env::var(base_url_env_var) {
-                client = client.with_base_url(&base_url);
-                log::debug!("Using custom base url: {base_url}");
-            }
-            if let Ok(val) = std::env::var("SIDEKO_REST_API_API_KEY_AUTH") {
-                log::debug!("Adding api-key auth 'ApiKeyAuth' (key=\"****\")");
-                client = client.with_api_key_auth(&val);
-            }
-            if let Ok(val) = std::env::var("SIDEKO_REST_API_COOKIE_AUTH") {
-                log::debug!("Adding api-key auth 'CookieAuth' (key=\"****\")");
-                client = client.with_cookie_auth(&val);
-            }
-            let res = client.api().members().list(req).await?;
-            println!(
-                "{}", serde_json::to_string_pretty(& res).unwrap_or_else(| _ |
-                serde_json::json!(& res) .to_string())
-            );
-        }
-        SidekoCommand::ApiSubcommand(
             ApiSubcommand::ApiSpecSubcommand(ApiSpecSubcommand::List(req)),
         ) => {
             let mut client = sideko_rest_api::Client::default();
@@ -319,11 +297,7 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
             );
         }
         SidekoCommand::ApiSubcommand(
-            ApiSubcommand::ApiSpecSubcommand(
-                ApiSpecSubcommand::ApiSpecOpenapiSubcommand(
-                    ApiSpecOpenapiSubcommand::List(req),
-                ),
-            ),
+            ApiSubcommand::ApiSpecSubcommand(ApiSpecSubcommand::GetOpenapi(req)),
         ) => {
             let mut client = sideko_rest_api::Client::default();
             if let Ok(base_url) = std::env::var(base_url_env_var) {
@@ -338,13 +312,15 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
                 log::debug!("Adding api-key auth 'CookieAuth' (key=\"****\")");
                 client = client.with_cookie_auth(&val);
             }
-            let res = client.api().spec().openapi().list(req).await?;
+            let res = client.api().spec().get_openapi(req).await?;
             println!(
                 "{}", serde_json::to_string_pretty(& res).unwrap_or_else(| _ |
                 serde_json::json!(& res) .to_string())
             );
         }
-        SidekoCommand::GetApiVersionStats(req) => {
+        SidekoCommand::ApiSubcommand(
+            ApiSubcommand::ApiSpecSubcommand(ApiSpecSubcommand::GetStats(req)),
+        ) => {
             let mut client = sideko_rest_api::Client::default();
             if let Ok(base_url) = std::env::var(base_url_env_var) {
                 client = client.with_base_url(&base_url);
@@ -358,7 +334,7 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
                 log::debug!("Adding api-key auth 'CookieAuth' (key=\"****\")");
                 client = client.with_cookie_auth(&val);
             }
-            let res = client.get_api_version_stats(req).await?;
+            let res = client.api().spec().get_stats(req).await?;
             println!(
                 "{}", serde_json::to_string_pretty(& res).unwrap_or_else(| _ |
                 serde_json::json!(& res) .to_string())
@@ -546,26 +522,6 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
                 serde_json::json!(& res) .to_string())
             );
         }
-        SidekoCommand::ListDocProjectMembers(req) => {
-            let mut client = sideko_rest_api::Client::default();
-            if let Ok(base_url) = std::env::var(base_url_env_var) {
-                client = client.with_base_url(&base_url);
-                log::debug!("Using custom base url: {base_url}");
-            }
-            if let Ok(val) = std::env::var("SIDEKO_REST_API_API_KEY_AUTH") {
-                log::debug!("Adding api-key auth 'ApiKeyAuth' (key=\"****\")");
-                client = client.with_api_key_auth(&val);
-            }
-            if let Ok(val) = std::env::var("SIDEKO_REST_API_COOKIE_AUTH") {
-                log::debug!("Adding api-key auth 'CookieAuth' (key=\"****\")");
-                client = client.with_cookie_auth(&val);
-            }
-            let res = client.list_doc_project_members(req).await?;
-            println!(
-                "{}", serde_json::to_string_pretty(& res).unwrap_or_else(| _ |
-                serde_json::json!(& res) .to_string())
-            );
-        }
         SidekoCommand::GetDocProjectTheme(req) => {
             let mut client = sideko_rest_api::Client::default();
             if let Ok(base_url) = std::env::var(base_url_env_var) {
@@ -726,26 +682,6 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
                 serde_json::json!(& res) .to_string())
             );
         }
-        SidekoCommand::ListOrganizationMembers => {
-            let mut client = sideko_rest_api::Client::default();
-            if let Ok(base_url) = std::env::var(base_url_env_var) {
-                client = client.with_base_url(&base_url);
-                log::debug!("Using custom base url: {base_url}");
-            }
-            if let Ok(val) = std::env::var("SIDEKO_REST_API_API_KEY_AUTH") {
-                log::debug!("Adding api-key auth 'ApiKeyAuth' (key=\"****\")");
-                client = client.with_api_key_auth(&val);
-            }
-            if let Ok(val) = std::env::var("SIDEKO_REST_API_COOKIE_AUTH") {
-                log::debug!("Adding api-key auth 'CookieAuth' (key=\"****\")");
-                client = client.with_cookie_auth(&val);
-            }
-            let res = client.list_organization_members().await?;
-            println!(
-                "{}", serde_json::to_string_pretty(& res).unwrap_or_else(| _ |
-                serde_json::json!(& res) .to_string())
-            );
-        }
         SidekoCommand::GetOrganizationTheme => {
             let mut client = sideko_rest_api::Client::default();
             if let Ok(base_url) = std::env::var(base_url_env_var) {
@@ -766,7 +702,7 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
                 serde_json::json!(& res) .to_string())
             );
         }
-        SidekoCommand::ListSdks(req) => {
+        SidekoCommand::RoleSubcommand(RoleSubcommand::List(req)) => {
             let mut client = sideko_rest_api::Client::default();
             if let Ok(base_url) = std::env::var(base_url_env_var) {
                 client = client.with_base_url(&base_url);
@@ -780,7 +716,27 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
                 log::debug!("Adding api-key auth 'CookieAuth' (key=\"****\")");
                 client = client.with_cookie_auth(&val);
             }
-            let res = client.list_sdks(req).await?;
+            let res = client.role().list(req).await?;
+            println!(
+                "{}", serde_json::to_string_pretty(& res).unwrap_or_else(| _ |
+                serde_json::json!(& res) .to_string())
+            );
+        }
+        SidekoCommand::SdkSubcommand(SdkSubcommand::List(req)) => {
+            let mut client = sideko_rest_api::Client::default();
+            if let Ok(base_url) = std::env::var(base_url_env_var) {
+                client = client.with_base_url(&base_url);
+                log::debug!("Using custom base url: {base_url}");
+            }
+            if let Ok(val) = std::env::var("SIDEKO_REST_API_API_KEY_AUTH") {
+                log::debug!("Adding api-key auth 'ApiKeyAuth' (key=\"****\")");
+                client = client.with_api_key_auth(&val);
+            }
+            if let Ok(val) = std::env::var("SIDEKO_REST_API_COOKIE_AUTH") {
+                log::debug!("Adding api-key auth 'CookieAuth' (key=\"****\")");
+                client = client.with_cookie_auth(&val);
+            }
+            let res = client.sdk().list(req).await?;
             println!(
                 "{}", serde_json::to_string_pretty(& res).unwrap_or_else(| _ |
                 serde_json::json!(& res) .to_string())
@@ -826,7 +782,7 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
                 serde_json::json!(& res) .to_string())
             );
         }
-        SidekoCommand::GetUserProjectRole(req) => {
+        SidekoCommand::ListServiceAccounts => {
             let mut client = sideko_rest_api::Client::default();
             if let Ok(base_url) = std::env::var(base_url_env_var) {
                 client = client.with_base_url(&base_url);
@@ -840,13 +796,13 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
                 log::debug!("Adding api-key auth 'CookieAuth' (key=\"****\")");
                 client = client.with_cookie_auth(&val);
             }
-            let res = client.get_user_project_role(req).await?;
+            let res = client.list_service_accounts().await?;
             println!(
                 "{}", serde_json::to_string_pretty(& res).unwrap_or_else(| _ |
                 serde_json::json!(& res) .to_string())
             );
         }
-        SidekoCommand::GetServiceAccounts => {
+        SidekoCommand::GetServiceAccount(req) => {
             let mut client = sideko_rest_api::Client::default();
             if let Ok(base_url) = std::env::var(base_url_env_var) {
                 client = client.with_base_url(&base_url);
@@ -860,7 +816,7 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
                 log::debug!("Adding api-key auth 'CookieAuth' (key=\"****\")");
                 client = client.with_cookie_auth(&val);
             }
-            let res = client.get_service_accounts().await?;
+            let res = client.get_service_account(req).await?;
             println!(
                 "{}", serde_json::to_string_pretty(& res).unwrap_or_else(| _ |
                 serde_json::json!(& res) .to_string())
@@ -1029,25 +985,6 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
             );
         }
         SidekoCommand::ApiSubcommand(
-            ApiSubcommand::ApiRoleSubcommand(ApiRoleSubcommand::Create(req)),
-        ) => {
-            let mut client = sideko_rest_api::Client::default();
-            if let Ok(base_url) = std::env::var(base_url_env_var) {
-                client = client.with_base_url(&base_url);
-                log::debug!("Using custom base url: {base_url}");
-            }
-            if let Ok(val) = std::env::var("SIDEKO_REST_API_API_KEY_AUTH") {
-                log::debug!("Adding api-key auth 'ApiKeyAuth' (key=\"****\")");
-                client = client.with_api_key_auth(&val);
-            }
-            if let Ok(val) = std::env::var("SIDEKO_REST_API_COOKIE_AUTH") {
-                log::debug!("Adding api-key auth 'CookieAuth' (key=\"****\")");
-                client = client.with_cookie_auth(&val);
-            }
-            client.api().role().create(req).await?;
-            log::info!("API returned no content");
-        }
-        SidekoCommand::ApiSubcommand(
             ApiSubcommand::ApiSpecSubcommand(ApiSpecSubcommand::Create(req)),
         ) => {
             let mut client = sideko_rest_api::Client::default();
@@ -1169,23 +1106,6 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
                 serde_json::json!(& res) .to_string())
             );
         }
-        SidekoCommand::GrantDocProjectRole(req) => {
-            let mut client = sideko_rest_api::Client::default();
-            if let Ok(base_url) = std::env::var(base_url_env_var) {
-                client = client.with_base_url(&base_url);
-                log::debug!("Using custom base url: {base_url}");
-            }
-            if let Ok(val) = std::env::var("SIDEKO_REST_API_API_KEY_AUTH") {
-                log::debug!("Adding api-key auth 'ApiKeyAuth' (key=\"****\")");
-                client = client.with_api_key_auth(&val);
-            }
-            if let Ok(val) = std::env::var("SIDEKO_REST_API_COOKIE_AUTH") {
-                log::debug!("Adding api-key auth 'CookieAuth' (key=\"****\")");
-                client = client.with_cookie_auth(&val);
-            }
-            client.grant_doc_project_role(req).await?;
-            log::info!("API returned no content");
-        }
         SidekoCommand::CreateGuide(req) => {
             let mut client = sideko_rest_api::Client::default();
             if let Ok(base_url) = std::env::var(base_url_env_var) {
@@ -1266,7 +1186,7 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
                 serde_json::json!(& res) .to_string())
             );
         }
-        SidekoCommand::CreateSdk(req) => {
+        SidekoCommand::RoleSubcommand(RoleSubcommand::Create(req)) => {
             let mut client = sideko_rest_api::Client::default();
             if let Ok(base_url) = std::env::var(base_url_env_var) {
                 client = client.with_base_url(&base_url);
@@ -1280,30 +1200,13 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
                 log::debug!("Adding api-key auth 'CookieAuth' (key=\"****\")");
                 client = client.with_cookie_auth(&val);
             }
-            let res = client.create_sdk(req).await?;
-            save_binary_response(res)?;
-        }
-        SidekoCommand::UpdateSdk(req) => {
-            let mut client = sideko_rest_api::Client::default();
-            if let Ok(base_url) = std::env::var(base_url_env_var) {
-                client = client.with_base_url(&base_url);
-                log::debug!("Using custom base url: {base_url}");
-            }
-            if let Ok(val) = std::env::var("SIDEKO_REST_API_API_KEY_AUTH") {
-                log::debug!("Adding api-key auth 'ApiKeyAuth' (key=\"****\")");
-                client = client.with_api_key_auth(&val);
-            }
-            if let Ok(val) = std::env::var("SIDEKO_REST_API_COOKIE_AUTH") {
-                log::debug!("Adding api-key auth 'CookieAuth' (key=\"****\")");
-                client = client.with_cookie_auth(&val);
-            }
-            let res = client.update_sdk(req).await?;
+            let res = client.role().create(req).await?;
             println!(
                 "{}", serde_json::to_string_pretty(& res).unwrap_or_else(| _ |
                 serde_json::json!(& res) .to_string())
             );
         }
-        SidekoCommand::StatelessGenerateSdk(req) => {
+        SidekoCommand::SdkSubcommand(SdkSubcommand::Generate(req)) => {
             let mut client = sideko_rest_api::Client::default();
             if let Ok(base_url) = std::env::var(base_url_env_var) {
                 client = client.with_base_url(&base_url);
@@ -1317,7 +1220,93 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
                 log::debug!("Adding api-key auth 'CookieAuth' (key=\"****\")");
                 client = client.with_cookie_auth(&val);
             }
-            let res = client.stateless_generate_sdk(req).await?;
+            let res = client.sdk().generate(req).await?;
+            save_binary_response(res)?;
+        }
+        SidekoCommand::SdkSubcommand(
+            SdkSubcommand::SdkConfigSubcommand(
+                SdkConfigSubcommand::SdkConfigInitSubcommand(
+                    SdkConfigInitSubcommand::Init(req),
+                ),
+            ),
+        ) => {
+            let mut client = sideko_rest_api::Client::default();
+            if let Ok(base_url) = std::env::var(base_url_env_var) {
+                client = client.with_base_url(&base_url);
+                log::debug!("Using custom base url: {base_url}");
+            }
+            if let Ok(val) = std::env::var("SIDEKO_REST_API_API_KEY_AUTH") {
+                log::debug!("Adding api-key auth 'ApiKeyAuth' (key=\"****\")");
+                client = client.with_api_key_auth(&val);
+            }
+            if let Ok(val) = std::env::var("SIDEKO_REST_API_COOKIE_AUTH") {
+                log::debug!("Adding api-key auth 'CookieAuth' (key=\"****\")");
+                client = client.with_cookie_auth(&val);
+            }
+            let res = client.sdk().config().init().init(req).await?;
+            save_binary_response(res)?;
+        }
+        SidekoCommand::SdkSubcommand(
+            SdkSubcommand::SdkConfigSubcommand(
+                SdkConfigSubcommand::SdkConfigSyncSubcommand(
+                    SdkConfigSyncSubcommand::Sync(req),
+                ),
+            ),
+        ) => {
+            let mut client = sideko_rest_api::Client::default();
+            if let Ok(base_url) = std::env::var(base_url_env_var) {
+                client = client.with_base_url(&base_url);
+                log::debug!("Using custom base url: {base_url}");
+            }
+            if let Ok(val) = std::env::var("SIDEKO_REST_API_API_KEY_AUTH") {
+                log::debug!("Adding api-key auth 'ApiKeyAuth' (key=\"****\")");
+                client = client.with_api_key_auth(&val);
+            }
+            if let Ok(val) = std::env::var("SIDEKO_REST_API_COOKIE_AUTH") {
+                log::debug!("Adding api-key auth 'CookieAuth' (key=\"****\")");
+                client = client.with_cookie_auth(&val);
+            }
+            let res = client.sdk().config().sync().sync(req).await?;
+            save_binary_response(res)?;
+        }
+        SidekoCommand::SdkSubcommand(
+            SdkSubcommand::SdkUpdateSubcommand(SdkUpdateSubcommand::Update(req)),
+        ) => {
+            let mut client = sideko_rest_api::Client::default();
+            if let Ok(base_url) = std::env::var(base_url_env_var) {
+                client = client.with_base_url(&base_url);
+                log::debug!("Using custom base url: {base_url}");
+            }
+            if let Ok(val) = std::env::var("SIDEKO_REST_API_API_KEY_AUTH") {
+                log::debug!("Adding api-key auth 'ApiKeyAuth' (key=\"****\")");
+                client = client.with_api_key_auth(&val);
+            }
+            if let Ok(val) = std::env::var("SIDEKO_REST_API_COOKIE_AUTH") {
+                log::debug!("Adding api-key auth 'CookieAuth' (key=\"****\")");
+                client = client.with_cookie_auth(&val);
+            }
+            let res = client.sdk().update().update(req).await?;
+            println!("{res}");
+        }
+        SidekoCommand::StatelessSubcommand(
+            StatelessSubcommand::StatelessGenerateSdkSubcommand(
+                StatelessGenerateSdkSubcommand::GenerateStateless(req),
+            ),
+        ) => {
+            let mut client = sideko_rest_api::Client::default();
+            if let Ok(base_url) = std::env::var(base_url_env_var) {
+                client = client.with_base_url(&base_url);
+                log::debug!("Using custom base url: {base_url}");
+            }
+            if let Ok(val) = std::env::var("SIDEKO_REST_API_API_KEY_AUTH") {
+                log::debug!("Adding api-key auth 'ApiKeyAuth' (key=\"****\")");
+                client = client.with_api_key_auth(&val);
+            }
+            if let Ok(val) = std::env::var("SIDEKO_REST_API_COOKIE_AUTH") {
+                log::debug!("Adding api-key auth 'CookieAuth' (key=\"****\")");
+                client = client.with_cookie_auth(&val);
+            }
+            let res = client.stateless().generate_sdk().generate_stateless(req).await?;
             save_binary_response(res)?;
         }
         SidekoCommand::InviteUser(req) => {
@@ -1664,91 +1653,86 @@ enum SidekoCommand {
     /// command group: authentication/documenention/configurations/etc.
     #[command(subcommand, name = "config")]
     SidekoConfigSubcommand(SidekoConfigSubcommand),
-    /// command group (5 commands, 3 sub groups)
+    /// command group (5 commands, 1 sub groups)
     #[command(subcommand, name = "api")]
     ApiSubcommand(ApiSubcommand),
+    /// command group (3 commands, 0 sub groups)
+    #[command(subcommand, name = "role")]
+    RoleSubcommand(RoleSubcommand),
+    /// command group (2 commands, 2 sub groups)
+    #[command(subcommand, name = "sdk")]
+    SdkSubcommand(SdkSubcommand),
+    /// command group (0 commands, 1 sub groups)
+    #[command(subcommand, name = "stateless")]
+    StatelessSubcommand(StatelessSubcommand),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api delete-api-link --link-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a`
+    /// **Example:** `sideko-rest-api delete-api-link --id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a`
     #[command(name = "delete-api-link")]
     DeleteApiLink(sideko_rest_api::DeleteApiLinkRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api delete-api-link-group --group-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a`
+    /// **Example:** `sideko-rest-api delete-api-link-group --id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a`
     #[command(name = "delete-api-link-group")]
     DeleteApiLinkGroup(sideko_rest_api::DeleteApiLinkGroupRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api delete-doc-project --project-id-or-name string`
+    /// **Example:** `sideko-rest-api delete-doc-project --doc-name my-project`
     #[command(name = "delete-doc-project")]
     DeleteDocProject(sideko_rest_api::DeleteDocProjectRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api delete-doc-project-role --project-id-or-name string --user-id string`
-    #[command(name = "delete-doc-project-role")]
-    DeleteDocProjectRole(sideko_rest_api::DeleteDocProjectRoleRequest),
-    /// command
-    ///
-    /// **Required Auth:** CookieAuth OR ApiKeyAuth
-    ///
-    /// **Example:** `sideko-rest-api delete-guide --project-id-or-name string --version-id string --guide-id string`
+    /// **Example:** `sideko-rest-api delete-guide --doc-name my-project --doc-version 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --guide-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a`
     #[command(name = "delete-guide")]
     DeleteGuide(sideko_rest_api::DeleteGuideRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api delete-guide-href --project-id-or-name string --version-id string --guide-id string --variant next`
+    /// **Example:** `sideko-rest-api delete-guide-href --doc-name my-project --doc-version 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --guide-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --variant next`
     #[command(name = "delete-guide-href")]
     DeleteGuideHref(sideko_rest_api::DeleteGuideHrefRequest),
-    /// Delete an asset in your organization
+    /// Delete a media asset in your organization
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api delete-asset --asset-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a`
+    /// **Example:** `sideko-rest-api delete-asset --id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a`
     #[command(name = "delete-asset")]
     DeleteAsset(sideko_rest_api::DeleteAssetRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api delete-service-account --service-account-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a`
+    /// **Example:** `sideko-rest-api delete-service-account --id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a`
     #[command(name = "delete-service-account")]
     DeleteServiceAccount(sideko_rest_api::DeleteServiceAccountRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api get-api-version-stats --id string --version string`
-    #[command(name = "get-api-version-stats")]
-    GetApiVersionStats(sideko_rest_api::GetApiVersionStatsRequest),
-    /// command
-    ///
-    /// **Required Auth:** CookieAuth OR ApiKeyAuth
-    ///
-    /// **Example:** `sideko-rest-api list-api-links --doc-version-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a`
+    /// **Example:** `sideko-rest-api list-api-links --doc-version 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a`
     #[command(name = "list-api-links")]
     ListApiLinks(sideko_rest_api::ListApiLinksRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api get-api-link --link-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a`
+    /// **Example:** `sideko-rest-api get-api-link --id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a`
     #[command(name = "get-api-link")]
     GetApiLink(sideko_rest_api::GetApiLinkRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api list-api-link-groups --doc-version-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a`
+    /// **Example:** `sideko-rest-api list-api-link-groups --doc-version 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a`
     #[command(name = "list-api-link-groups")]
     ListApiLinkGroups(sideko_rest_api::ListApiLinkGroupsRequest),
     /// command
@@ -1782,70 +1766,63 @@ enum SidekoCommand {
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api get-doc-project --project-id-or-name string`
+    /// **Example:** `sideko-rest-api get-doc-project --doc-name my-project`
     #[command(name = "get-doc-project")]
     GetDocProject(sideko_rest_api::GetDocProjectRequest),
     /// Retrieves all deployments for a doc project
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api list-deployments --project-id-or-name string --limit 123 --target Preview`
+    /// **Example:** `sideko-rest-api list-deployments --doc-name my-project --limit 123 --target Preview`
     #[command(name = "list-deployments")]
     ListDeployments(sideko_rest_api::ListDeploymentsRequest),
     /// Retrieves single deployment
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api get-deployment --project-id-or-name string --deployment-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a`
+    /// **Example:** `sideko-rest-api get-deployment --doc-name my-project --deployment-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a`
     #[command(name = "get-deployment")]
     GetDeployment(sideko_rest_api::GetDeploymentRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api list-doc-project-members --project-id-or-name string`
-    #[command(name = "list-doc-project-members")]
-    ListDocProjectMembers(sideko_rest_api::ListDocProjectMembersRequest),
-    /// command
-    ///
-    /// **Required Auth:** CookieAuth OR ApiKeyAuth
-    ///
-    /// **Example:** `sideko-rest-api get-doc-project-theme --project-id-or-name string`
+    /// **Example:** `sideko-rest-api get-doc-project-theme --doc-name my-project`
     #[command(name = "get-doc-project-theme")]
     GetDocProjectTheme(sideko_rest_api::GetDocProjectThemeRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api list-doc-versions --project-id-or-name string`
+    /// **Example:** `sideko-rest-api list-doc-versions --doc-name my-project`
     #[command(name = "list-doc-versions")]
     ListDocVersions(sideko_rest_api::ListDocVersionsRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api get-doc-version --project-id-or-name string --version-id string`
+    /// **Example:** `sideko-rest-api get-doc-version --doc-name my-project --doc-version 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a`
     #[command(name = "get-doc-version")]
     GetDocVersion(sideko_rest_api::GetDocVersionRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api list-guides --project-id-or-name string --version-id string`
+    /// **Example:** `sideko-rest-api list-guides --doc-name my-project --doc-version 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a`
     #[command(name = "list-guides")]
     ListGuides(sideko_rest_api::ListGuidesRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api get-guide --project-id-or-name string --version-id string --guide-id string`
+    /// **Example:** `sideko-rest-api get-guide --doc-name my-project --doc-version 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --guide-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a`
     #[command(name = "get-guide")]
     GetGuide(sideko_rest_api::GetGuideRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api get-guide-content --project-id-or-name string --version-id string --guide-id string`
+    /// **Example:** `sideko-rest-api get-guide-content --doc-name my-project --doc-version 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --guide-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a`
     #[command(name = "get-guide-content")]
     GetGuideContent(sideko_rest_api::GetGuideContentRequest),
     /// Get user organization
@@ -1855,20 +1832,13 @@ enum SidekoCommand {
     /// **Example:** `sideko-rest-api get-organization`
     #[command(name = "get-organization")]
     GetOrganization,
-    /// Get all assets for an organization
+    /// Get all media assets for an organization
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
     /// **Example:** `sideko-rest-api list-assets --name string --page 123`
     #[command(name = "list-assets")]
     ListAssets(sideko_rest_api::ListAssetsRequest),
-    /// Get users in the organization
-    ///
-    /// **Required Auth:** CookieAuth OR ApiKeyAuth
-    ///
-    /// **Example:** `sideko-rest-api list-organization-members`
-    #[command(name = "list-organization-members")]
-    ListOrganizationMembers,
     /// Get documentation project theme configured at the organization level
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
@@ -1876,13 +1846,6 @@ enum SidekoCommand {
     /// **Example:** `sideko-rest-api get-organization-theme`
     #[command(name = "get-organization-theme")]
     GetOrganizationTheme,
-    /// command
-    ///
-    /// **Required Auth:** CookieAuth OR ApiKeyAuth
-    ///
-    /// **Example:** `sideko-rest-api list-sdks --api-id string`
-    #[command(name = "list-sdks")]
-    ListSdks(sideko_rest_api::ListSdksRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
@@ -1897,53 +1860,53 @@ enum SidekoCommand {
     /// **Example:** `sideko-rest-api get-api-key`
     #[command(name = "get-api-key")]
     GetApiKey,
-    /// retrieve current user role for a given project type/id
-    ///
-    /// **Required Auth:** CookieAuth OR ApiKeyAuth
-    ///
-    /// **Example:** `sideko-rest-api get-user-project-role --project-type api --project-id string`
-    #[command(name = "get-user-project-role")]
-    GetUserProjectRole(sideko_rest_api::GetUserProjectRoleRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api get-service-accounts`
-    #[command(name = "get-service-accounts")]
-    GetServiceAccounts,
+    /// **Example:** `sideko-rest-api list-service-accounts`
+    #[command(name = "list-service-accounts")]
+    ListServiceAccounts,
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api update-api-link --link-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --api-version string --build-request-enabled true --include-mock-server true --nav-label string --policy latest --slug string`
+    /// **Example:** `sideko-rest-api get-service-account --id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a`
+    #[command(name = "get-service-account")]
+    GetServiceAccount(sideko_rest_api::GetServiceAccountRequest),
+    /// command
+    ///
+    /// **Required Auth:** CookieAuth OR ApiKeyAuth
+    ///
+    /// **Example:** `sideko-rest-api update-api-link --id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --api-version '{"api_id":"my-api","version":"0.1.0"}' --build-request-enabled true --include-mock-server true --nav-label string --policy latest --slug string`
     #[command(name = "update-api-link")]
     UpdateApiLink(sideko_rest_api::UpdateApiLinkRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api update-api-link-group --group-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --nav-label string --slug string`
+    /// **Example:** `sideko-rest-api update-api-link-group --id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --nav-label string --slug string`
     #[command(name = "update-api-link-group")]
     UpdateApiLinkGroup(sideko_rest_api::UpdateApiLinkGroupRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api update-doc-project --project-id-or-name string --logos '{"dark":"3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a","favicon":"3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a","light":"3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a"}' --settings '{"action_button":{"enabled":true,"label":"string","url":"http://www.example.com"},"metadata":{"description":"string","title":"string"}}' --title my-company-docs`
+    /// **Example:** `sideko-rest-api update-doc-project --doc-name my-project --logos '{"dark":"3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a","favicon":"3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a","light":"3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a"}' --name my-company-docs --settings '{"action_button":{"enabled":true,"label":"string","url":"http://www.example.com"},"metadata":{"description":"string","title":"string"}}'`
     #[command(name = "update-doc-project")]
     UpdateDocProject(sideko_rest_api::UpdateDocProjectRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api update-guide --project-id-or-name string --version-id string --guide-id string --content string --nav-label string --next-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --prev-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --slug string`
+    /// **Example:** `sideko-rest-api update-guide --doc-name my-project --doc-version 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --guide-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --content string --nav-label string --next-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --prev-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --slug string`
     #[command(name = "update-guide")]
     UpdateGuide(sideko_rest_api::UpdateGuideRequest),
-    /// Update an asset in your organization
+    /// Update a media asset in your organization
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api update-asset --asset-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --name string`
+    /// **Example:** `sideko-rest-api update-asset --id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --name string`
     #[command(name = "update-asset")]
     UpdateAsset(sideko_rest_api::UpdateAssetRequest),
     /// command
@@ -1971,35 +1934,28 @@ enum SidekoCommand {
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api create-doc-project --title my-company-docs`
+    /// **Example:** `sideko-rest-api create-doc-project --name my-company-docs`
     #[command(name = "create-doc-project")]
     CreateDocProject(sideko_rest_api::CreateDocProjectRequest),
     /// Deploys a new generated version of documentation with linked guides & APIs
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api trigger-deployment --project-id-or-name string --doc-version-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --target Preview`
+    /// **Example:** `sideko-rest-api trigger-deployment --doc-name my-project --doc-version-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --target Preview`
     #[command(name = "trigger-deployment")]
     TriggerDeployment(sideko_rest_api::TriggerDeploymentRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api grant-doc-project-role --project-id-or-name string --role admin --user-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a`
-    #[command(name = "grant-doc-project-role")]
-    GrantDocProjectRole(sideko_rest_api::GrantDocProjectRoleRequest),
-    /// command
-    ///
-    /// **Required Auth:** CookieAuth OR ApiKeyAuth
-    ///
-    /// **Example:** `sideko-rest-api create-guide --project-id-or-name string --version-id string --content string --is-parent --nav-label string --next-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --parent-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --prev-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --slug string`
+    /// **Example:** `sideko-rest-api create-guide --doc-name my-project --doc-version 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --content string --is-parent --nav-label string --next-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --parent-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --prev-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --slug string`
     #[command(name = "create-guide")]
     CreateGuide(sideko_rest_api::CreateGuideRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api reorder-guides --project-id-or-name string --version-id string --data '{"id":"3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a","order":123,"parent_id":"3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a"}'`
+    /// **Example:** `sideko-rest-api reorder-guides --doc-name my-project --doc-version 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --data '{"id":"3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a","order":123,"parent_id":"3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a"}'`
     #[command(name = "reorder-guides")]
     ReorderGuides(sideko_rest_api::ReorderGuidesRequest),
     /// command
@@ -2009,7 +1965,7 @@ enum SidekoCommand {
     /// **Example:** `sideko-rest-api create-organization --name string --subdomain string`
     #[command(name = "create-organization")]
     CreateOrganization(sideko_rest_api::CreateOrganizationRequest),
-    /// Add a assets like logos or other media to an organization
+    /// Add a media asset like logos or other media to an organization
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
@@ -2020,42 +1976,21 @@ enum SidekoCommand {
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api create-sdk --api-id my-api --language go --name my-api-python --semver 1.0.0`
-    #[command(name = "create-sdk")]
-    CreateSdk(sideko_rest_api::CreateSdkRequest),
-    /// command
-    ///
-    /// **Required Auth:** CookieAuth OR ApiKeyAuth
-    ///
-    /// **Example:** `sideko-rest-api update-sdk --name my-python-sdk --semver 0.1.1 --api-version string --file ./tests/file.pdf`
-    #[command(name = "update-sdk")]
-    UpdateSdk(sideko_rest_api::UpdateSdkRequest),
-    /// command
-    ///
-    /// **Required Auth:** CookieAuth OR ApiKeyAuth
-    ///
-    /// **Example:** `sideko-rest-api stateless-generate-sdk --base-url http://127.0.0.1:8080/api --language go --openapi ./tests/file.pdf --package-name my_sdk`
-    #[command(name = "stateless-generate-sdk")]
-    StatelessGenerateSdk(sideko_rest_api::StatelessGenerateSdkRequest),
-    /// command
-    ///
-    /// **Required Auth:** CookieAuth OR ApiKeyAuth
-    ///
-    /// **Example:** `sideko-rest-api invite-user --email user@example.com --role admin`
+    /// **Example:** `sideko-rest-api invite-user --email user@example.com --role-definition-id ApiProjectAdmin`
     #[command(name = "invite-user")]
     InviteUser(sideko_rest_api::InviteUserRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api create-service-account --name 'Documentation Publisher Service Account' --project-roles '{"project_id_or_name":"string","project_type":"api","role":"admin"}'`
+    /// **Example:** `sideko-rest-api create-service-account --name 'Documentation Publisher Service Account' --object-roles '{"object_id":"3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a","object_type":"api_project","role_definition_id":"ApiProjectAdmin"}'`
     #[command(name = "create-service-account")]
     CreateServiceAccount(sideko_rest_api::CreateServiceAccountRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api update-doc-project-theme --project-id-or-name string --api-reference-group-variant grouped --dark-active-button-bg-color '#FFFFFF' --dark-active-button-text-color '#FFFFFF' --dark-bg-color '#FFFFFF' --dark-navbar-color '#FFFFFF' --dark-navbar-text-color '#FFFFFF' --light-active-button-bg-color '#FFFFFF' --light-active-button-text-color '#FFFFFF' --light-bg-color '#FFFFFF' --light-navbar-color '#FFFFFF' --light-navbar-text-color '#FFFFFF'`
+    /// **Example:** `sideko-rest-api update-doc-project-theme --doc-name my-project --api-reference-group-variant grouped --dark-active-button-bg-color '#FFFFFF' --dark-active-button-text-color '#FFFFFF' --dark-bg-color '#FFFFFF' --dark-navbar-color '#FFFFFF' --dark-navbar-text-color '#FFFFFF' --light-active-button-bg-color '#FFFFFF' --light-active-button-text-color '#FFFFFF' --light-bg-color '#FFFFFF' --light-navbar-color '#FFFFFF' --light-navbar-text-color '#FFFFFF'`
     #[command(name = "update-doc-project-theme")]
     UpdateDocProjectTheme(sideko_rest_api::UpdateDocProjectThemeRequest),
     /// Update  documentation project theme configured at the organization level
@@ -2069,20 +2004,14 @@ enum SidekoCommand {
 #[derive(clap::Subcommand)]
 #[allow(clippy::enum_variant_names)]
 enum ApiSubcommand {
-    /// command group (2 commands, 0 sub groups)
-    #[command(subcommand, name = "role")]
-    ApiRoleSubcommand(ApiRoleSubcommand),
-    /// command group (1 commands, 0 sub groups)
-    #[command(subcommand, name = "members")]
-    ApiMembersSubcommand(ApiMembersSubcommand),
-    /// command group (4 commands, 1 sub groups)
+    /// command group (7 commands, 0 sub groups)
     #[command(subcommand, name = "spec")]
     ApiSpecSubcommand(ApiSpecSubcommand),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api api delete --id string`
+    /// **Example:** `sideko-rest-api api delete --api-name my-project`
     #[command(name = "delete")]
     Delete(sideko_rest_api::resources::api::DeleteRequest),
     /// command
@@ -2096,98 +2025,188 @@ enum ApiSubcommand {
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api api get --id string`
+    /// **Example:** `sideko-rest-api api get --api-name my-project`
     #[command(name = "get")]
     Get(sideko_rest_api::resources::api::GetRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api api patch --id string --id my-new-api-name`
+    /// **Example:** `sideko-rest-api api patch --api-name my-project --name my-new-api-name`
     #[command(name = "patch")]
     Patch(sideko_rest_api::resources::api::PatchRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api api create --id my-api-spec`
+    /// **Example:** `sideko-rest-api api create --name my-api-spec`
     #[command(name = "create")]
     Create(sideko_rest_api::resources::api::CreateRequest),
 }
 #[derive(clap::Subcommand)]
 #[allow(clippy::enum_variant_names)]
-enum ApiRoleSubcommand {
-    /// command
-    ///
-    /// **Required Auth:** CookieAuth OR ApiKeyAuth
-    ///
-    /// **Example:** `sideko-rest-api api role delete --id string --user-id string`
-    #[command(name = "delete")]
-    Delete(sideko_rest_api::resources::api::role::DeleteRequest),
-    /// command
-    ///
-    /// **Required Auth:** CookieAuth OR ApiKeyAuth
-    ///
-    /// **Example:** `sideko-rest-api api role create --id string --role admin --user-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a`
-    #[command(name = "create")]
-    Create(sideko_rest_api::resources::api::role::CreateRequest),
-}
-#[derive(clap::Subcommand)]
-#[allow(clippy::enum_variant_names)]
-enum ApiMembersSubcommand {
-    /// command
-    ///
-    /// **Required Auth:** CookieAuth OR ApiKeyAuth
-    ///
-    /// **Example:** `sideko-rest-api api members list --id string`
-    #[command(name = "list")]
-    List(sideko_rest_api::resources::api::members::ListRequest),
-}
-#[derive(clap::Subcommand)]
-#[allow(clippy::enum_variant_names)]
 enum ApiSpecSubcommand {
-    /// command group (1 commands, 0 sub groups)
-    #[command(subcommand, name = "openapi")]
-    ApiSpecOpenapiSubcommand(ApiSpecOpenapiSubcommand),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api api spec list --id string`
+    /// **Example:** `sideko-rest-api api spec delete --api-name my-project --api-version string`
+    #[command(name = "delete")]
+    Delete(sideko_rest_api::resources::api::spec::DeleteRequest),
+    /// command
+    ///
+    /// **Required Auth:** CookieAuth OR ApiKeyAuth
+    ///
+    /// **Example:** `sideko-rest-api api spec list --api-name my-project`
     #[command(name = "list")]
     List(sideko_rest_api::resources::api::spec::ListRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api api spec get --id string --version string`
+    /// **Example:** `sideko-rest-api api spec get --api-name my-project --api-version string`
     #[command(name = "get")]
     Get(sideko_rest_api::resources::api::spec::GetRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api api spec patch --id string --version string --mock-server-enabled true --notes '<p>This version includes a number of excellent improvements</p>' --openapi ./tests/file.pdf --semver string`
+    /// **Example:** `sideko-rest-api api spec get-openapi --api-name my-project --api-version string`
+    #[command(name = "get-openapi")]
+    GetOpenapi(sideko_rest_api::resources::api::spec::GetOpenapiRequest),
+    /// command
+    ///
+    /// **Required Auth:** CookieAuth OR ApiKeyAuth
+    ///
+    /// **Example:** `sideko-rest-api api spec get-stats --api-name my-project --api-version string`
+    #[command(name = "get-stats")]
+    GetStats(sideko_rest_api::resources::api::spec::GetStatsRequest),
+    /// command
+    ///
+    /// **Required Auth:** CookieAuth OR ApiKeyAuth
+    ///
+    /// **Example:** `sideko-rest-api api spec patch --api-name my-project --api-version string --mock-server-enabled true --notes '<p>This version includes a number of excellent improvements</p>' --openapi ./tests/file.pdf --version string`
     #[command(name = "patch")]
     Patch(sideko_rest_api::resources::api::spec::PatchRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api api spec create --id string --mock-server-enabled true --notes '<p>This version includes a number of excellent improvements</p>' --openapi ./tests/file.pdf --version string`
+    /// **Example:** `sideko-rest-api api spec create --api-name my-project --mock-server-enabled true --notes '<p>This version includes a number of excellent improvements</p>' --openapi ./tests/file.pdf --version patch`
     #[command(name = "create")]
     Create(sideko_rest_api::resources::api::spec::CreateRequest),
 }
 #[derive(clap::Subcommand)]
 #[allow(clippy::enum_variant_names)]
-enum ApiSpecOpenapiSubcommand {
+enum RoleSubcommand {
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api api spec openapi list --id string --version string`
+    /// **Example:** `sideko-rest-api role delete --id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a`
+    #[command(name = "delete")]
+    Delete(sideko_rest_api::resources::role::DeleteRequest),
+    /// command
+    ///
+    /// **Required Auth:** CookieAuth OR ApiKeyAuth
+    ///
+    /// **Example:** `sideko-rest-api role list --object-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --object-type api_project --user-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a`
     #[command(name = "list")]
-    List(sideko_rest_api::resources::api::spec::openapi::ListRequest),
+    List(sideko_rest_api::resources::role::ListRequest),
+    /// command
+    ///
+    /// **Required Auth:** CookieAuth OR ApiKeyAuth
+    ///
+    /// **Example:** `sideko-rest-api role create --object-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --object-type api_project --role-definition-id ApiProjectAdmin --user-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a`
+    #[command(name = "create")]
+    Create(sideko_rest_api::resources::role::CreateRequest),
+}
+#[derive(clap::Subcommand)]
+#[allow(clippy::enum_variant_names)]
+enum SdkSubcommand {
+    /// command group (0 commands, 2 sub groups)
+    #[command(subcommand, name = "config")]
+    SdkConfigSubcommand(SdkConfigSubcommand),
+    /// command group (1 commands, 0 sub groups)
+    #[command(subcommand, name = "update")]
+    SdkUpdateSubcommand(SdkUpdateSubcommand),
+    /// command
+    ///
+    /// **Required Auth:** CookieAuth OR ApiKeyAuth
+    ///
+    /// **Example:** `sideko-rest-api sdk list --api my-project --successful true`
+    #[command(name = "list")]
+    List(sideko_rest_api::resources::sdk::ListRequest),
+    /// command
+    ///
+    /// **Required Auth:** CookieAuth OR ApiKeyAuth
+    ///
+    /// **Example:** `sideko-rest-api sdk generate --api-version string --config ./tests/file.pdf --language go --sdk-version 0.1.0`
+    #[command(name = "generate")]
+    Generate(sideko_rest_api::resources::sdk::GenerateRequest),
+}
+#[derive(clap::Subcommand)]
+#[allow(clippy::enum_variant_names)]
+enum SdkConfigSubcommand {
+    /// command group (1 commands, 0 sub groups)
+    #[command(subcommand, name = "init")]
+    SdkConfigInitSubcommand(SdkConfigInitSubcommand),
+    /// command group (1 commands, 0 sub groups)
+    #[command(subcommand, name = "sync")]
+    SdkConfigSyncSubcommand(SdkConfigSyncSubcommand),
+}
+#[derive(clap::Subcommand)]
+#[allow(clippy::enum_variant_names)]
+enum SdkConfigInitSubcommand {
+    /// Creates a sdk config with default configurations for the api/api version
+    ///
+    /// **Required Auth:** CookieAuth OR ApiKeyAuth
+    ///
+    /// **Example:** `sideko-rest-api sdk config init init --api-name my-project --api-version string`
+    #[command(name = "init")]
+    Init(sideko_rest_api::resources::sdk::config::init::InitRequest),
+}
+#[derive(clap::Subcommand)]
+#[allow(clippy::enum_variant_names)]
+enum SdkConfigSyncSubcommand {
+    /// Updates provided config with missing default configurations for the api version
+    ///
+    /// **Required Auth:** CookieAuth OR ApiKeyAuth
+    ///
+    /// **Example:** `sideko-rest-api sdk config sync sync --api-version string --config ./tests/file.pdf`
+    #[command(name = "sync")]
+    Sync(sideko_rest_api::resources::sdk::config::sync::SyncRequest),
+}
+#[derive(clap::Subcommand)]
+#[allow(clippy::enum_variant_names)]
+enum SdkUpdateSubcommand {
+    /// command
+    ///
+    /// **Required Auth:** CookieAuth OR ApiKeyAuth
+    ///
+    /// **Example:** `sideko-rest-api sdk update update --api-version string --config ./tests/file.pdf --prev-sdk-git ./tests/file.pdf --prev-sdk-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --sdk-version patch`
+    #[command(name = "update")]
+    Update(sideko_rest_api::resources::sdk::update::UpdateRequest),
+}
+#[derive(clap::Subcommand)]
+#[allow(clippy::enum_variant_names)]
+enum StatelessSubcommand {
+    /// command group (1 commands, 0 sub groups)
+    #[command(subcommand, name = "generate-sdk")]
+    StatelessGenerateSdkSubcommand(StatelessGenerateSdkSubcommand),
+}
+#[derive(clap::Subcommand)]
+#[allow(clippy::enum_variant_names)]
+enum StatelessGenerateSdkSubcommand {
+    /// command
+    ///
+    /// **Required Auth:** CookieAuth OR ApiKeyAuth
+    ///
+    /// **Example:** `sideko-rest-api stateless generate-sdk generate-stateless --base-url http://127.0.0.1:8080/api --language go --openapi ./tests/file.pdf --package-name my_sdk`
+    #[command(name = "generate-stateless")]
+    GenerateStateless(
+        sideko_rest_api::resources::stateless::generate_sdk::GenerateStatelessRequest,
+    ),
 }
 #[cfg(test)]
 mod cli_tests {
@@ -2227,7 +2246,8 @@ mod cli_tests {
         super::handle_cli(cli).await.expect("failed running auth command");
         let cli = super::SidekoCli::try_parse_from(
                 shlex::Shlex::new(
-                    &["sideko-rest-api", "api", "delete", "--id", "string"].join(" "),
+                    &["sideko-rest-api", "api", "delete", "--api-name", "my-project"]
+                        .join(" "),
                 ),
             )
             .expect("failed parsing cli input");
@@ -2237,7 +2257,7 @@ mod cli_tests {
     }
     #[serial_test::serial]
     #[tokio::test]
-    async fn test_cli_api_role_delete_204_generated_success() {
+    async fn test_cli_api_spec_delete_204_generated_success() {
         let cli = super::SidekoCli::try_parse_from(
                 shlex::Shlex::new(
                     &[
@@ -2273,11 +2293,11 @@ mod cli_tests {
                     &[
                         "sideko-rest-api",
                         "api",
-                        "role",
+                        "spec",
                         "delete",
-                        "--id",
-                        "string",
-                        "--user-id",
+                        "--api-name",
+                        "my-project",
+                        "--api-version",
                         "string",
                     ]
                         .join(" "),
@@ -2326,7 +2346,7 @@ mod cli_tests {
                     &[
                         "sideko-rest-api",
                         "delete-api-link",
-                        "--link-id",
+                        "--id",
                         "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
                     ]
                         .join(" "),
@@ -2375,7 +2395,7 @@ mod cli_tests {
                     &[
                         "sideko-rest-api",
                         "delete-api-link-group",
-                        "--group-id",
+                        "--id",
                         "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
                     ]
                         .join(" "),
@@ -2424,59 +2444,8 @@ mod cli_tests {
                     &[
                         "sideko-rest-api",
                         "delete-doc-project",
-                        "--project-id-or-name",
-                        "string",
-                    ]
-                        .join(" "),
-                ),
-            )
-            .expect("failed parsing cli input");
-        let result = super::handle_cli(cli).await;
-        println!("{:?}", & result);
-        assert!(result.is_ok())
-    }
-    #[serial_test::serial]
-    #[tokio::test]
-    async fn test_cli_delete_doc_project_role_204_generated_success() {
-        let cli = super::SidekoCli::try_parse_from(
-                shlex::Shlex::new(
-                    &[
-                        "sideko-rest-api",
-                        "config",
-                        "auth",
-                        "api-key-auth",
-                        "--key",
-                        "API_KEY",
-                    ]
-                        .join(" "),
-                ),
-            )
-            .expect("failed parsing auth cli input");
-        super::handle_cli(cli).await.expect("failed running auth command");
-        let cli = super::SidekoCli::try_parse_from(
-                shlex::Shlex::new(
-                    &[
-                        "sideko-rest-api",
-                        "config",
-                        "auth",
-                        "cookie-auth",
-                        "--key",
-                        "API_KEY",
-                    ]
-                        .join(" "),
-                ),
-            )
-            .expect("failed parsing auth cli input");
-        super::handle_cli(cli).await.expect("failed running auth command");
-        let cli = super::SidekoCli::try_parse_from(
-                shlex::Shlex::new(
-                    &[
-                        "sideko-rest-api",
-                        "delete-doc-project-role",
-                        "--project-id-or-name",
-                        "string",
-                        "--user-id",
-                        "string",
+                        "--doc-name",
+                        "my-project",
                     ]
                         .join(" "),
                 ),
@@ -2524,12 +2493,12 @@ mod cli_tests {
                     &[
                         "sideko-rest-api",
                         "delete-guide",
-                        "--project-id-or-name",
-                        "string",
-                        "--version-id",
-                        "string",
+                        "--doc-name",
+                        "my-project",
+                        "--doc-version",
+                        "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
                         "--guide-id",
-                        "string",
+                        "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
                     ]
                         .join(" "),
                 ),
@@ -2577,12 +2546,12 @@ mod cli_tests {
                     &[
                         "sideko-rest-api",
                         "delete-guide-href",
-                        "--project-id-or-name",
-                        "string",
-                        "--version-id",
-                        "string",
+                        "--doc-name",
+                        "my-project",
+                        "--doc-version",
+                        "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
                         "--guide-id",
-                        "string",
+                        "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
                         "--variant",
                         "next",
                     ]
@@ -2632,7 +2601,57 @@ mod cli_tests {
                     &[
                         "sideko-rest-api",
                         "delete-asset",
-                        "--asset-id",
+                        "--id",
+                        "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
+                    ]
+                        .join(" "),
+                ),
+            )
+            .expect("failed parsing cli input");
+        let result = super::handle_cli(cli).await;
+        println!("{:?}", & result);
+        assert!(result.is_ok())
+    }
+    #[serial_test::serial]
+    #[tokio::test]
+    async fn test_cli_role_delete_204_generated_success() {
+        let cli = super::SidekoCli::try_parse_from(
+                shlex::Shlex::new(
+                    &[
+                        "sideko-rest-api",
+                        "config",
+                        "auth",
+                        "api-key-auth",
+                        "--key",
+                        "API_KEY",
+                    ]
+                        .join(" "),
+                ),
+            )
+            .expect("failed parsing auth cli input");
+        super::handle_cli(cli).await.expect("failed running auth command");
+        let cli = super::SidekoCli::try_parse_from(
+                shlex::Shlex::new(
+                    &[
+                        "sideko-rest-api",
+                        "config",
+                        "auth",
+                        "cookie-auth",
+                        "--key",
+                        "API_KEY",
+                    ]
+                        .join(" "),
+                ),
+            )
+            .expect("failed parsing auth cli input");
+        super::handle_cli(cli).await.expect("failed running auth command");
+        let cli = super::SidekoCli::try_parse_from(
+                shlex::Shlex::new(
+                    &[
+                        "sideko-rest-api",
+                        "role",
+                        "delete",
+                        "--id",
                         "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
                     ]
                         .join(" "),
@@ -2681,7 +2700,7 @@ mod cli_tests {
                     &[
                         "sideko-rest-api",
                         "delete-service-account",
-                        "--service-account-id",
+                        "--id",
                         "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
                     ]
                         .join(" "),
@@ -2820,50 +2839,7 @@ mod cli_tests {
         super::handle_cli(cli).await.expect("failed running auth command");
         let cli = super::SidekoCli::try_parse_from(
                 shlex::Shlex::new(
-                    &["sideko-rest-api", "api", "get", "--id", "string"].join(" "),
-                ),
-            )
-            .expect("failed parsing cli input");
-        let result = super::handle_cli(cli).await;
-        println!("{:?}", & result);
-        assert!(result.is_ok())
-    }
-    #[serial_test::serial]
-    #[tokio::test]
-    async fn test_cli_api_members_list_200_generated_success() {
-        let cli = super::SidekoCli::try_parse_from(
-                shlex::Shlex::new(
-                    &[
-                        "sideko-rest-api",
-                        "config",
-                        "auth",
-                        "api-key-auth",
-                        "--key",
-                        "API_KEY",
-                    ]
-                        .join(" "),
-                ),
-            )
-            .expect("failed parsing auth cli input");
-        super::handle_cli(cli).await.expect("failed running auth command");
-        let cli = super::SidekoCli::try_parse_from(
-                shlex::Shlex::new(
-                    &[
-                        "sideko-rest-api",
-                        "config",
-                        "auth",
-                        "cookie-auth",
-                        "--key",
-                        "API_KEY",
-                    ]
-                        .join(" "),
-                ),
-            )
-            .expect("failed parsing auth cli input");
-        super::handle_cli(cli).await.expect("failed running auth command");
-        let cli = super::SidekoCli::try_parse_from(
-                shlex::Shlex::new(
-                    &["sideko-rest-api", "api", "members", "list", "--id", "string"]
+                    &["sideko-rest-api", "api", "get", "--api-name", "my-project"]
                         .join(" "),
                 ),
             )
@@ -2907,7 +2883,14 @@ mod cli_tests {
         super::handle_cli(cli).await.expect("failed running auth command");
         let cli = super::SidekoCli::try_parse_from(
                 shlex::Shlex::new(
-                    &["sideko-rest-api", "api", "spec", "list", "--id", "string"]
+                    &[
+                        "sideko-rest-api",
+                        "api",
+                        "spec",
+                        "list",
+                        "--api-name",
+                        "my-project",
+                    ]
                         .join(" "),
                 ),
             )
@@ -2956,9 +2939,9 @@ mod cli_tests {
                         "api",
                         "spec",
                         "get",
-                        "--id",
-                        "string",
-                        "--version",
+                        "--api-name",
+                        "my-project",
+                        "--api-version",
                         "string",
                     ]
                         .join(" "),
@@ -2971,7 +2954,7 @@ mod cli_tests {
     }
     #[serial_test::serial]
     #[tokio::test]
-    async fn test_cli_api_spec_openapi_list_200_generated_success() {
+    async fn test_cli_api_spec_get_openapi_200_generated_success() {
         let cli = super::SidekoCli::try_parse_from(
                 shlex::Shlex::new(
                     &[
@@ -3008,11 +2991,10 @@ mod cli_tests {
                         "sideko-rest-api",
                         "api",
                         "spec",
-                        "openapi",
-                        "list",
-                        "--id",
-                        "string",
-                        "--version",
+                        "get-openapi",
+                        "--api-name",
+                        "my-project",
+                        "--api-version",
                         "string",
                     ]
                         .join(" "),
@@ -3025,7 +3007,7 @@ mod cli_tests {
     }
     #[serial_test::serial]
     #[tokio::test]
-    async fn test_cli_get_api_version_stats_200_generated_success() {
+    async fn test_cli_api_spec_get_stats_200_generated_success() {
         let cli = super::SidekoCli::try_parse_from(
                 shlex::Shlex::new(
                     &[
@@ -3060,10 +3042,12 @@ mod cli_tests {
                 shlex::Shlex::new(
                     &[
                         "sideko-rest-api",
-                        "get-api-version-stats",
-                        "--id",
-                        "string",
-                        "--version",
+                        "api",
+                        "spec",
+                        "get-stats",
+                        "--api-name",
+                        "my-project",
+                        "--api-version",
                         "string",
                     ]
                         .join(" "),
@@ -3112,7 +3096,7 @@ mod cli_tests {
                     &[
                         "sideko-rest-api",
                         "list-api-links",
-                        "--doc-version-id",
+                        "--doc-version",
                         "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
                     ]
                         .join(" "),
@@ -3161,7 +3145,7 @@ mod cli_tests {
                     &[
                         "sideko-rest-api",
                         "get-api-link",
-                        "--link-id",
+                        "--id",
                         "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
                     ]
                         .join(" "),
@@ -3210,7 +3194,7 @@ mod cli_tests {
                     &[
                         "sideko-rest-api",
                         "list-api-link-groups",
-                        "--doc-version-id",
+                        "--doc-version",
                         "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
                     ]
                         .join(" "),
@@ -3367,12 +3351,7 @@ mod cli_tests {
         super::handle_cli(cli).await.expect("failed running auth command");
         let cli = super::SidekoCli::try_parse_from(
                 shlex::Shlex::new(
-                    &[
-                        "sideko-rest-api",
-                        "get-doc-project",
-                        "--project-id-or-name",
-                        "string",
-                    ]
+                    &["sideko-rest-api", "get-doc-project", "--doc-name", "my-project"]
                         .join(" "),
                 ),
             )
@@ -3419,8 +3398,8 @@ mod cli_tests {
                     &[
                         "sideko-rest-api",
                         "list-deployments",
-                        "--project-id-or-name",
-                        "string",
+                        "--doc-name",
+                        "my-project",
                         "--limit",
                         "123",
                         "--target",
@@ -3472,59 +3451,10 @@ mod cli_tests {
                     &[
                         "sideko-rest-api",
                         "get-deployment",
-                        "--project-id-or-name",
-                        "string",
+                        "--doc-name",
+                        "my-project",
                         "--deployment-id",
                         "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
-                    ]
-                        .join(" "),
-                ),
-            )
-            .expect("failed parsing cli input");
-        let result = super::handle_cli(cli).await;
-        println!("{:?}", & result);
-        assert!(result.is_ok())
-    }
-    #[serial_test::serial]
-    #[tokio::test]
-    async fn test_cli_list_doc_project_members_200_generated_success() {
-        let cli = super::SidekoCli::try_parse_from(
-                shlex::Shlex::new(
-                    &[
-                        "sideko-rest-api",
-                        "config",
-                        "auth",
-                        "api-key-auth",
-                        "--key",
-                        "API_KEY",
-                    ]
-                        .join(" "),
-                ),
-            )
-            .expect("failed parsing auth cli input");
-        super::handle_cli(cli).await.expect("failed running auth command");
-        let cli = super::SidekoCli::try_parse_from(
-                shlex::Shlex::new(
-                    &[
-                        "sideko-rest-api",
-                        "config",
-                        "auth",
-                        "cookie-auth",
-                        "--key",
-                        "API_KEY",
-                    ]
-                        .join(" "),
-                ),
-            )
-            .expect("failed parsing auth cli input");
-        super::handle_cli(cli).await.expect("failed running auth command");
-        let cli = super::SidekoCli::try_parse_from(
-                shlex::Shlex::new(
-                    &[
-                        "sideko-rest-api",
-                        "list-doc-project-members",
-                        "--project-id-or-name",
-                        "string",
                     ]
                         .join(" "),
                 ),
@@ -3569,12 +3499,7 @@ mod cli_tests {
         super::handle_cli(cli).await.expect("failed running auth command");
         let cli = super::SidekoCli::try_parse_from(
                 shlex::Shlex::new(
-                    &[
-                        "sideko-rest-api",
-                        "check-preview",
-                        "--project-id-or-name",
-                        "string",
-                    ]
+                    &["sideko-rest-api", "check-preview", "--doc-name", "my-project"]
                         .join(" "),
                 ),
             )
@@ -3621,8 +3546,8 @@ mod cli_tests {
                     &[
                         "sideko-rest-api",
                         "get-doc-project-theme",
-                        "--project-id-or-name",
-                        "string",
+                        "--doc-name",
+                        "my-project",
                     ]
                         .join(" "),
                 ),
@@ -3667,12 +3592,7 @@ mod cli_tests {
         super::handle_cli(cli).await.expect("failed running auth command");
         let cli = super::SidekoCli::try_parse_from(
                 shlex::Shlex::new(
-                    &[
-                        "sideko-rest-api",
-                        "list-doc-versions",
-                        "--project-id-or-name",
-                        "string",
-                    ]
+                    &["sideko-rest-api", "list-doc-versions", "--doc-name", "my-project"]
                         .join(" "),
                 ),
             )
@@ -3719,10 +3639,10 @@ mod cli_tests {
                     &[
                         "sideko-rest-api",
                         "get-doc-version",
-                        "--project-id-or-name",
-                        "string",
-                        "--version-id",
-                        "string",
+                        "--doc-name",
+                        "my-project",
+                        "--doc-version",
+                        "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
                     ]
                         .join(" "),
                 ),
@@ -3770,10 +3690,10 @@ mod cli_tests {
                     &[
                         "sideko-rest-api",
                         "list-guides",
-                        "--project-id-or-name",
-                        "string",
-                        "--version-id",
-                        "string",
+                        "--doc-name",
+                        "my-project",
+                        "--doc-version",
+                        "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
                     ]
                         .join(" "),
                 ),
@@ -3821,12 +3741,12 @@ mod cli_tests {
                     &[
                         "sideko-rest-api",
                         "get-guide",
-                        "--project-id-or-name",
-                        "string",
-                        "--version-id",
-                        "string",
+                        "--doc-name",
+                        "my-project",
+                        "--doc-version",
+                        "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
                         "--guide-id",
-                        "string",
+                        "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
                     ]
                         .join(" "),
                 ),
@@ -3874,12 +3794,12 @@ mod cli_tests {
                     &[
                         "sideko-rest-api",
                         "get-guide-content",
-                        "--project-id-or-name",
-                        "string",
-                        "--version-id",
-                        "string",
+                        "--doc-name",
+                        "my-project",
+                        "--doc-version",
+                        "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
                         "--guide-id",
-                        "string",
+                        "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
                     ]
                         .join(" "),
                 ),
@@ -3983,49 +3903,6 @@ mod cli_tests {
     }
     #[serial_test::serial]
     #[tokio::test]
-    async fn test_cli_list_organization_members_200_generated_success() {
-        let cli = super::SidekoCli::try_parse_from(
-                shlex::Shlex::new(
-                    &[
-                        "sideko-rest-api",
-                        "config",
-                        "auth",
-                        "api-key-auth",
-                        "--key",
-                        "API_KEY",
-                    ]
-                        .join(" "),
-                ),
-            )
-            .expect("failed parsing auth cli input");
-        super::handle_cli(cli).await.expect("failed running auth command");
-        let cli = super::SidekoCli::try_parse_from(
-                shlex::Shlex::new(
-                    &[
-                        "sideko-rest-api",
-                        "config",
-                        "auth",
-                        "cookie-auth",
-                        "--key",
-                        "API_KEY",
-                    ]
-                        .join(" "),
-                ),
-            )
-            .expect("failed parsing auth cli input");
-        super::handle_cli(cli).await.expect("failed running auth command");
-        let cli = super::SidekoCli::try_parse_from(
-                shlex::Shlex::new(
-                    &["sideko-rest-api", "list-organization-members"].join(" "),
-                ),
-            )
-            .expect("failed parsing cli input");
-        let result = super::handle_cli(cli).await;
-        println!("{:?}", & result);
-        assert!(result.is_ok())
-    }
-    #[serial_test::serial]
-    #[tokio::test]
     async fn test_cli_get_organization_theme_200_generated_success() {
         let cli = super::SidekoCli::try_parse_from(
                 shlex::Shlex::new(
@@ -4069,7 +3946,7 @@ mod cli_tests {
     }
     #[serial_test::serial]
     #[tokio::test]
-    async fn test_cli_list_sdks_200_generated_success() {
+    async fn test_cli_role_list_200_generated_success() {
         let cli = super::SidekoCli::try_parse_from(
                 shlex::Shlex::new(
                     &[
@@ -4102,7 +3979,70 @@ mod cli_tests {
         super::handle_cli(cli).await.expect("failed running auth command");
         let cli = super::SidekoCli::try_parse_from(
                 shlex::Shlex::new(
-                    &["sideko-rest-api", "list-sdks", "--api-id", "string"].join(" "),
+                    &[
+                        "sideko-rest-api",
+                        "role",
+                        "list",
+                        "--object-id",
+                        "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
+                        "--object-type",
+                        "api_project",
+                        "--user-id",
+                        "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
+                    ]
+                        .join(" "),
+                ),
+            )
+            .expect("failed parsing cli input");
+        let result = super::handle_cli(cli).await;
+        println!("{:?}", & result);
+        assert!(result.is_ok())
+    }
+    #[serial_test::serial]
+    #[tokio::test]
+    async fn test_cli_sdk_list_200_generated_success() {
+        let cli = super::SidekoCli::try_parse_from(
+                shlex::Shlex::new(
+                    &[
+                        "sideko-rest-api",
+                        "config",
+                        "auth",
+                        "api-key-auth",
+                        "--key",
+                        "API_KEY",
+                    ]
+                        .join(" "),
+                ),
+            )
+            .expect("failed parsing auth cli input");
+        super::handle_cli(cli).await.expect("failed running auth command");
+        let cli = super::SidekoCli::try_parse_from(
+                shlex::Shlex::new(
+                    &[
+                        "sideko-rest-api",
+                        "config",
+                        "auth",
+                        "cookie-auth",
+                        "--key",
+                        "API_KEY",
+                    ]
+                        .join(" "),
+                ),
+            )
+            .expect("failed parsing auth cli input");
+        super::handle_cli(cli).await.expect("failed running auth command");
+        let cli = super::SidekoCli::try_parse_from(
+                shlex::Shlex::new(
+                    &[
+                        "sideko-rest-api",
+                        "sdk",
+                        "list",
+                        "--api",
+                        "my-project",
+                        "--successful",
+                        "true",
+                    ]
+                        .join(" "),
                 ),
             )
             .expect("failed parsing cli input");
@@ -4194,7 +4134,7 @@ mod cli_tests {
     }
     #[serial_test::serial]
     #[tokio::test]
-    async fn test_cli_get_user_project_role_200_generated_success() {
+    async fn test_cli_list_service_accounts_200_generated_success() {
         let cli = super::SidekoCli::try_parse_from(
                 shlex::Shlex::new(
                     &[
@@ -4227,15 +4167,7 @@ mod cli_tests {
         super::handle_cli(cli).await.expect("failed running auth command");
         let cli = super::SidekoCli::try_parse_from(
                 shlex::Shlex::new(
-                    &[
-                        "sideko-rest-api",
-                        "get-user-project-role",
-                        "--project-type",
-                        "api",
-                        "--project-id",
-                        "string",
-                    ]
-                        .join(" "),
+                    &["sideko-rest-api", "list-service-accounts"].join(" "),
                 ),
             )
             .expect("failed parsing cli input");
@@ -4245,7 +4177,7 @@ mod cli_tests {
     }
     #[serial_test::serial]
     #[tokio::test]
-    async fn test_cli_get_service_accounts_200_generated_success() {
+    async fn test_cli_get_service_account_200_generated_success() {
         let cli = super::SidekoCli::try_parse_from(
                 shlex::Shlex::new(
                     &[
@@ -4277,7 +4209,15 @@ mod cli_tests {
             .expect("failed parsing auth cli input");
         super::handle_cli(cli).await.expect("failed running auth command");
         let cli = super::SidekoCli::try_parse_from(
-                shlex::Shlex::new(&["sideko-rest-api", "get-service-accounts"].join(" ")),
+                shlex::Shlex::new(
+                    &[
+                        "sideko-rest-api",
+                        "get-service-account",
+                        "--id",
+                        "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
+                    ]
+                        .join(" "),
+                ),
             )
             .expect("failed parsing cli input");
         let result = super::handle_cli(cli).await;
@@ -4323,9 +4263,9 @@ mod cli_tests {
                         "sideko-rest-api",
                         "api",
                         "patch",
-                        "--id",
-                        "string",
-                        "--id",
+                        "--api-name",
+                        "my-project",
+                        "--name",
                         "my-new-api-name",
                     ]
                         .join(" "),
@@ -4376,9 +4316,9 @@ mod cli_tests {
                         "api",
                         "spec",
                         "patch",
-                        "--id",
-                        "string",
-                        "--version",
+                        "--api-name",
+                        "my-project",
+                        "--api-version",
                         "string",
                         "--mock-server-enabled",
                         "true",
@@ -4386,7 +4326,7 @@ mod cli_tests {
                         "'<p>This version includes a number of excellent improvements</p>'",
                         "--openapi",
                         "./tests/file.pdf",
-                        "--semver",
+                        "--version",
                         "string",
                     ]
                         .join(" "),
@@ -4435,10 +4375,10 @@ mod cli_tests {
                     &[
                         "sideko-rest-api",
                         "update-api-link",
-                        "--link-id",
+                        "--id",
                         "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
                         "--api-version",
-                        "string",
+                        "'{\"api_id\":\"my-api\",\"version\":\"0.1.0\"}'",
                         "--build-request-enabled",
                         "true",
                         "--include-mock-server",
@@ -4496,7 +4436,7 @@ mod cli_tests {
                     &[
                         "sideko-rest-api",
                         "update-api-link-group",
-                        "--group-id",
+                        "--id",
                         "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
                         "--nav-label",
                         "string",
@@ -4549,14 +4489,14 @@ mod cli_tests {
                     &[
                         "sideko-rest-api",
                         "update-doc-project",
-                        "--project-id-or-name",
-                        "string",
+                        "--doc-name",
+                        "my-project",
                         "--logos",
                         "'{\"dark\":\"3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a\",\"favicon\":\"3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a\",\"light\":\"3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a\"}'",
+                        "--name",
+                        "my-company-docs",
                         "--settings",
                         "'{\"action_button\":{\"enabled\":true,\"label\":\"string\",\"url\":\"http://www.example.com\"},\"metadata\":{\"description\":\"string\",\"title\":\"string\"}}'",
-                        "--title",
-                        "my-company-docs",
                     ]
                         .join(" "),
                 ),
@@ -4604,12 +4544,12 @@ mod cli_tests {
                     &[
                         "sideko-rest-api",
                         "update-guide",
-                        "--project-id-or-name",
-                        "string",
-                        "--version-id",
-                        "string",
+                        "--doc-name",
+                        "my-project",
+                        "--doc-version",
+                        "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
                         "--guide-id",
-                        "string",
+                        "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
                         "--content",
                         "string",
                         "--nav-label",
@@ -4667,7 +4607,7 @@ mod cli_tests {
                     &[
                         "sideko-rest-api",
                         "update-asset",
-                        "--asset-id",
+                        "--id",
                         "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
                         "--name",
                         "string",
@@ -4715,62 +4655,7 @@ mod cli_tests {
         super::handle_cli(cli).await.expect("failed running auth command");
         let cli = super::SidekoCli::try_parse_from(
                 shlex::Shlex::new(
-                    &["sideko-rest-api", "api", "create", "--id", "my-api-spec"]
-                        .join(" "),
-                ),
-            )
-            .expect("failed parsing cli input");
-        let result = super::handle_cli(cli).await;
-        println!("{:?}", & result);
-        assert!(result.is_ok())
-    }
-    #[serial_test::serial]
-    #[tokio::test]
-    async fn test_cli_api_role_create_201_success_default() {
-        let cli = super::SidekoCli::try_parse_from(
-                shlex::Shlex::new(
-                    &[
-                        "sideko-rest-api",
-                        "config",
-                        "auth",
-                        "api-key-auth",
-                        "--key",
-                        "API_KEY",
-                    ]
-                        .join(" "),
-                ),
-            )
-            .expect("failed parsing auth cli input");
-        super::handle_cli(cli).await.expect("failed running auth command");
-        let cli = super::SidekoCli::try_parse_from(
-                shlex::Shlex::new(
-                    &[
-                        "sideko-rest-api",
-                        "config",
-                        "auth",
-                        "cookie-auth",
-                        "--key",
-                        "API_KEY",
-                    ]
-                        .join(" "),
-                ),
-            )
-            .expect("failed parsing auth cli input");
-        super::handle_cli(cli).await.expect("failed running auth command");
-        let cli = super::SidekoCli::try_parse_from(
-                shlex::Shlex::new(
-                    &[
-                        "sideko-rest-api",
-                        "api",
-                        "role",
-                        "create",
-                        "--id",
-                        "string",
-                        "--role",
-                        "admin",
-                        "--user-id",
-                        "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
-                    ]
+                    &["sideko-rest-api", "api", "create", "--name", "my-api-spec"]
                         .join(" "),
                 ),
             )
@@ -4819,8 +4704,8 @@ mod cli_tests {
                         "api",
                         "spec",
                         "create",
-                        "--id",
-                        "string",
+                        "--api-name",
+                        "my-project",
                         "--mock-server-enabled",
                         "true",
                         "--notes",
@@ -4828,7 +4713,7 @@ mod cli_tests {
                         "--openapi",
                         "./tests/file.pdf",
                         "--version",
-                        "string",
+                        "patch",
                     ]
                         .join(" "),
                 ),
@@ -5043,7 +4928,7 @@ mod cli_tests {
                     &[
                         "sideko-rest-api",
                         "create-doc-project",
-                        "--title",
+                        "--name",
                         "my-company-docs",
                     ]
                         .join(" "),
@@ -5092,65 +4977,12 @@ mod cli_tests {
                     &[
                         "sideko-rest-api",
                         "trigger-deployment",
-                        "--project-id-or-name",
-                        "string",
+                        "--doc-name",
+                        "my-project",
                         "--doc-version-id",
                         "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
                         "--target",
                         "Preview",
-                    ]
-                        .join(" "),
-                ),
-            )
-            .expect("failed parsing cli input");
-        let result = super::handle_cli(cli).await;
-        println!("{:?}", & result);
-        assert!(result.is_ok())
-    }
-    #[serial_test::serial]
-    #[tokio::test]
-    async fn test_cli_grant_doc_project_role_201_success_default() {
-        let cli = super::SidekoCli::try_parse_from(
-                shlex::Shlex::new(
-                    &[
-                        "sideko-rest-api",
-                        "config",
-                        "auth",
-                        "api-key-auth",
-                        "--key",
-                        "API_KEY",
-                    ]
-                        .join(" "),
-                ),
-            )
-            .expect("failed parsing auth cli input");
-        super::handle_cli(cli).await.expect("failed running auth command");
-        let cli = super::SidekoCli::try_parse_from(
-                shlex::Shlex::new(
-                    &[
-                        "sideko-rest-api",
-                        "config",
-                        "auth",
-                        "cookie-auth",
-                        "--key",
-                        "API_KEY",
-                    ]
-                        .join(" "),
-                ),
-            )
-            .expect("failed parsing auth cli input");
-        super::handle_cli(cli).await.expect("failed running auth command");
-        let cli = super::SidekoCli::try_parse_from(
-                shlex::Shlex::new(
-                    &[
-                        "sideko-rest-api",
-                        "grant-doc-project-role",
-                        "--project-id-or-name",
-                        "string",
-                        "--role",
-                        "admin",
-                        "--user-id",
-                        "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
                     ]
                         .join(" "),
                 ),
@@ -5198,10 +5030,10 @@ mod cli_tests {
                     &[
                         "sideko-rest-api",
                         "create-guide",
-                        "--project-id-or-name",
-                        "string",
-                        "--version-id",
-                        "string",
+                        "--doc-name",
+                        "my-project",
+                        "--doc-version",
+                        "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
                         "--content",
                         "string",
                         "--is-parent",
@@ -5262,10 +5094,10 @@ mod cli_tests {
                     &[
                         "sideko-rest-api",
                         "reorder-guides",
-                        "--project-id-or-name",
-                        "string",
-                        "--version-id",
-                        "string",
+                        "--doc-name",
+                        "my-project",
+                        "--doc-version",
+                        "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
                         "--data",
                         "'{\"id\":\"3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a\",\"order\":123,\"parent_id\":\"3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a\"}'",
                     ]
@@ -5330,7 +5162,7 @@ mod cli_tests {
     }
     #[serial_test::serial]
     #[tokio::test]
-    async fn test_cli_upload_assets_200_success_default() {
+    async fn test_cli_upload_assets_201_success_default() {
         let cli = super::SidekoCli::try_parse_from(
                 shlex::Shlex::new(
                     &[
@@ -5374,7 +5206,7 @@ mod cli_tests {
     }
     #[serial_test::serial]
     #[tokio::test]
-    async fn test_cli_create_sdk_201_success_default() {
+    async fn test_cli_role_create_201_success_default() {
         let cli = super::SidekoCli::try_parse_from(
                 shlex::Shlex::new(
                     &[
@@ -5409,15 +5241,16 @@ mod cli_tests {
                 shlex::Shlex::new(
                     &[
                         "sideko-rest-api",
-                        "create-sdk",
-                        "--api-id",
-                        "my-api",
-                        "--language",
-                        "go",
-                        "--name",
-                        "my-api-python",
-                        "--semver",
-                        "1.0.0",
+                        "role",
+                        "create",
+                        "--object-id",
+                        "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
+                        "--object-type",
+                        "api_project",
+                        "--role-definition-id",
+                        "ApiProjectAdmin",
+                        "--user-id",
+                        "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
                     ]
                         .join(" "),
                 ),
@@ -5429,7 +5262,7 @@ mod cli_tests {
     }
     #[serial_test::serial]
     #[tokio::test]
-    async fn test_cli_update_sdk_200_success_default() {
+    async fn test_cli_sdk_generate_201_success_default() {
         let cli = super::SidekoCli::try_parse_from(
                 shlex::Shlex::new(
                     &[
@@ -5464,14 +5297,123 @@ mod cli_tests {
                 shlex::Shlex::new(
                     &[
                         "sideko-rest-api",
-                        "update-sdk",
-                        "--name",
-                        "my-python-sdk",
-                        "--semver",
-                        "0.1.1",
+                        "sdk",
+                        "generate",
                         "--api-version",
                         "string",
-                        "--file",
+                        "--config",
+                        "./tests/file.pdf",
+                        "--language",
+                        "go",
+                        "--sdk-version",
+                        "0.1.0",
+                    ]
+                        .join(" "),
+                ),
+            )
+            .expect("failed parsing cli input");
+        let result = super::handle_cli(cli).await;
+        println!("{:?}", & result);
+        assert!(result.is_ok())
+    }
+    #[serial_test::serial]
+    #[tokio::test]
+    async fn test_cli_sdk_config_init_init_200_success_default() {
+        let cli = super::SidekoCli::try_parse_from(
+                shlex::Shlex::new(
+                    &[
+                        "sideko-rest-api",
+                        "config",
+                        "auth",
+                        "api-key-auth",
+                        "--key",
+                        "API_KEY",
+                    ]
+                        .join(" "),
+                ),
+            )
+            .expect("failed parsing auth cli input");
+        super::handle_cli(cli).await.expect("failed running auth command");
+        let cli = super::SidekoCli::try_parse_from(
+                shlex::Shlex::new(
+                    &[
+                        "sideko-rest-api",
+                        "config",
+                        "auth",
+                        "cookie-auth",
+                        "--key",
+                        "API_KEY",
+                    ]
+                        .join(" "),
+                ),
+            )
+            .expect("failed parsing auth cli input");
+        super::handle_cli(cli).await.expect("failed running auth command");
+        let cli = super::SidekoCli::try_parse_from(
+                shlex::Shlex::new(
+                    &[
+                        "sideko-rest-api",
+                        "sdk",
+                        "config",
+                        "init",
+                        "init",
+                        "--api-name",
+                        "my-project",
+                        "--api-version",
+                        "string",
+                    ]
+                        .join(" "),
+                ),
+            )
+            .expect("failed parsing cli input");
+        let result = super::handle_cli(cli).await;
+        println!("{:?}", & result);
+        assert!(result.is_ok())
+    }
+    #[serial_test::serial]
+    #[tokio::test]
+    async fn test_cli_sdk_config_sync_sync_200_success_default() {
+        let cli = super::SidekoCli::try_parse_from(
+                shlex::Shlex::new(
+                    &[
+                        "sideko-rest-api",
+                        "config",
+                        "auth",
+                        "api-key-auth",
+                        "--key",
+                        "API_KEY",
+                    ]
+                        .join(" "),
+                ),
+            )
+            .expect("failed parsing auth cli input");
+        super::handle_cli(cli).await.expect("failed running auth command");
+        let cli = super::SidekoCli::try_parse_from(
+                shlex::Shlex::new(
+                    &[
+                        "sideko-rest-api",
+                        "config",
+                        "auth",
+                        "cookie-auth",
+                        "--key",
+                        "API_KEY",
+                    ]
+                        .join(" "),
+                ),
+            )
+            .expect("failed parsing auth cli input");
+        super::handle_cli(cli).await.expect("failed running auth command");
+        let cli = super::SidekoCli::try_parse_from(
+                shlex::Shlex::new(
+                    &[
+                        "sideko-rest-api",
+                        "sdk",
+                        "config",
+                        "sync",
+                        "sync",
+                        "--api-version",
+                        "string",
+                        "--config",
                         "./tests/file.pdf",
                     ]
                         .join(" "),
@@ -5484,7 +5426,7 @@ mod cli_tests {
     }
     #[serial_test::serial]
     #[tokio::test]
-    async fn test_cli_stateless_generate_sdk_201_success_default() {
+    async fn test_cli_sdk_update_update_201_success_default() {
         let cli = super::SidekoCli::try_parse_from(
                 shlex::Shlex::new(
                     &[
@@ -5519,7 +5461,68 @@ mod cli_tests {
                 shlex::Shlex::new(
                     &[
                         "sideko-rest-api",
-                        "stateless-generate-sdk",
+                        "sdk",
+                        "update",
+                        "update",
+                        "--api-version",
+                        "string",
+                        "--config",
+                        "./tests/file.pdf",
+                        "--prev-sdk-git",
+                        "./tests/file.pdf",
+                        "--prev-sdk-id",
+                        "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
+                        "--sdk-version",
+                        "patch",
+                    ]
+                        .join(" "),
+                ),
+            )
+            .expect("failed parsing cli input");
+        let result = super::handle_cli(cli).await;
+        println!("{:?}", & result);
+        assert!(result.is_ok())
+    }
+    #[serial_test::serial]
+    #[tokio::test]
+    async fn test_cli_stateless_generate_sdk_generate_stateless_201_success_default() {
+        let cli = super::SidekoCli::try_parse_from(
+                shlex::Shlex::new(
+                    &[
+                        "sideko-rest-api",
+                        "config",
+                        "auth",
+                        "api-key-auth",
+                        "--key",
+                        "API_KEY",
+                    ]
+                        .join(" "),
+                ),
+            )
+            .expect("failed parsing auth cli input");
+        super::handle_cli(cli).await.expect("failed running auth command");
+        let cli = super::SidekoCli::try_parse_from(
+                shlex::Shlex::new(
+                    &[
+                        "sideko-rest-api",
+                        "config",
+                        "auth",
+                        "cookie-auth",
+                        "--key",
+                        "API_KEY",
+                    ]
+                        .join(" "),
+                ),
+            )
+            .expect("failed parsing auth cli input");
+        super::handle_cli(cli).await.expect("failed running auth command");
+        let cli = super::SidekoCli::try_parse_from(
+                shlex::Shlex::new(
+                    &[
+                        "sideko-rest-api",
+                        "stateless",
+                        "generate-sdk",
+                        "generate-stateless",
                         "--base-url",
                         "http://127.0.0.1:8080/api",
                         "--language",
@@ -5539,7 +5542,7 @@ mod cli_tests {
     }
     #[serial_test::serial]
     #[tokio::test]
-    async fn test_cli_invite_user_201_success_default() {
+    async fn test_cli_invite_user_202_success_default() {
         let cli = super::SidekoCli::try_parse_from(
                 shlex::Shlex::new(
                     &[
@@ -5577,8 +5580,8 @@ mod cli_tests {
                         "invite-user",
                         "--email",
                         "user@example.com",
-                        "--role",
-                        "admin",
+                        "--role-definition-id",
+                        "ApiProjectAdmin",
                     ]
                         .join(" "),
                 ),
@@ -5628,8 +5631,8 @@ mod cli_tests {
                         "create-service-account",
                         "--name",
                         "'Documentation Publisher Service Account'",
-                        "--project-roles",
-                        "'{\"project_id_or_name\":\"string\",\"project_type\":\"api\",\"role\":\"admin\"}'",
+                        "--object-roles",
+                        "'{\"object_id\":\"3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a\",\"object_type\":\"api_project\",\"role_definition_id\":\"ApiProjectAdmin\"}'",
                     ]
                         .join(" "),
                 ),
@@ -5720,8 +5723,8 @@ mod cli_tests {
                     &[
                         "sideko-rest-api",
                         "update-doc-project-theme",
-                        "--project-id-or-name",
-                        "string",
+                        "--doc-name",
+                        "my-project",
                         "--api-reference-group-variant",
                         "grouped",
                         "--dark-active-button-bg-color",
