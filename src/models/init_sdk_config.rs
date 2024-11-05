@@ -5,6 +5,10 @@ pub struct InitSdkConfig {
     #[cfg_attr(feature = "cli", arg(id = "api-name", long = "api-name"))]
     pub api_name: String,
     #[cfg_attr(feature = "cli", arg(id = "api-version", long = "api-version"))]
+    #[cfg_attr(
+        feature = "cli",
+        arg(value_parser = crate::core::clap::parse_json::<crate::models::ApiVersion>)
+    )]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub api_version: Option<String>,
+    pub api_version: Option<crate::models::ApiVersion>,
 }

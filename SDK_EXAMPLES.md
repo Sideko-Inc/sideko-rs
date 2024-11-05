@@ -40,7 +40,9 @@ let res = client
     .spec()
     .delete(sideko_rest_api::resources::api::spec::DeleteRequest {
         api_name: "my-project".to_string(),
-        api_version: "string".to_string(),
+        api_version: sideko_rest_api::models::ApiVersion::StrEnum(
+            sideko_rest_api::models::VersionTypeEnum::Latest,
+        ),
     })
     .await;
 ```
@@ -324,7 +326,9 @@ let res = client
     .spec()
     .get(sideko_rest_api::resources::api::spec::GetRequest {
         api_name: "my-project".to_string(),
-        api_version: "string".to_string(),
+        api_version: sideko_rest_api::models::ApiVersion::StrEnum(
+            sideko_rest_api::models::VersionTypeEnum::Latest,
+        ),
     })
     .await;
 ```
@@ -347,7 +351,9 @@ let res = client
     .spec()
     .get_openapi(sideko_rest_api::resources::api::spec::GetOpenapiRequest {
         api_name: "my-project".to_string(),
-        api_version: "string".to_string(),
+        api_version: sideko_rest_api::models::ApiVersion::StrEnum(
+            sideko_rest_api::models::VersionTypeEnum::Latest,
+        ),
     })
     .await;
 ```
@@ -370,7 +376,9 @@ let res = client
     .spec()
     .get_stats(sideko_rest_api::resources::api::spec::GetStatsRequest {
         api_name: "my-project".to_string(),
-        api_version: "string".to_string(),
+        api_version: sideko_rest_api::models::ApiVersion::StrEnum(
+            sideko_rest_api::models::VersionTypeEnum::Latest,
+        ),
     })
     .await;
 ```
@@ -956,7 +964,9 @@ let res = client
     .spec()
     .patch(sideko_rest_api::resources::api::spec::PatchRequest {
         api_name: "my-project".to_string(),
-        api_version: "string".to_string(),
+        api_version: sideko_rest_api::models::ApiVersion::StrEnum(
+            sideko_rest_api::models::VersionTypeEnum::Latest,
+        ),
         data: sideko_rest_api::models::UpdateApiSpec {
             mock_server_enabled: Some(true),
             notes: Some(
@@ -1455,7 +1465,11 @@ let res = client
     .sdk()
     .generate(sideko_rest_api::resources::sdk::GenerateRequest {
         data: sideko_rest_api::models::NewSdk {
-            api_version: Some("string".to_string()),
+            api_version: Some(
+                sideko_rest_api::models::ApiVersion::StrEnum(
+                    sideko_rest_api::models::VersionTypeEnum::Latest,
+                ),
+            ),
             config: sideko_rest_api::UploadFile::from_path("tests/file.pdf")
                 .unwrap(),
             language: sideko_rest_api::models::SdkLanguageEnum::Go,
@@ -1485,7 +1499,11 @@ let res = client
     .init(sideko_rest_api::resources::sdk::config::init::InitRequest {
         data: sideko_rest_api::models::InitSdkConfig {
             api_name: "my-project".to_string(),
-            api_version: Some("string".to_string()),
+            api_version: Some(
+                sideko_rest_api::models::ApiVersion::StrEnum(
+                    sideko_rest_api::models::VersionTypeEnum::Latest,
+                ),
+            ),
         },
     })
     .await;
@@ -1510,7 +1528,11 @@ let res = client
     .sync()
     .sync(sideko_rest_api::resources::sdk::config::sync::SyncRequest {
         data: sideko_rest_api::models::SyncSdkConfig {
-            api_version: Some("string".to_string()),
+            api_version: Some(
+                sideko_rest_api::models::ApiVersion::StrEnum(
+                    sideko_rest_api::models::VersionTypeEnum::Latest,
+                ),
+            ),
             config: sideko_rest_api::UploadFile::from_path("tests/file.pdf").unwrap(),
         },
     })
@@ -1535,7 +1557,11 @@ let res = client
     .update()
     .update(sideko_rest_api::resources::sdk::update::UpdateRequest {
         data: sideko_rest_api::models::UpdateSdk {
-            api_version: Some("string".to_string()),
+            api_version: Some(
+                sideko_rest_api::models::ApiVersion::StrEnum(
+                    sideko_rest_api::models::VersionTypeEnum::Latest,
+                ),
+            ),
             config: sideko_rest_api::UploadFile::from_path("tests/file.pdf")
                 .unwrap(),
             prev_sdk_git: sideko_rest_api::UploadFile::from_path("tests/file.pdf")

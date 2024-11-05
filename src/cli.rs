@@ -2050,7 +2050,7 @@ enum ApiSpecSubcommand {
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api api spec delete --api-name my-project --api-version string`
+    /// **Example:** `sideko-rest-api api spec delete --api-name my-project --api-version latest`
     #[command(name = "delete")]
     Delete(sideko_rest_api::resources::api::spec::DeleteRequest),
     /// command
@@ -2064,28 +2064,28 @@ enum ApiSpecSubcommand {
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api api spec get --api-name my-project --api-version string`
+    /// **Example:** `sideko-rest-api api spec get --api-name my-project --api-version latest`
     #[command(name = "get")]
     Get(sideko_rest_api::resources::api::spec::GetRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api api spec get-openapi --api-name my-project --api-version string`
+    /// **Example:** `sideko-rest-api api spec get-openapi --api-name my-project --api-version latest`
     #[command(name = "get-openapi")]
     GetOpenapi(sideko_rest_api::resources::api::spec::GetOpenapiRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api api spec get-stats --api-name my-project --api-version string`
+    /// **Example:** `sideko-rest-api api spec get-stats --api-name my-project --api-version latest`
     #[command(name = "get-stats")]
     GetStats(sideko_rest_api::resources::api::spec::GetStatsRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api api spec patch --api-name my-project --api-version string --mock-server-enabled true --notes '<p>This version includes a number of excellent improvements</p>' --openapi ./tests/file.pdf --version string`
+    /// **Example:** `sideko-rest-api api spec patch --api-name my-project --api-version latest --mock-server-enabled true --notes '<p>This version includes a number of excellent improvements</p>' --openapi ./tests/file.pdf --version string`
     #[command(name = "patch")]
     Patch(sideko_rest_api::resources::api::spec::PatchRequest),
     /// command
@@ -2141,7 +2141,7 @@ enum SdkSubcommand {
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api sdk generate --api-version string --config ./tests/file.pdf --language go --sdk-version 0.1.0`
+    /// **Example:** `sideko-rest-api sdk generate --api-version latest --config ./tests/file.pdf --language go --sdk-version 0.1.0`
     #[command(name = "generate")]
     Generate(sideko_rest_api::resources::sdk::GenerateRequest),
 }
@@ -2162,7 +2162,7 @@ enum SdkConfigInitSubcommand {
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api sdk config init init --api-name my-project --api-version string`
+    /// **Example:** `sideko-rest-api sdk config init init --api-name my-project --api-version latest`
     #[command(name = "init")]
     Init(sideko_rest_api::resources::sdk::config::init::InitRequest),
 }
@@ -2173,7 +2173,7 @@ enum SdkConfigSyncSubcommand {
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api sdk config sync sync --api-version string --config ./tests/file.pdf`
+    /// **Example:** `sideko-rest-api sdk config sync sync --api-version latest --config ./tests/file.pdf`
     #[command(name = "sync")]
     Sync(sideko_rest_api::resources::sdk::config::sync::SyncRequest),
 }
@@ -2184,7 +2184,7 @@ enum SdkUpdateSubcommand {
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api sdk update update --api-version string --config ./tests/file.pdf --prev-sdk-git ./tests/file.pdf --prev-sdk-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --sdk-version patch`
+    /// **Example:** `sideko-rest-api sdk update update --api-version latest --config ./tests/file.pdf --prev-sdk-git ./tests/file.pdf --prev-sdk-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --sdk-version patch`
     #[command(name = "update")]
     Update(sideko_rest_api::resources::sdk::update::UpdateRequest),
 }
@@ -2298,7 +2298,7 @@ mod cli_tests {
                         "--api-name",
                         "my-project",
                         "--api-version",
-                        "string",
+                        "latest",
                     ]
                         .join(" "),
                 ),
@@ -2942,7 +2942,7 @@ mod cli_tests {
                         "--api-name",
                         "my-project",
                         "--api-version",
-                        "string",
+                        "latest",
                     ]
                         .join(" "),
                 ),
@@ -2995,7 +2995,7 @@ mod cli_tests {
                         "--api-name",
                         "my-project",
                         "--api-version",
-                        "string",
+                        "latest",
                     ]
                         .join(" "),
                 ),
@@ -3048,7 +3048,7 @@ mod cli_tests {
                         "--api-name",
                         "my-project",
                         "--api-version",
-                        "string",
+                        "latest",
                     ]
                         .join(" "),
                 ),
@@ -4319,7 +4319,7 @@ mod cli_tests {
                         "--api-name",
                         "my-project",
                         "--api-version",
-                        "string",
+                        "latest",
                         "--mock-server-enabled",
                         "true",
                         "--notes",
@@ -5300,7 +5300,7 @@ mod cli_tests {
                         "sdk",
                         "generate",
                         "--api-version",
-                        "string",
+                        "latest",
                         "--config",
                         "./tests/file.pdf",
                         "--language",
@@ -5360,7 +5360,7 @@ mod cli_tests {
                         "--api-name",
                         "my-project",
                         "--api-version",
-                        "string",
+                        "latest",
                     ]
                         .join(" "),
                 ),
@@ -5412,7 +5412,7 @@ mod cli_tests {
                         "sync",
                         "sync",
                         "--api-version",
-                        "string",
+                        "latest",
                         "--config",
                         "./tests/file.pdf",
                     ]
@@ -5465,7 +5465,7 @@ mod cli_tests {
                         "update",
                         "update",
                         "--api-version",
-                        "string",
+                        "latest",
                         "--config",
                         "./tests/file.pdf",
                         "--prev-sdk-git",
