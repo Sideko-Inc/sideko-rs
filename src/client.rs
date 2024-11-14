@@ -19,30 +19,39 @@ impl Client {
         self
     }
     pub fn with_api_key_auth(mut self, val: &str) -> Self {
-        self.base_client.auth.insert(
-            "ApiKeyAuth".into(),
-            crate::core::auth::AuthProvider::KeyHeader("x-sideko-key".into(), val.into()),
-        );
+        self.base_client
+            .auth
+            .insert(
+                "ApiKeyAuth".into(),
+                crate::core::auth::AuthProvider::KeyHeader(
+                    "x-sideko-key".into(),
+                    val.into(),
+                ),
+            );
         self
     }
     pub fn with_cookie_auth(mut self, val: &str) -> Self {
-        self.base_client.auth.insert(
-            "CookieAuth".into(),
-            crate::core::auth::AuthProvider::KeyCookie("SIDEKO_SESSION".into(), val.into()),
-        );
+        self.base_client
+            .auth
+            .insert(
+                "CookieAuth".into(),
+                crate::core::auth::AuthProvider::KeyCookie(
+                    "SIDEKO_SESSION".into(),
+                    val.into(),
+                ),
+            );
         self
     }
     pub fn api(&self) -> crate::resources::api::resource_client::ApiClient {
         crate::resources::api::resource_client::ApiClient::new(self.base_client.clone())
     }
     pub fn role(&self) -> crate::resources::role::resource_client::RoleClient {
-        crate::resources::role::resource_client::RoleClient::new(self.base_client.clone())
+        crate::resources::role::resource_client::RoleClient::new(
+            self.base_client.clone(),
+        )
     }
     pub fn sdk(&self) -> crate::resources::sdk::resource_client::SdkClient {
         crate::resources::sdk::resource_client::SdkClient::new(self.base_client.clone())
-    }
-    pub fn stateless(&self) -> crate::resources::stateless::resource_client::StatelessClient {
-        crate::resources::stateless::resource_client::StatelessClient::new(self.base_client.clone())
     }
     /// no description available
     pub async fn delete_api_link(
@@ -51,7 +60,12 @@ impl Client {
     ) -> crate::SdkResult<()> {
         let url = self
             .base_client
-            .build_url(&format!("/api_link/{}", &request.id));
+            .build_url(
+                &format!(
+                    "/api_link/{}", crate ::core::params::format_string_param(& request
+                    .id)
+                ),
+            );
         let mut builder = reqwest::Client::default().delete(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         builder = self
@@ -68,7 +82,12 @@ impl Client {
     ) -> crate::SdkResult<()> {
         let url = self
             .base_client
-            .build_url(&format!("/api_link_group/{}", &request.id));
+            .build_url(
+                &format!(
+                    "/api_link_group/{}", crate ::core::params::format_string_param(&
+                    request.id)
+                ),
+            );
         let mut builder = reqwest::Client::default().delete(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         builder = self
@@ -85,7 +104,12 @@ impl Client {
     ) -> crate::SdkResult<()> {
         let url = self
             .base_client
-            .build_url(&format!("/doc_project/{}", &request.doc_name));
+            .build_url(
+                &format!(
+                    "/doc_project/{}", crate ::core::params::format_string_param(&
+                    request.doc_name)
+                ),
+            );
         let mut builder = reqwest::Client::default().delete(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         builder = self
@@ -100,12 +124,16 @@ impl Client {
         &self,
         request: super::request_types::DeleteGuideRequest,
     ) -> crate::SdkResult<()> {
-        let url = self.base_client.build_url(&format!(
-            "/doc_project/{}/version/{}/guide/{}",
-            &request.doc_name,
-            &crate::core::params::format_string_param(&request.doc_version),
-            &request.guide_id
-        ));
+        let url = self
+            .base_client
+            .build_url(
+                &format!(
+                    "/doc_project/{}/version/{}/guide/{}", crate
+                    ::core::params::format_string_param(& request.doc_name), crate
+                    ::core::params::format_string_param(& request.doc_version), crate
+                    ::core::params::format_string_param(& request.guide_id)
+                ),
+            );
         let mut builder = reqwest::Client::default().delete(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         builder = self
@@ -120,12 +148,16 @@ impl Client {
         &self,
         request: super::request_types::DeleteGuideHrefRequest,
     ) -> crate::SdkResult<()> {
-        let url = self.base_client.build_url(&format!(
-            "/doc_project/{}/version/{}/guide/{}/href",
-            &request.doc_name,
-            &crate::core::params::format_string_param(&request.doc_version),
-            &request.guide_id
-        ));
+        let url = self
+            .base_client
+            .build_url(
+                &format!(
+                    "/doc_project/{}/version/{}/guide/{}/href", crate
+                    ::core::params::format_string_param(& request.doc_name), crate
+                    ::core::params::format_string_param(& request.doc_version), crate
+                    ::core::params::format_string_param(& request.guide_id)
+                ),
+            );
         let mut builder = reqwest::Client::default().delete(&url);
         let mut queries = crate::core::params::QueryParams::default();
         queries.add("variant", &request.variant, false);
@@ -145,7 +177,12 @@ impl Client {
     ) -> crate::SdkResult<()> {
         let url = self
             .base_client
-            .build_url(&format!("/organization/asset/{}", &request.id));
+            .build_url(
+                &format!(
+                    "/organization/asset/{}", crate ::core::params::format_string_param(&
+                    request.id)
+                ),
+            );
         let mut builder = reqwest::Client::default().delete(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         builder = self
@@ -162,7 +199,12 @@ impl Client {
     ) -> crate::SdkResult<()> {
         let url = self
             .base_client
-            .build_url(&format!("/user/service_account/{}", &request.id));
+            .build_url(
+                &format!(
+                    "/user/service_account/{}", crate
+                    ::core::params::format_string_param(& request.id)
+                ),
+            );
         let mut builder = reqwest::Client::default().delete(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         builder = self
@@ -171,6 +213,31 @@ impl Client {
         let response = builder.send().await?;
         self.base_client.error_for_status(response).await?;
         Ok(())
+    }
+    /// no description available
+    pub async fn health_check(
+        &self,
+    ) -> crate::SdkResult<crate::models::GetHealthResponse> {
+        let url = self.base_client.build_url("/_health");
+        let mut builder = reqwest::Client::default().get(&url);
+        builder = builder.header("x-sideko-sdk-language", "rust");
+        builder = self
+            .base_client
+            .apply_auths_to_builder(builder, &["ApiKeyAuth", "CookieAuth"]);
+        let mut response = builder.send().await?;
+        response = self.base_client.error_for_status(response).await?;
+        crate::core::response::process_json::<crate::models::GetHealthResponse>(response)
+            .await
+    }
+    /// no description available
+    pub async fn ping_check(&self) -> crate::SdkResult<crate::models::GetPingResponse> {
+        let url = self.base_client.build_url("/_ping");
+        let mut builder = reqwest::Client::default().get(&url);
+        builder = builder.header("x-sideko-sdk-language", "rust");
+        let mut response = builder.send().await?;
+        response = self.base_client.error_for_status(response).await?;
+        crate::core::response::process_json::<crate::models::GetPingResponse>(response)
+            .await
     }
     /// no description available
     pub async fn list_api_links(
@@ -188,7 +255,8 @@ impl Client {
             .apply_auths_to_builder(builder, &["ApiKeyAuth", "CookieAuth"]);
         let mut response = builder.send().await?;
         response = self.base_client.error_for_status(response).await?;
-        crate::core::response::process_json::<Vec<crate::models::ApiLink>>(response).await
+        crate::core::response::process_json::<Vec<crate::models::ApiLink>>(response)
+            .await
     }
     /// no description available
     pub async fn get_api_link(
@@ -197,7 +265,12 @@ impl Client {
     ) -> crate::SdkResult<crate::models::ApiLink> {
         let url = self
             .base_client
-            .build_url(&format!("/api_link/{}", &request.id));
+            .build_url(
+                &format!(
+                    "/api_link/{}", crate ::core::params::format_string_param(& request
+                    .id)
+                ),
+            );
         let mut builder = reqwest::Client::default().get(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         builder = self
@@ -223,7 +296,8 @@ impl Client {
             .apply_auths_to_builder(builder, &["ApiKeyAuth", "CookieAuth"]);
         let mut response = builder.send().await?;
         response = self.base_client.error_for_status(response).await?;
-        crate::core::response::process_json::<Vec<crate::models::ApiLinkGroup>>(response).await
+        crate::core::response::process_json::<Vec<crate::models::ApiLinkGroup>>(response)
+            .await
     }
     /// no description available
     pub async fn exchange_code_for_key(
@@ -279,15 +353,23 @@ impl Client {
     ) -> crate::SdkResult<Vec<crate::models::CliUpdate>> {
         let url = self
             .base_client
-            .build_url(&format!("/cli/updates/{}", &request.cli_version));
+            .build_url(
+                &format!(
+                    "/cli/updates/{}", crate ::core::params::format_string_param(&
+                    request.cli_version)
+                ),
+            );
         let mut builder = reqwest::Client::default().get(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         let mut response = builder.send().await?;
         response = self.base_client.error_for_status(response).await?;
-        crate::core::response::process_json::<Vec<crate::models::CliUpdate>>(response).await
+        crate::core::response::process_json::<Vec<crate::models::CliUpdate>>(response)
+            .await
     }
     /// no description available
-    pub async fn list_doc_projects(&self) -> crate::SdkResult<Vec<crate::models::DocProject>> {
+    pub async fn list_doc_projects(
+        &self,
+    ) -> crate::SdkResult<Vec<crate::models::DocProject>> {
         let url = self.base_client.build_url("/doc_project");
         let mut builder = reqwest::Client::default().get(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
@@ -296,7 +378,8 @@ impl Client {
             .apply_auths_to_builder(builder, &["ApiKeyAuth", "CookieAuth"]);
         let mut response = builder.send().await?;
         response = self.base_client.error_for_status(response).await?;
-        crate::core::response::process_json::<Vec<crate::models::DocProject>>(response).await
+        crate::core::response::process_json::<Vec<crate::models::DocProject>>(response)
+            .await
     }
     /// no description available
     pub async fn get_doc_project(
@@ -305,7 +388,12 @@ impl Client {
     ) -> crate::SdkResult<crate::models::DocProject> {
         let url = self
             .base_client
-            .build_url(&format!("/doc_project/{}", &request.doc_name));
+            .build_url(
+                &format!(
+                    "/doc_project/{}", crate ::core::params::format_string_param(&
+                    request.doc_name)
+                ),
+            );
         let mut builder = reqwest::Client::default().get(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         builder = self
@@ -322,7 +410,12 @@ impl Client {
     ) -> crate::SdkResult<Vec<crate::models::Deployment>> {
         let url = self
             .base_client
-            .build_url(&format!("/doc_project/{}/deployment", &request.doc_name));
+            .build_url(
+                &format!(
+                    "/doc_project/{}/deployment", crate
+                    ::core::params::format_string_param(& request.doc_name)
+                ),
+            );
         let mut builder = reqwest::Client::default().get(&url);
         let mut queries = crate::core::params::QueryParams::default();
         queries.add_option("limit", &request.limit, false);
@@ -334,17 +427,23 @@ impl Client {
             .apply_auths_to_builder(builder, &["ApiKeyAuth", "CookieAuth"]);
         let mut response = builder.send().await?;
         response = self.base_client.error_for_status(response).await?;
-        crate::core::response::process_json::<Vec<crate::models::Deployment>>(response).await
+        crate::core::response::process_json::<Vec<crate::models::Deployment>>(response)
+            .await
     }
     /// Retrieves single deployment
     pub async fn get_deployment(
         &self,
         request: super::request_types::GetDeploymentRequest,
     ) -> crate::SdkResult<crate::models::Deployment> {
-        let url = self.base_client.build_url(&format!(
-            "/doc_project/{}/deployment/{}",
-            &request.doc_name, &request.deployment_id
-        ));
+        let url = self
+            .base_client
+            .build_url(
+                &format!(
+                    "/doc_project/{}/deployment/{}", crate
+                    ::core::params::format_string_param(& request.doc_name), crate
+                    ::core::params::format_string_param(& request.deployment_id)
+                ),
+            );
         let mut builder = reqwest::Client::default().get(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         builder = self
@@ -355,13 +454,40 @@ impl Client {
         crate::core::response::process_json::<crate::models::Deployment>(response).await
     }
     /// no description available
+    pub async fn check_preview(
+        &self,
+        request: super::request_types::CheckPreviewRequest,
+    ) -> crate::SdkResult<bool> {
+        let url = self
+            .base_client
+            .build_url(
+                &format!(
+                    "/doc_project/{}/preview", crate
+                    ::core::params::format_string_param(& request.doc_name)
+                ),
+            );
+        let mut builder = reqwest::Client::default().get(&url);
+        builder = builder.header("x-sideko-sdk-language", "rust");
+        builder = self
+            .base_client
+            .apply_auths_to_builder(builder, &["ApiKeyAuth", "CookieAuth"]);
+        let mut response = builder.send().await?;
+        response = self.base_client.error_for_status(response).await?;
+        crate::core::response::process_json::<bool>(response).await
+    }
+    /// no description available
     pub async fn get_doc_project_theme(
         &self,
         request: super::request_types::GetDocProjectThemeRequest,
     ) -> crate::SdkResult<crate::models::Theme> {
         let url = self
             .base_client
-            .build_url(&format!("/doc_project/{}/theme", &request.doc_name));
+            .build_url(
+                &format!(
+                    "/doc_project/{}/theme", crate ::core::params::format_string_param(&
+                    request.doc_name)
+                ),
+            );
         let mut builder = reqwest::Client::default().get(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         builder = self
@@ -378,7 +504,12 @@ impl Client {
     ) -> crate::SdkResult<Vec<crate::models::DocVersion>> {
         let url = self
             .base_client
-            .build_url(&format!("/doc_project/{}/version", &request.doc_name));
+            .build_url(
+                &format!(
+                    "/doc_project/{}/version", crate
+                    ::core::params::format_string_param(& request.doc_name)
+                ),
+            );
         let mut builder = reqwest::Client::default().get(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         builder = self
@@ -386,18 +517,23 @@ impl Client {
             .apply_auths_to_builder(builder, &["ApiKeyAuth", "CookieAuth"]);
         let mut response = builder.send().await?;
         response = self.base_client.error_for_status(response).await?;
-        crate::core::response::process_json::<Vec<crate::models::DocVersion>>(response).await
+        crate::core::response::process_json::<Vec<crate::models::DocVersion>>(response)
+            .await
     }
     /// no description available
     pub async fn get_doc_version(
         &self,
         request: super::request_types::GetDocVersionRequest,
     ) -> crate::SdkResult<crate::models::DocVersion> {
-        let url = self.base_client.build_url(&format!(
-            "/doc_project/{}/version/{}",
-            &request.doc_name,
-            &crate::core::params::format_string_param(&request.doc_version),
-        ));
+        let url = self
+            .base_client
+            .build_url(
+                &format!(
+                    "/doc_project/{}/version/{}", crate
+                    ::core::params::format_string_param(& request.doc_name), crate
+                    ::core::params::format_string_param(& request.doc_version)
+                ),
+            );
         let mut builder = reqwest::Client::default().get(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         builder = self
@@ -412,11 +548,15 @@ impl Client {
         &self,
         request: super::request_types::ListGuidesRequest,
     ) -> crate::SdkResult<Vec<crate::models::GuideWithChildren>> {
-        let url = self.base_client.build_url(&format!(
-            "/doc_project/{}/version/{}/guide",
-            &request.doc_name,
-            &crate::core::params::format_string_param(&request.doc_version),
-        ));
+        let url = self
+            .base_client
+            .build_url(
+                &format!(
+                    "/doc_project/{}/version/{}/guide", crate
+                    ::core::params::format_string_param(& request.doc_name), crate
+                    ::core::params::format_string_param(& request.doc_version)
+                ),
+            );
         let mut builder = reqwest::Client::default().get(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         builder = self
@@ -424,19 +564,26 @@ impl Client {
             .apply_auths_to_builder(builder, &["ApiKeyAuth", "CookieAuth"]);
         let mut response = builder.send().await?;
         response = self.base_client.error_for_status(response).await?;
-        crate::core::response::process_json::<Vec<crate::models::GuideWithChildren>>(response).await
+        crate::core::response::process_json::<
+            Vec<crate::models::GuideWithChildren>,
+        >(response)
+            .await
     }
     /// no description available
     pub async fn get_guide(
         &self,
         request: super::request_types::GetGuideRequest,
     ) -> crate::SdkResult<crate::models::Guide> {
-        let url = self.base_client.build_url(&format!(
-            "/doc_project/{}/version/{}/guide/{}",
-            &request.doc_name,
-            &crate::core::params::format_string_param(&request.doc_version),
-            &request.guide_id
-        ));
+        let url = self
+            .base_client
+            .build_url(
+                &format!(
+                    "/doc_project/{}/version/{}/guide/{}", crate
+                    ::core::params::format_string_param(& request.doc_name), crate
+                    ::core::params::format_string_param(& request.doc_version), crate
+                    ::core::params::format_string_param(& request.guide_id)
+                ),
+            );
         let mut builder = reqwest::Client::default().get(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         builder = self
@@ -451,12 +598,16 @@ impl Client {
         &self,
         request: super::request_types::GetGuideContentRequest,
     ) -> crate::SdkResult<crate::models::GuideContent> {
-        let url = self.base_client.build_url(&format!(
-            "/doc_project/{}/version/{}/guide/{}/content",
-            &request.doc_name,
-            &crate::core::params::format_string_param(&request.doc_version),
-            &request.guide_id
-        ));
+        let url = self
+            .base_client
+            .build_url(
+                &format!(
+                    "/doc_project/{}/version/{}/guide/{}/content", crate
+                    ::core::params::format_string_param(& request.doc_name), crate
+                    ::core::params::format_string_param(& request.doc_version), crate
+                    ::core::params::format_string_param(& request.guide_id)
+                ),
+            );
         let mut builder = reqwest::Client::default().get(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         builder = self
@@ -464,10 +615,13 @@ impl Client {
             .apply_auths_to_builder(builder, &["ApiKeyAuth", "CookieAuth"]);
         let mut response = builder.send().await?;
         response = self.base_client.error_for_status(response).await?;
-        crate::core::response::process_json::<crate::models::GuideContent>(response).await
+        crate::core::response::process_json::<crate::models::GuideContent>(response)
+            .await
     }
     /// Get user organization
-    pub async fn get_organization(&self) -> crate::SdkResult<crate::models::Organization> {
+    pub async fn get_organization(
+        &self,
+    ) -> crate::SdkResult<crate::models::Organization> {
         let url = self.base_client.build_url("/organization");
         let mut builder = reqwest::Client::default().get(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
@@ -476,7 +630,8 @@ impl Client {
             .apply_auths_to_builder(builder, &["ApiKeyAuth", "CookieAuth"]);
         let mut response = builder.send().await?;
         response = self.base_client.error_for_status(response).await?;
-        crate::core::response::process_json::<crate::models::Organization>(response).await
+        crate::core::response::process_json::<crate::models::Organization>(response)
+            .await
     }
     /// Get all media assets for an organization
     pub async fn list_assets(
@@ -495,10 +650,15 @@ impl Client {
             .apply_auths_to_builder(builder, &["ApiKeyAuth", "CookieAuth"]);
         let mut response = builder.send().await?;
         response = self.base_client.error_for_status(response).await?;
-        crate::core::response::process_json::<Vec<crate::models::ListAssetsPage>>(response).await
+        crate::core::response::process_json::<
+            Vec<crate::models::ListAssetsPage>,
+        >(response)
+            .await
     }
     /// Get documentation project theme configured at the organization level
-    pub async fn get_organization_theme(&self) -> crate::SdkResult<crate::models::Theme> {
+    pub async fn get_organization_theme(
+        &self,
+    ) -> crate::SdkResult<crate::models::Theme> {
         let url = self.base_client.build_url("/organization/theme");
         let mut builder = reqwest::Client::default().get(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
@@ -534,7 +694,9 @@ impl Client {
         crate::core::response::process_json::<crate::models::UserApiKey>(response).await
     }
     /// no description available
-    pub async fn list_service_accounts(&self) -> crate::SdkResult<Vec<crate::models::UserApiKey>> {
+    pub async fn list_service_accounts(
+        &self,
+    ) -> crate::SdkResult<Vec<crate::models::UserApiKey>> {
         let url = self.base_client.build_url("/user/service_account");
         let mut builder = reqwest::Client::default().get(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
@@ -543,7 +705,8 @@ impl Client {
             .apply_auths_to_builder(builder, &["ApiKeyAuth", "CookieAuth"]);
         let mut response = builder.send().await?;
         response = self.base_client.error_for_status(response).await?;
-        crate::core::response::process_json::<Vec<crate::models::UserApiKey>>(response).await
+        crate::core::response::process_json::<Vec<crate::models::UserApiKey>>(response)
+            .await
     }
     /// no description available
     pub async fn get_service_account(
@@ -552,7 +715,12 @@ impl Client {
     ) -> crate::SdkResult<crate::models::UserApiKey> {
         let url = self
             .base_client
-            .build_url(&format!("/user/service_account/{}", &request.id));
+            .build_url(
+                &format!(
+                    "/user/service_account/{}", crate
+                    ::core::params::format_string_param(& request.id)
+                ),
+            );
         let mut builder = reqwest::Client::default().get(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         builder = self
@@ -569,7 +737,12 @@ impl Client {
     ) -> crate::SdkResult<crate::models::ApiLink> {
         let url = self
             .base_client
-            .build_url(&format!("/api_link/{}", &request.id));
+            .build_url(
+                &format!(
+                    "/api_link/{}", crate ::core::params::format_string_param(& request
+                    .id)
+                ),
+            );
         let mut builder = reqwest::Client::default().patch(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         builder = builder.header("content-type", "application/json");
@@ -588,7 +761,12 @@ impl Client {
     ) -> crate::SdkResult<crate::models::ApiLinkGroup> {
         let url = self
             .base_client
-            .build_url(&format!("/api_link_group/{}", &request.id));
+            .build_url(
+                &format!(
+                    "/api_link_group/{}", crate ::core::params::format_string_param(&
+                    request.id)
+                ),
+            );
         let mut builder = reqwest::Client::default().patch(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         builder = builder.header("content-type", "application/json");
@@ -598,7 +776,8 @@ impl Client {
             .apply_auths_to_builder(builder, &["ApiKeyAuth", "CookieAuth"]);
         let mut response = builder.send().await?;
         response = self.base_client.error_for_status(response).await?;
-        crate::core::response::process_json::<crate::models::ApiLinkGroup>(response).await
+        crate::core::response::process_json::<crate::models::ApiLinkGroup>(response)
+            .await
     }
     /// no description available
     pub async fn update_doc_project(
@@ -607,7 +786,12 @@ impl Client {
     ) -> crate::SdkResult<crate::models::DocProject> {
         let url = self
             .base_client
-            .build_url(&format!("/doc_project/{}", &request.doc_name));
+            .build_url(
+                &format!(
+                    "/doc_project/{}", crate ::core::params::format_string_param(&
+                    request.doc_name)
+                ),
+            );
         let mut builder = reqwest::Client::default().patch(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         builder = builder.header("content-type", "application/json");
@@ -624,12 +808,16 @@ impl Client {
         &self,
         request: super::request_types::UpdateGuideRequest,
     ) -> crate::SdkResult<crate::models::Guide> {
-        let url = self.base_client.build_url(&format!(
-            "/doc_project/{}/version/{}/guide/{}",
-            &request.doc_name,
-            &crate::core::params::format_string_param(&request.doc_version),
-            &request.guide_id
-        ));
+        let url = self
+            .base_client
+            .build_url(
+                &format!(
+                    "/doc_project/{}/version/{}/guide/{}", crate
+                    ::core::params::format_string_param(& request.doc_name), crate
+                    ::core::params::format_string_param(& request.doc_version), crate
+                    ::core::params::format_string_param(& request.guide_id)
+                ),
+            );
         let mut builder = reqwest::Client::default().patch(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         builder = builder.header("content-type", "application/json");
@@ -648,7 +836,12 @@ impl Client {
     ) -> crate::SdkResult<crate::models::Asset> {
         let url = self
             .base_client
-            .build_url(&format!("/organization/asset/{}", &request.id));
+            .build_url(
+                &format!(
+                    "/organization/asset/{}", crate ::core::params::format_string_param(&
+                    request.id)
+                ),
+            );
         let mut builder = reqwest::Client::default().patch(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         builder = builder.header("content-type", "application/json");
@@ -709,7 +902,8 @@ impl Client {
             .apply_auths_to_builder(builder, &["ApiKeyAuth", "CookieAuth"]);
         let mut response = builder.send().await?;
         response = self.base_client.error_for_status(response).await?;
-        crate::core::response::process_json::<crate::models::ApiLinkGroup>(response).await
+        crate::core::response::process_json::<crate::models::ApiLinkGroup>(response)
+            .await
     }
     /// no description available
     pub async fn create_doc_project(
@@ -735,7 +929,12 @@ impl Client {
     ) -> crate::SdkResult<crate::models::Deployment> {
         let url = self
             .base_client
-            .build_url(&format!("/doc_project/{}/deployment", &request.doc_name));
+            .build_url(
+                &format!(
+                    "/doc_project/{}/deployment", crate
+                    ::core::params::format_string_param(& request.doc_name)
+                ),
+            );
         let mut builder = reqwest::Client::default().post(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         builder = builder.header("content-type", "application/json");
@@ -752,11 +951,15 @@ impl Client {
         &self,
         request: super::request_types::CreateGuideRequest,
     ) -> crate::SdkResult<crate::models::Guide> {
-        let url = self.base_client.build_url(&format!(
-            "/doc_project/{}/version/{}/guide",
-            &request.doc_name,
-            &crate::core::params::format_string_param(&request.doc_version),
-        ));
+        let url = self
+            .base_client
+            .build_url(
+                &format!(
+                    "/doc_project/{}/version/{}/guide", crate
+                    ::core::params::format_string_param(& request.doc_name), crate
+                    ::core::params::format_string_param(& request.doc_version)
+                ),
+            );
         let mut builder = reqwest::Client::default().post(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         builder = builder.header("content-type", "application/json");
@@ -773,11 +976,15 @@ impl Client {
         &self,
         request: super::request_types::ReorderGuidesRequest,
     ) -> crate::SdkResult<Vec<crate::models::GuideWithChildren>> {
-        let url = self.base_client.build_url(&format!(
-            "/doc_project/{}/version/{}/guide/reorder",
-            &request.doc_name,
-            &crate::core::params::format_string_param(&request.doc_version),
-        ));
+        let url = self
+            .base_client
+            .build_url(
+                &format!(
+                    "/doc_project/{}/version/{}/guide/reorder", crate
+                    ::core::params::format_string_param(& request.doc_name), crate
+                    ::core::params::format_string_param(& request.doc_version)
+                ),
+            );
         let mut builder = reqwest::Client::default().post(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         builder = builder.header("content-type", "application/json");
@@ -787,7 +994,10 @@ impl Client {
             .apply_auths_to_builder(builder, &["ApiKeyAuth", "CookieAuth"]);
         let mut response = builder.send().await?;
         response = self.base_client.error_for_status(response).await?;
-        crate::core::response::process_json::<Vec<crate::models::GuideWithChildren>>(response).await
+        crate::core::response::process_json::<
+            Vec<crate::models::GuideWithChildren>,
+        >(response)
+            .await
     }
     /// no description available
     pub async fn create_organization(
@@ -804,7 +1014,9 @@ impl Client {
             .apply_auths_to_builder(builder, &["ApiKeyAuth", "CookieAuth"]);
         let mut response = builder.send().await?;
         response = self.base_client.error_for_status(response).await?;
-        crate::core::response::process_json::<crate::models::OrganizationWithRedirect>(response)
+        crate::core::response::process_json::<
+            crate::models::OrganizationWithRedirect,
+        >(response)
             .await
     }
     /// Add a media asset like logos or other media to an organization
@@ -816,7 +1028,8 @@ impl Client {
         let mut builder = reqwest::Client::default().post(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         let mut form_data = reqwest::multipart::Form::new();
-        form_data = form_data.part("file", reqwest::multipart::Part::from(&request.data.file));
+        form_data = form_data
+            .part("file", reqwest::multipart::Part::from(&request.data.file));
         builder = builder.multipart(form_data);
         builder = self
             .base_client
@@ -860,13 +1073,35 @@ impl Client {
         crate::core::response::process_json::<crate::models::UserApiKey>(response).await
     }
     /// no description available
+    pub async fn vercel_webhook(
+        &self,
+        request: super::request_types::VercelWebhookRequest,
+    ) -> crate::SdkResult<()> {
+        let url = self.base_client.build_url("/webhook/vercel");
+        let mut builder = reqwest::Client::default().post(&url);
+        builder = builder.header("x-sideko-sdk-language", "rust");
+        builder = builder.header("content-type", "application/json");
+        builder = builder.json(&request.data);
+        builder = self
+            .base_client
+            .apply_auths_to_builder(builder, &["ApiKeyAuth", "CookieAuth"]);
+        let response = builder.send().await?;
+        self.base_client.error_for_status(response).await?;
+        Ok(())
+    }
+    /// no description available
     pub async fn update_doc_project_theme(
         &self,
         request: super::request_types::UpdateDocProjectThemeRequest,
     ) -> crate::SdkResult<crate::models::Theme> {
         let url = self
             .base_client
-            .build_url(&format!("/doc_project/{}/theme", &request.doc_name));
+            .build_url(
+                &format!(
+                    "/doc_project/{}/theme", crate ::core::params::format_string_param(&
+                    request.doc_name)
+                ),
+            );
         let mut builder = reqwest::Client::default().put(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         builder = builder.header("content-type", "application/json");

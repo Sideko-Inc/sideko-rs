@@ -2,8 +2,11 @@
 name = "sideko_rest_api"
 version = "0.3.2"
 edition = "2021"
-description = "Rust API Client for sideko_rest_api"
+description = "Rust API Client"
 license = "MIT"
+
+[target.x86_64-unknown-linux-musl.dependencies]
+openssl = { version = "*", features = ["vendored"] }
 
 [lib]
 crate-type = ["lib"]

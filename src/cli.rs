@@ -212,6 +212,38 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
             client.delete_service_account(req).await?;
             log::info!("API returned no content");
         }
+        SidekoCommand::HealthCheck => {
+            let mut client = sideko_rest_api::Client::default();
+            if let Ok(base_url) = std::env::var(base_url_env_var) {
+                client = client.with_base_url(&base_url);
+                log::debug!("Using custom base url: {base_url}");
+            }
+            if let Ok(val) = std::env::var("SIDEKO_REST_API_API_KEY_AUTH") {
+                log::debug!("Adding api-key auth 'ApiKeyAuth' (key=\"****\")");
+                client = client.with_api_key_auth(&val);
+            }
+            if let Ok(val) = std::env::var("SIDEKO_REST_API_COOKIE_AUTH") {
+                log::debug!("Adding api-key auth 'CookieAuth' (key=\"****\")");
+                client = client.with_cookie_auth(&val);
+            }
+            let res = client.health_check().await?;
+            println!(
+                "{}", serde_json::to_string_pretty(& res).unwrap_or_else(| _ |
+                serde_json::json!(& res) .to_string())
+            );
+        }
+        SidekoCommand::PingCheck => {
+            let mut client = sideko_rest_api::Client::default();
+            if let Ok(base_url) = std::env::var(base_url_env_var) {
+                client = client.with_base_url(&base_url);
+                log::debug!("Using custom base url: {base_url}");
+            }
+            let res = client.ping_check().await?;
+            println!(
+                "{}", serde_json::to_string_pretty(& res).unwrap_or_else(| _ |
+                serde_json::json!(& res) .to_string())
+            );
+        }
         SidekoCommand::ApiSubcommand(ApiSubcommand::List) => {
             let mut client = sideko_rest_api::Client::default();
             if let Ok(base_url) = std::env::var(base_url_env_var) {
@@ -297,7 +329,11 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
             );
         }
         SidekoCommand::ApiSubcommand(
-            ApiSubcommand::ApiSpecSubcommand(ApiSpecSubcommand::GetOpenapi(req)),
+            ApiSubcommand::ApiSpecSubcommand(
+                ApiSpecSubcommand::ApiSpecOpenapiSubcommand(
+                    ApiSpecOpenapiSubcommand::GetOpenapi(req),
+                ),
+            ),
         ) => {
             let mut client = sideko_rest_api::Client::default();
             if let Ok(base_url) = std::env::var(base_url_env_var) {
@@ -312,14 +348,18 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
                 log::debug!("Adding api-key auth 'CookieAuth' (key=\"****\")");
                 client = client.with_cookie_auth(&val);
             }
-            let res = client.api().spec().get_openapi(req).await?;
+            let res = client.api().spec().openapi().get_openapi(req).await?;
             println!(
                 "{}", serde_json::to_string_pretty(& res).unwrap_or_else(| _ |
                 serde_json::json!(& res) .to_string())
             );
         }
         SidekoCommand::ApiSubcommand(
-            ApiSubcommand::ApiSpecSubcommand(ApiSpecSubcommand::GetStats(req)),
+            ApiSubcommand::ApiSpecSubcommand(
+                ApiSpecSubcommand::ApiSpecStatsSubcommand(
+                    ApiSpecStatsSubcommand::GetStats(req),
+                ),
+            ),
         ) => {
             let mut client = sideko_rest_api::Client::default();
             if let Ok(base_url) = std::env::var(base_url_env_var) {
@@ -334,7 +374,7 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
                 log::debug!("Adding api-key auth 'CookieAuth' (key=\"****\")");
                 client = client.with_cookie_auth(&val);
             }
-            let res = client.api().spec().get_stats(req).await?;
+            let res = client.api().spec().stats().get_stats(req).await?;
             println!(
                 "{}", serde_json::to_string_pretty(& res).unwrap_or_else(| _ |
                 serde_json::json!(& res) .to_string())
@@ -517,6 +557,26 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
                 client = client.with_cookie_auth(&val);
             }
             let res = client.get_deployment(req).await?;
+            println!(
+                "{}", serde_json::to_string_pretty(& res).unwrap_or_else(| _ |
+                serde_json::json!(& res) .to_string())
+            );
+        }
+        SidekoCommand::CheckPreview(req) => {
+            let mut client = sideko_rest_api::Client::default();
+            if let Ok(base_url) = std::env::var(base_url_env_var) {
+                client = client.with_base_url(&base_url);
+                log::debug!("Using custom base url: {base_url}");
+            }
+            if let Ok(val) = std::env::var("SIDEKO_REST_API_API_KEY_AUTH") {
+                log::debug!("Adding api-key auth 'ApiKeyAuth' (key=\"****\")");
+                client = client.with_api_key_auth(&val);
+            }
+            if let Ok(val) = std::env::var("SIDEKO_REST_API_COOKIE_AUTH") {
+                log::debug!("Adding api-key auth 'CookieAuth' (key=\"****\")");
+                client = client.with_cookie_auth(&val);
+            }
+            let res = client.check_preview(req).await?;
             println!(
                 "{}", serde_json::to_string_pretty(& res).unwrap_or_else(| _ |
                 serde_json::json!(& res) .to_string())
@@ -1224,11 +1284,7 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
             save_binary_response(res)?;
         }
         SidekoCommand::SdkSubcommand(
-            SdkSubcommand::SdkConfigSubcommand(
-                SdkConfigSubcommand::SdkConfigInitSubcommand(
-                    SdkConfigInitSubcommand::Init(req),
-                ),
-            ),
+            SdkSubcommand::SdkConfigSubcommand(SdkConfigSubcommand::Init(req)),
         ) => {
             let mut client = sideko_rest_api::Client::default();
             if let Ok(base_url) = std::env::var(base_url_env_var) {
@@ -1243,15 +1299,11 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
                 log::debug!("Adding api-key auth 'CookieAuth' (key=\"****\")");
                 client = client.with_cookie_auth(&val);
             }
-            let res = client.sdk().config().init().init(req).await?;
+            let res = client.sdk().config().init(req).await?;
             save_binary_response(res)?;
         }
         SidekoCommand::SdkSubcommand(
-            SdkSubcommand::SdkConfigSubcommand(
-                SdkConfigSubcommand::SdkConfigSyncSubcommand(
-                    SdkConfigSyncSubcommand::Sync(req),
-                ),
-            ),
+            SdkSubcommand::SdkConfigSubcommand(SdkConfigSubcommand::Sync(req)),
         ) => {
             let mut client = sideko_rest_api::Client::default();
             if let Ok(base_url) = std::env::var(base_url_env_var) {
@@ -1266,12 +1318,10 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
                 log::debug!("Adding api-key auth 'CookieAuth' (key=\"****\")");
                 client = client.with_cookie_auth(&val);
             }
-            let res = client.sdk().config().sync().sync(req).await?;
+            let res = client.sdk().config().sync(req).await?;
             save_binary_response(res)?;
         }
-        SidekoCommand::SdkSubcommand(
-            SdkSubcommand::SdkUpdateSubcommand(SdkUpdateSubcommand::Update(req)),
-        ) => {
+        SidekoCommand::SdkSubcommand(SdkSubcommand::Update(req)) => {
             let mut client = sideko_rest_api::Client::default();
             if let Ok(base_url) = std::env::var(base_url_env_var) {
                 client = client.with_base_url(&base_url);
@@ -1285,14 +1335,10 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
                 log::debug!("Adding api-key auth 'CookieAuth' (key=\"****\")");
                 client = client.with_cookie_auth(&val);
             }
-            let res = client.sdk().update().update(req).await?;
+            let res = client.sdk().update(req).await?;
             println!("{res}");
         }
-        SidekoCommand::StatelessSubcommand(
-            StatelessSubcommand::StatelessGenerateSdkSubcommand(
-                StatelessGenerateSdkSubcommand::GenerateStateless(req),
-            ),
-        ) => {
+        SidekoCommand::SdkSubcommand(SdkSubcommand::GenerateStateless(req)) => {
             let mut client = sideko_rest_api::Client::default();
             if let Ok(base_url) = std::env::var(base_url_env_var) {
                 client = client.with_base_url(&base_url);
@@ -1306,7 +1352,7 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
                 log::debug!("Adding api-key auth 'CookieAuth' (key=\"****\")");
                 client = client.with_cookie_auth(&val);
             }
-            let res = client.stateless().generate_sdk().generate_stateless(req).await?;
+            let res = client.sdk().generate_stateless(req).await?;
             save_binary_response(res)?;
         }
         SidekoCommand::InviteUser(req) => {
@@ -1345,6 +1391,23 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
                 "{}", serde_json::to_string_pretty(& res).unwrap_or_else(| _ |
                 serde_json::json!(& res) .to_string())
             );
+        }
+        SidekoCommand::VercelWebhook(req) => {
+            let mut client = sideko_rest_api::Client::default();
+            if let Ok(base_url) = std::env::var(base_url_env_var) {
+                client = client.with_base_url(&base_url);
+                log::debug!("Using custom base url: {base_url}");
+            }
+            if let Ok(val) = std::env::var("SIDEKO_REST_API_API_KEY_AUTH") {
+                log::debug!("Adding api-key auth 'ApiKeyAuth' (key=\"****\")");
+                client = client.with_api_key_auth(&val);
+            }
+            if let Ok(val) = std::env::var("SIDEKO_REST_API_COOKIE_AUTH") {
+                log::debug!("Adding api-key auth 'CookieAuth' (key=\"****\")");
+                client = client.with_cookie_auth(&val);
+            }
+            client.vercel_webhook(req).await?;
+            log::info!("API returned no content");
         }
         SidekoCommand::UpdateDocProjectTheme(req) => {
             let mut client = sideko_rest_api::Client::default();
@@ -1659,12 +1722,9 @@ enum SidekoCommand {
     /// command group (3 commands, 0 sub groups)
     #[command(subcommand, name = "role")]
     RoleSubcommand(RoleSubcommand),
-    /// command group (2 commands, 2 sub groups)
+    /// command group (4 commands, 1 sub groups)
     #[command(subcommand, name = "sdk")]
     SdkSubcommand(SdkSubcommand),
-    /// command group (0 commands, 1 sub groups)
-    #[command(subcommand, name = "stateless")]
-    StatelessSubcommand(StatelessSubcommand),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
@@ -1714,6 +1774,18 @@ enum SidekoCommand {
     /// **Example:** `sideko-rest-api delete-service-account --id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a`
     #[command(name = "delete-service-account")]
     DeleteServiceAccount(sideko_rest_api::DeleteServiceAccountRequest),
+    /// command
+    ///
+    /// **Required Auth:** CookieAuth OR ApiKeyAuth
+    ///
+    /// **Example:** `sideko-rest-api health-check`
+    #[command(name = "health-check")]
+    HealthCheck,
+    /// command
+    ///
+    /// **Example:** `sideko-rest-api ping-check`
+    #[command(name = "ping-check")]
+    PingCheck,
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
@@ -1783,6 +1855,13 @@ enum SidekoCommand {
     /// **Example:** `sideko-rest-api get-deployment --doc-name my-project --deployment-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a`
     #[command(name = "get-deployment")]
     GetDeployment(sideko_rest_api::GetDeploymentRequest),
+    /// command
+    ///
+    /// **Required Auth:** CookieAuth OR ApiKeyAuth
+    ///
+    /// **Example:** `sideko-rest-api check-preview --doc-name my-project`
+    #[command(name = "check-preview")]
+    CheckPreview(sideko_rest_api::CheckPreviewRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
@@ -1969,7 +2048,7 @@ enum SidekoCommand {
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api upload-assets --file ./tests/file.pdf`
+    /// **Example:** `sideko-rest-api upload-assets --file uploads/file.pdf`
     #[command(name = "upload-assets")]
     UploadAssets(sideko_rest_api::UploadAssetsRequest),
     /// command
@@ -1990,6 +2069,13 @@ enum SidekoCommand {
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
+    /// **Example:** `sideko-rest-api vercel-webhook --data '{}'`
+    #[command(name = "vercel-webhook")]
+    VercelWebhook(sideko_rest_api::VercelWebhookRequest),
+    /// command
+    ///
+    /// **Required Auth:** CookieAuth OR ApiKeyAuth
+    ///
     /// **Example:** `sideko-rest-api update-doc-project-theme --doc-name my-project --api-reference-group-variant grouped --dark-active-button-bg-color '#FFFFFF' --dark-active-button-text-color '#FFFFFF' --dark-bg-color '#FFFFFF' --dark-navbar-color '#FFFFFF' --dark-navbar-text-color '#FFFFFF' --light-active-button-bg-color '#FFFFFF' --light-active-button-text-color '#FFFFFF' --light-bg-color '#FFFFFF' --light-navbar-color '#FFFFFF' --light-navbar-text-color '#FFFFFF'`
     #[command(name = "update-doc-project-theme")]
     UpdateDocProjectTheme(sideko_rest_api::UpdateDocProjectThemeRequest),
@@ -2004,7 +2090,7 @@ enum SidekoCommand {
 #[derive(clap::Subcommand)]
 #[allow(clippy::enum_variant_names)]
 enum ApiSubcommand {
-    /// command group (7 commands, 0 sub groups)
+    /// command group (5 commands, 2 sub groups)
     #[command(subcommand, name = "spec")]
     ApiSpecSubcommand(ApiSpecSubcommand),
     /// command
@@ -2046,6 +2132,12 @@ enum ApiSubcommand {
 #[derive(clap::Subcommand)]
 #[allow(clippy::enum_variant_names)]
 enum ApiSpecSubcommand {
+    /// command group (1 commands, 0 sub groups)
+    #[command(subcommand, name = "openapi")]
+    ApiSpecOpenapiSubcommand(ApiSpecOpenapiSubcommand),
+    /// command group (1 commands, 0 sub groups)
+    #[command(subcommand, name = "stats")]
+    ApiSpecStatsSubcommand(ApiSpecStatsSubcommand),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
@@ -2071,30 +2163,38 @@ enum ApiSpecSubcommand {
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api api spec get-openapi --api-name my-project --api-version latest`
-    #[command(name = "get-openapi")]
-    GetOpenapi(sideko_rest_api::resources::api::spec::GetOpenapiRequest),
-    /// command
-    ///
-    /// **Required Auth:** CookieAuth OR ApiKeyAuth
-    ///
-    /// **Example:** `sideko-rest-api api spec get-stats --api-name my-project --api-version latest`
-    #[command(name = "get-stats")]
-    GetStats(sideko_rest_api::resources::api::spec::GetStatsRequest),
-    /// command
-    ///
-    /// **Required Auth:** CookieAuth OR ApiKeyAuth
-    ///
-    /// **Example:** `sideko-rest-api api spec patch --api-name my-project --api-version latest --mock-server-enabled true --notes '<p>This version includes a number of excellent improvements</p>' --openapi ./tests/file.pdf --version string`
+    /// **Example:** `sideko-rest-api api spec patch --api-name my-project --api-version latest --mock-server-enabled true --notes '<p>This version includes a number of excellent improvements</p>' --openapi openapi.yaml --version string`
     #[command(name = "patch")]
     Patch(sideko_rest_api::resources::api::spec::PatchRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api api spec create --api-name my-project --mock-server-enabled true --notes '<p>This version includes a number of excellent improvements</p>' --openapi ./tests/file.pdf --version patch`
+    /// **Example:** `sideko-rest-api api spec create --api-name my-project --mock-server-enabled true --notes '<p>This version includes a number of excellent improvements</p>' --openapi openapi.yaml --version major`
     #[command(name = "create")]
     Create(sideko_rest_api::resources::api::spec::CreateRequest),
+}
+#[derive(clap::Subcommand)]
+#[allow(clippy::enum_variant_names)]
+enum ApiSpecOpenapiSubcommand {
+    /// command
+    ///
+    /// **Required Auth:** CookieAuth OR ApiKeyAuth
+    ///
+    /// **Example:** `sideko-rest-api api spec openapi get-openapi --api-name my-project --api-version latest`
+    #[command(name = "get-openapi")]
+    GetOpenapi(sideko_rest_api::resources::api::spec::openapi::GetOpenapiRequest),
+}
+#[derive(clap::Subcommand)]
+#[allow(clippy::enum_variant_names)]
+enum ApiSpecStatsSubcommand {
+    /// command
+    ///
+    /// **Required Auth:** CookieAuth OR ApiKeyAuth
+    ///
+    /// **Example:** `sideko-rest-api api spec stats get-stats --api-name my-project --api-version latest`
+    #[command(name = "get-stats")]
+    GetStats(sideko_rest_api::resources::api::spec::stats::GetStatsRequest),
 }
 #[derive(clap::Subcommand)]
 #[allow(clippy::enum_variant_names)]
@@ -2124,89 +2224,55 @@ enum RoleSubcommand {
 #[derive(clap::Subcommand)]
 #[allow(clippy::enum_variant_names)]
 enum SdkSubcommand {
-    /// command group (0 commands, 2 sub groups)
+    /// command group (2 commands, 0 sub groups)
     #[command(subcommand, name = "config")]
     SdkConfigSubcommand(SdkConfigSubcommand),
-    /// command group (1 commands, 0 sub groups)
-    #[command(subcommand, name = "update")]
-    SdkUpdateSubcommand(SdkUpdateSubcommand),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api sdk list --api my-project --successful true`
+    /// **Example:** `sideko-rest-api sdk list --api-name my-project --successful true`
     #[command(name = "list")]
     List(sideko_rest_api::resources::sdk::ListRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api sdk generate --api-version latest --config ./tests/file.pdf --language go --sdk-version 0.1.0`
+    /// **Example:** `sideko-rest-api sdk generate --api-version latest --config uploads/file.pdf --language go --sdk-version 0.1.0`
     #[command(name = "generate")]
     Generate(sideko_rest_api::resources::sdk::GenerateRequest),
+    /// command
+    ///
+    /// **Required Auth:** CookieAuth OR ApiKeyAuth
+    ///
+    /// **Example:** `sideko-rest-api sdk update --api-version latest --config uploads/file.pdf --prev-sdk-git uploads/file.pdf --prev-sdk-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --sdk-version major`
+    #[command(name = "update")]
+    Update(sideko_rest_api::resources::sdk::UpdateRequest),
+    /// command
+    ///
+    /// **Required Auth:** CookieAuth OR ApiKeyAuth
+    ///
+    /// **Example:** `sideko-rest-api sdk generate-stateless --base-url http://127.0.0.1:8080/api --language go --openapi openapi.yaml --package-name my_sdk`
+    #[command(name = "generate-stateless")]
+    GenerateStateless(sideko_rest_api::resources::sdk::GenerateStatelessRequest),
 }
 #[derive(clap::Subcommand)]
 #[allow(clippy::enum_variant_names)]
 enum SdkConfigSubcommand {
-    /// command group (1 commands, 0 sub groups)
-    #[command(subcommand, name = "init")]
-    SdkConfigInitSubcommand(SdkConfigInitSubcommand),
-    /// command group (1 commands, 0 sub groups)
-    #[command(subcommand, name = "sync")]
-    SdkConfigSyncSubcommand(SdkConfigSyncSubcommand),
-}
-#[derive(clap::Subcommand)]
-#[allow(clippy::enum_variant_names)]
-enum SdkConfigInitSubcommand {
     /// Creates a sdk config with default configurations for the api/api version
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api sdk config init init --api-name my-project --api-version latest`
+    /// **Example:** `sideko-rest-api sdk config init --api-name my-project --api-version latest`
     #[command(name = "init")]
-    Init(sideko_rest_api::resources::sdk::config::init::InitRequest),
-}
-#[derive(clap::Subcommand)]
-#[allow(clippy::enum_variant_names)]
-enum SdkConfigSyncSubcommand {
+    Init(sideko_rest_api::resources::sdk::config::InitRequest),
     /// Updates provided config with missing default configurations for the api version
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api sdk config sync sync --api-version latest --config ./tests/file.pdf`
+    /// **Example:** `sideko-rest-api sdk config sync --api-version latest --config uploads/file.pdf`
     #[command(name = "sync")]
-    Sync(sideko_rest_api::resources::sdk::config::sync::SyncRequest),
-}
-#[derive(clap::Subcommand)]
-#[allow(clippy::enum_variant_names)]
-enum SdkUpdateSubcommand {
-    /// command
-    ///
-    /// **Required Auth:** CookieAuth OR ApiKeyAuth
-    ///
-    /// **Example:** `sideko-rest-api sdk update update --api-version latest --config ./tests/file.pdf --prev-sdk-git ./tests/file.pdf --prev-sdk-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a --sdk-version patch`
-    #[command(name = "update")]
-    Update(sideko_rest_api::resources::sdk::update::UpdateRequest),
-}
-#[derive(clap::Subcommand)]
-#[allow(clippy::enum_variant_names)]
-enum StatelessSubcommand {
-    /// command group (1 commands, 0 sub groups)
-    #[command(subcommand, name = "generate-sdk")]
-    StatelessGenerateSdkSubcommand(StatelessGenerateSdkSubcommand),
-}
-#[derive(clap::Subcommand)]
-#[allow(clippy::enum_variant_names)]
-enum StatelessGenerateSdkSubcommand {
-    /// command
-    ///
-    /// **Required Auth:** CookieAuth OR ApiKeyAuth
-    ///
-    /// **Example:** `sideko-rest-api stateless generate-sdk generate-stateless --base-url http://127.0.0.1:8080/api --language go --openapi ./tests/file.pdf --package-name my_sdk`
-    #[command(name = "generate-stateless")]
-    GenerateStateless(
-        sideko_rest_api::resources::stateless::generate_sdk::GenerateStatelessRequest,
-    ),
+    Sync(sideko_rest_api::resources::sdk::config::SyncRequest),
 }
 #[cfg(test)]
 mod cli_tests {
@@ -2954,7 +3020,7 @@ mod cli_tests {
     }
     #[serial_test::serial]
     #[tokio::test]
-    async fn test_cli_api_spec_get_openapi_200_generated_success() {
+    async fn test_cli_api_spec_openapi_get_openapi_200_generated_success() {
         let cli = super::SidekoCli::try_parse_from(
                 shlex::Shlex::new(
                     &[
@@ -2991,6 +3057,7 @@ mod cli_tests {
                         "sideko-rest-api",
                         "api",
                         "spec",
+                        "openapi",
                         "get-openapi",
                         "--api-name",
                         "my-project",
@@ -3007,7 +3074,7 @@ mod cli_tests {
     }
     #[serial_test::serial]
     #[tokio::test]
-    async fn test_cli_api_spec_get_stats_200_generated_success() {
+    async fn test_cli_api_spec_stats_get_stats_200_generated_success() {
         let cli = super::SidekoCli::try_parse_from(
                 shlex::Shlex::new(
                     &[
@@ -3044,6 +3111,7 @@ mod cli_tests {
                         "sideko-rest-api",
                         "api",
                         "spec",
+                        "stats",
                         "get-stats",
                         "--api-name",
                         "my-project",
@@ -4037,7 +4105,7 @@ mod cli_tests {
                         "sideko-rest-api",
                         "sdk",
                         "list",
-                        "--api",
+                        "--api-name",
                         "my-project",
                         "--successful",
                         "true",
@@ -4325,7 +4393,7 @@ mod cli_tests {
                         "--notes",
                         "'<p>This version includes a number of excellent improvements</p>'",
                         "--openapi",
-                        "./tests/file.pdf",
+                        "openapi.yaml",
                         "--version",
                         "string",
                     ]
@@ -4711,9 +4779,9 @@ mod cli_tests {
                         "--notes",
                         "'<p>This version includes a number of excellent improvements</p>'",
                         "--openapi",
-                        "./tests/file.pdf",
+                        "openapi.yaml",
                         "--version",
-                        "patch",
+                        "major",
                     ]
                         .join(" "),
                 ),
@@ -5195,7 +5263,7 @@ mod cli_tests {
         super::handle_cli(cli).await.expect("failed running auth command");
         let cli = super::SidekoCli::try_parse_from(
                 shlex::Shlex::new(
-                    &["sideko-rest-api", "upload-assets", "--file", "./tests/file.pdf"]
+                    &["sideko-rest-api", "upload-assets", "--file", "uploads/file.pdf"]
                         .join(" "),
                 ),
             )
@@ -5302,7 +5370,7 @@ mod cli_tests {
                         "--api-version",
                         "latest",
                         "--config",
-                        "./tests/file.pdf",
+                        "uploads/file.pdf",
                         "--language",
                         "go",
                         "--sdk-version",
@@ -5318,7 +5386,7 @@ mod cli_tests {
     }
     #[serial_test::serial]
     #[tokio::test]
-    async fn test_cli_sdk_config_init_init_200_success_default() {
+    async fn test_cli_sdk_config_init_200_success_default() {
         let cli = super::SidekoCli::try_parse_from(
                 shlex::Shlex::new(
                     &[
@@ -5355,7 +5423,6 @@ mod cli_tests {
                         "sideko-rest-api",
                         "sdk",
                         "config",
-                        "init",
                         "init",
                         "--api-name",
                         "my-project",
@@ -5372,7 +5439,7 @@ mod cli_tests {
     }
     #[serial_test::serial]
     #[tokio::test]
-    async fn test_cli_sdk_config_sync_sync_200_success_default() {
+    async fn test_cli_sdk_config_sync_200_success_default() {
         let cli = super::SidekoCli::try_parse_from(
                 shlex::Shlex::new(
                     &[
@@ -5410,11 +5477,10 @@ mod cli_tests {
                         "sdk",
                         "config",
                         "sync",
-                        "sync",
                         "--api-version",
                         "latest",
                         "--config",
-                        "./tests/file.pdf",
+                        "uploads/file.pdf",
                     ]
                         .join(" "),
                 ),
@@ -5426,7 +5492,7 @@ mod cli_tests {
     }
     #[serial_test::serial]
     #[tokio::test]
-    async fn test_cli_sdk_update_update_201_success_default() {
+    async fn test_cli_sdk_update_201_success_default() {
         let cli = super::SidekoCli::try_parse_from(
                 shlex::Shlex::new(
                     &[
@@ -5463,17 +5529,16 @@ mod cli_tests {
                         "sideko-rest-api",
                         "sdk",
                         "update",
-                        "update",
                         "--api-version",
                         "latest",
                         "--config",
-                        "./tests/file.pdf",
+                        "uploads/file.pdf",
                         "--prev-sdk-git",
-                        "./tests/file.pdf",
+                        "uploads/file.pdf",
                         "--prev-sdk-id",
                         "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a",
                         "--sdk-version",
-                        "patch",
+                        "major",
                     ]
                         .join(" "),
                 ),
@@ -5485,7 +5550,7 @@ mod cli_tests {
     }
     #[serial_test::serial]
     #[tokio::test]
-    async fn test_cli_stateless_generate_sdk_generate_stateless_201_success_default() {
+    async fn test_cli_sdk_generate_stateless_201_success_default() {
         let cli = super::SidekoCli::try_parse_from(
                 shlex::Shlex::new(
                     &[
@@ -5520,15 +5585,14 @@ mod cli_tests {
                 shlex::Shlex::new(
                     &[
                         "sideko-rest-api",
-                        "stateless",
-                        "generate-sdk",
+                        "sdk",
                         "generate-stateless",
                         "--base-url",
                         "http://127.0.0.1:8080/api",
                         "--language",
                         "go",
                         "--openapi",
-                        "./tests/file.pdf",
+                        "openapi.yaml",
                         "--package-name",
                         "my_sdk",
                     ]

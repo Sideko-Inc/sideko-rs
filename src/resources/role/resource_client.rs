@@ -11,7 +11,13 @@ impl RoleClient {
         &self,
         request: super::request_types::DeleteRequest,
     ) -> crate::SdkResult<()> {
-        let url = self.base_client.build_url(&format!("/role/{}", & request.id));
+        let url = self
+            .base_client
+            .build_url(
+                &format!(
+                    "/role/{}", crate ::core::params::format_string_param(& request.id)
+                ),
+            );
         let mut builder = reqwest::Client::default().delete(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         builder = self
