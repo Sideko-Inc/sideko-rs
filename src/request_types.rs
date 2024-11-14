@@ -143,12 +143,6 @@ pub struct GetDeploymentRequest {
 }
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
-pub struct CheckPreviewRequest {
-    #[cfg_attr(feature = "cli", arg(id = "doc-name", long = "doc-name"))]
-    pub doc_name: String,
-}
-#[cfg_attr(feature = "cli", derive(clap::Args))]
-#[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 pub struct GetDocProjectThemeRequest {
     #[cfg_attr(feature = "cli", arg(id = "doc-name", long = "doc-name"))]
     pub doc_name: String,
@@ -363,16 +357,6 @@ pub struct InviteUserRequest {
 pub struct CreateServiceAccountRequest {
     #[cfg_attr(feature = "cli", command(flatten))]
     pub data: crate::models::NewServiceAccount,
-}
-#[cfg_attr(feature = "cli", derive(clap::Args))]
-#[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
-pub struct VercelWebhookRequest {
-    #[cfg_attr(feature = "cli", arg(id = "data", long = "data"))]
-    #[cfg_attr(
-        feature = "cli",
-        arg(value_parser = crate::core::clap::parse_json::<serde_json::Value>)
-    )]
-    pub data: serde_json::Value,
 }
 #[cfg_attr(feature = "cli", derive(clap::Args))]
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default, Clone)]

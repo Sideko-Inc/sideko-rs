@@ -107,26 +107,6 @@ async fn test_delete_service_account_204_generated_success() {
 }
 #[serial_test::serial]
 #[tokio::test]
-async fn test_health_check_200_generated_success() {
-    let client = sideko_rest_api::Client::default()
-        .with_api_key_auth(&std::env::var("API_KEY").unwrap())
-        .with_cookie_auth(&std::env::var("API_KEY").unwrap());
-    let res = client.health_check().await;
-    println!("{:?}", res);
-    assert!(res.is_ok());
-}
-#[serial_test::serial]
-#[tokio::test]
-async fn test_ping_check_200_generated_success() {
-    let client = sideko_rest_api::Client::default()
-        .with_api_key_auth(&std::env::var("API_KEY").unwrap())
-        .with_cookie_auth(&std::env::var("API_KEY").unwrap());
-    let res = client.ping_check().await;
-    println!("{:?}", res);
-    assert!(res.is_ok());
-}
-#[serial_test::serial]
-#[tokio::test]
 async fn test_list_api_links_200_generated_success() {
     let client = sideko_rest_api::Client::default()
         .with_api_key_auth(&std::env::var("API_KEY").unwrap())
@@ -277,20 +257,6 @@ async fn test_get_deployment_200_generated_success() {
         .get_deployment(sideko_rest_api::GetDeploymentRequest {
             doc_name: "my-project".to_string(),
             deployment_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(),
-        })
-        .await;
-    println!("{:?}", res);
-    assert!(res.is_ok());
-}
-#[serial_test::serial]
-#[tokio::test]
-async fn test_check_preview_200_generated_success() {
-    let client = sideko_rest_api::Client::default()
-        .with_api_key_auth(&std::env::var("API_KEY").unwrap())
-        .with_cookie_auth(&std::env::var("API_KEY").unwrap());
-    let res = client
-        .check_preview(sideko_rest_api::CheckPreviewRequest {
-            doc_name: "my-project".to_string(),
         })
         .await;
     println!("{:?}", res);
@@ -808,20 +774,6 @@ async fn test_create_service_account_200_success_default() {
                     sideko_rest_api::models::RoleDefinitionIdEnum::ApiProjectAdmin }
                 ],
             },
-        })
-        .await;
-    println!("{:?}", res);
-    assert!(res.is_ok());
-}
-#[serial_test::serial]
-#[tokio::test]
-async fn test_vercel_webhook_202_success_default() {
-    let client = sideko_rest_api::Client::default()
-        .with_api_key_auth(&std::env::var("API_KEY").unwrap())
-        .with_cookie_auth(&std::env::var("API_KEY").unwrap());
-    let res = client
-        .vercel_webhook(sideko_rest_api::VercelWebhookRequest {
-            data: serde_json::json!({}),
         })
         .await;
     println!("{:?}", res);

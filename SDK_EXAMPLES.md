@@ -153,38 +153,6 @@ let res = client
 ```
 
     
-### Health Check
-
-
-**API Endpoint**: `GET /_health`
-
-
-#### Example Snippet
-
-```rust
-let client = sideko_rest_api::Client::default()
-    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
-    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
-let res = client.health_check().await;
-```
-
-    
-### Ping Check
-
-
-**API Endpoint**: `GET /_ping`
-
-
-#### Example Snippet
-
-```rust
-let client = sideko_rest_api::Client::default()
-    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
-    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
-let res = client.ping_check().await;
-```
-
-    
 ### List API links for doc version
 
 
@@ -403,26 +371,6 @@ let res = client
     .get_deployment(sideko_rest_api::GetDeploymentRequest {
         doc_name: "my-project".to_string(),
         deployment_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(),
-    })
-    .await;
-```
-
-    
-### A simple check to see if the requesting user has access to the preview doc project
-
-
-**API Endpoint**: `GET /doc_project/{doc_name}/preview`
-
-
-#### Example Snippet
-
-```rust
-let client = sideko_rest_api::Client::default()
-    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
-    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
-let res = client
-    .check_preview(sideko_rest_api::CheckPreviewRequest {
-        doc_name: "my-project".to_string(),
     })
     .await;
 ```
@@ -1114,26 +1062,6 @@ let res = client
                 sideko_rest_api::models::RoleDefinitionIdEnum::ApiProjectAdmin }
             ],
         },
-    })
-    .await;
-```
-
-    
-### webhooks sent to sideko by vercel
-
-
-**API Endpoint**: `POST /webhook/vercel`
-
-
-#### Example Snippet
-
-```rust
-let client = sideko_rest_api::Client::default()
-    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
-    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
-let res = client
-    .vercel_webhook(sideko_rest_api::VercelWebhookRequest {
-        data: serde_json::json!({}),
     })
     .await;
 ```

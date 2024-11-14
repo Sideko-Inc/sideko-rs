@@ -212,38 +212,6 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
             client.delete_service_account(req).await?;
             log::info!("API returned no content");
         }
-        SidekoCommand::HealthCheck => {
-            let mut client = sideko_rest_api::Client::default();
-            if let Ok(base_url) = std::env::var(base_url_env_var) {
-                client = client.with_base_url(&base_url);
-                log::debug!("Using custom base url: {base_url}");
-            }
-            if let Ok(val) = std::env::var("SIDEKO_REST_API_API_KEY_AUTH") {
-                log::debug!("Adding api-key auth 'ApiKeyAuth' (key=\"****\")");
-                client = client.with_api_key_auth(&val);
-            }
-            if let Ok(val) = std::env::var("SIDEKO_REST_API_COOKIE_AUTH") {
-                log::debug!("Adding api-key auth 'CookieAuth' (key=\"****\")");
-                client = client.with_cookie_auth(&val);
-            }
-            let res = client.health_check().await?;
-            println!(
-                "{}", serde_json::to_string_pretty(& res).unwrap_or_else(| _ |
-                serde_json::json!(& res) .to_string())
-            );
-        }
-        SidekoCommand::PingCheck => {
-            let mut client = sideko_rest_api::Client::default();
-            if let Ok(base_url) = std::env::var(base_url_env_var) {
-                client = client.with_base_url(&base_url);
-                log::debug!("Using custom base url: {base_url}");
-            }
-            let res = client.ping_check().await?;
-            println!(
-                "{}", serde_json::to_string_pretty(& res).unwrap_or_else(| _ |
-                serde_json::json!(& res) .to_string())
-            );
-        }
         SidekoCommand::ApiSubcommand(ApiSubcommand::List) => {
             let mut client = sideko_rest_api::Client::default();
             if let Ok(base_url) = std::env::var(base_url_env_var) {
@@ -557,26 +525,6 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
                 client = client.with_cookie_auth(&val);
             }
             let res = client.get_deployment(req).await?;
-            println!(
-                "{}", serde_json::to_string_pretty(& res).unwrap_or_else(| _ |
-                serde_json::json!(& res) .to_string())
-            );
-        }
-        SidekoCommand::CheckPreview(req) => {
-            let mut client = sideko_rest_api::Client::default();
-            if let Ok(base_url) = std::env::var(base_url_env_var) {
-                client = client.with_base_url(&base_url);
-                log::debug!("Using custom base url: {base_url}");
-            }
-            if let Ok(val) = std::env::var("SIDEKO_REST_API_API_KEY_AUTH") {
-                log::debug!("Adding api-key auth 'ApiKeyAuth' (key=\"****\")");
-                client = client.with_api_key_auth(&val);
-            }
-            if let Ok(val) = std::env::var("SIDEKO_REST_API_COOKIE_AUTH") {
-                log::debug!("Adding api-key auth 'CookieAuth' (key=\"****\")");
-                client = client.with_cookie_auth(&val);
-            }
-            let res = client.check_preview(req).await?;
             println!(
                 "{}", serde_json::to_string_pretty(& res).unwrap_or_else(| _ |
                 serde_json::json!(& res) .to_string())
@@ -1392,23 +1340,6 @@ async fn handle_cli(cli: SidekoCli) -> sideko_rest_api::SdkResult<()> {
                 serde_json::json!(& res) .to_string())
             );
         }
-        SidekoCommand::VercelWebhook(req) => {
-            let mut client = sideko_rest_api::Client::default();
-            if let Ok(base_url) = std::env::var(base_url_env_var) {
-                client = client.with_base_url(&base_url);
-                log::debug!("Using custom base url: {base_url}");
-            }
-            if let Ok(val) = std::env::var("SIDEKO_REST_API_API_KEY_AUTH") {
-                log::debug!("Adding api-key auth 'ApiKeyAuth' (key=\"****\")");
-                client = client.with_api_key_auth(&val);
-            }
-            if let Ok(val) = std::env::var("SIDEKO_REST_API_COOKIE_AUTH") {
-                log::debug!("Adding api-key auth 'CookieAuth' (key=\"****\")");
-                client = client.with_cookie_auth(&val);
-            }
-            client.vercel_webhook(req).await?;
-            log::info!("API returned no content");
-        }
         SidekoCommand::UpdateDocProjectTheme(req) => {
             let mut client = sideko_rest_api::Client::default();
             if let Ok(base_url) = std::env::var(base_url_env_var) {
@@ -1778,18 +1709,6 @@ enum SidekoCommand {
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
     ///
-    /// **Example:** `sideko-rest-api health-check`
-    #[command(name = "health-check")]
-    HealthCheck,
-    /// command
-    ///
-    /// **Example:** `sideko-rest-api ping-check`
-    #[command(name = "ping-check")]
-    PingCheck,
-    /// command
-    ///
-    /// **Required Auth:** CookieAuth OR ApiKeyAuth
-    ///
     /// **Example:** `sideko-rest-api list-api-links --doc-version 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a`
     #[command(name = "list-api-links")]
     ListApiLinks(sideko_rest_api::ListApiLinksRequest),
@@ -1855,13 +1774,6 @@ enum SidekoCommand {
     /// **Example:** `sideko-rest-api get-deployment --doc-name my-project --deployment-id 3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a`
     #[command(name = "get-deployment")]
     GetDeployment(sideko_rest_api::GetDeploymentRequest),
-    /// command
-    ///
-    /// **Required Auth:** CookieAuth OR ApiKeyAuth
-    ///
-    /// **Example:** `sideko-rest-api check-preview --doc-name my-project`
-    #[command(name = "check-preview")]
-    CheckPreview(sideko_rest_api::CheckPreviewRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
@@ -2065,13 +1977,6 @@ enum SidekoCommand {
     /// **Example:** `sideko-rest-api create-service-account --name 'Documentation Publisher Service Account' --object-roles '{"object_id":"3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a","object_type":"api_project","role_definition_id":"ApiProjectAdmin"}'`
     #[command(name = "create-service-account")]
     CreateServiceAccount(sideko_rest_api::CreateServiceAccountRequest),
-    /// command
-    ///
-    /// **Required Auth:** CookieAuth OR ApiKeyAuth
-    ///
-    /// **Example:** `sideko-rest-api vercel-webhook --data '{}'`
-    #[command(name = "vercel-webhook")]
-    VercelWebhook(sideko_rest_api::VercelWebhookRequest),
     /// command
     ///
     /// **Required Auth:** CookieAuth OR ApiKeyAuth
