@@ -6,12 +6,8 @@ impl SdkClient {
     pub(crate) fn new(base_client: crate::core::base_client::BaseClient) -> Self {
         Self { base_client }
     }
-    pub fn config(
-        &self,
-    ) -> crate::resources::sdk::config::resource_client::ConfigClient {
-        crate::resources::sdk::config::resource_client::ConfigClient::new(
-            self.base_client.clone(),
-        )
+    pub fn config(&self) -> crate::resources::sdk::config::resource_client::ConfigClient {
+        crate::resources::sdk::config::resource_client::ConfigClient::new(self.base_client.clone())
     }
     /// no description available
     pub async fn list(
@@ -30,10 +26,7 @@ impl SdkClient {
             .apply_auths_to_builder(builder, &["ApiKeyAuth", "CookieAuth"]);
         let mut response = builder.send().await?;
         response = self.base_client.error_for_status(response).await?;
-        crate::core::response::process_json::<
-            Vec<crate::models::SdkGeneration>,
-        >(response)
-            .await
+        crate::core::response::process_json::<Vec<crate::models::SdkGeneration>>(response).await
     }
     /// no description available
     pub async fn generate(
@@ -45,19 +38,24 @@ impl SdkClient {
         builder = builder.header("x-sideko-sdk-language", "rust");
         let mut form_data = reqwest::multipart::Form::new();
         if let Some(val) = &request.data.api_version {
-            form_data = form_data
-                .part("api_version", reqwest::multipart::Part::text(val.to_string()));
-        }
-        form_data = form_data
-            .part("config", reqwest::multipart::Part::from(&request.data.config));
-        form_data = form_data
-            .part(
-                "language",
-                reqwest::multipart::Part::text(request.data.language.to_string()),
+            form_data = form_data.part(
+                "api_version",
+                reqwest::multipart::Part::text(crate::core::params::format_string_param(&val)),
             );
+        }
+        form_data = form_data.part(
+            "config",
+            reqwest::multipart::Part::from(&request.data.config),
+        );
+        form_data = form_data.part(
+            "language",
+            reqwest::multipart::Part::text(request.data.language.to_string()),
+        );
         if let Some(val) = &request.data.sdk_version {
-            form_data = form_data
-                .part("sdk_version", reqwest::multipart::Part::text(val.to_string()));
+            form_data = form_data.part(
+                "sdk_version",
+                reqwest::multipart::Part::text(val.to_string()),
+            );
         }
         builder = builder.multipart(form_data);
         builder = self
@@ -77,26 +75,29 @@ impl SdkClient {
         builder = builder.header("x-sideko-sdk-language", "rust");
         let mut form_data = reqwest::multipart::Form::new();
         if let Some(val) = &request.data.api_version {
-            form_data = form_data
-                .part("api_version", reqwest::multipart::Part::text(val.to_string()));
+            form_data = form_data.part(
+                "api_version",
+                reqwest::multipart::Part::text(crate::core::params::format_string_param(&val)),
+            );
         }
-        form_data = form_data
-            .part("config", reqwest::multipart::Part::from(&request.data.config));
-        form_data = form_data
-            .part(
-                "prev_sdk_git",
-                reqwest::multipart::Part::from(&request.data.prev_sdk_git),
-            );
-        form_data = form_data
-            .part(
-                "prev_sdk_id",
-                reqwest::multipart::Part::text(request.data.prev_sdk_id.to_string()),
-            );
-        form_data = form_data
-            .part(
-                "sdk_version",
-                reqwest::multipart::Part::text(request.data.sdk_version.to_string()),
-            );
+        form_data = form_data.part(
+            "config",
+            reqwest::multipart::Part::from(&request.data.config),
+        );
+        form_data = form_data.part(
+            "prev_sdk_git",
+            reqwest::multipart::Part::from(&request.data.prev_sdk_git),
+        );
+        form_data = form_data.part(
+            "prev_sdk_id",
+            reqwest::multipart::Part::text(request.data.prev_sdk_id.to_string()),
+        );
+        form_data = form_data.part(
+            "sdk_version",
+            reqwest::multipart::Part::text(crate::core::params::format_string_param(
+                &request.data.sdk_version,
+            )),
+        );
         builder = builder.multipart(form_data);
         builder = self
             .base_client
@@ -115,19 +116,21 @@ impl SdkClient {
         builder = builder.header("x-sideko-sdk-language", "rust");
         let mut form_data = reqwest::multipart::Form::new();
         if let Some(val) = &request.data.base_url {
-            form_data = form_data
-                .part("base_url", reqwest::multipart::Part::text(val.to_string()));
+            form_data = form_data.part("base_url", reqwest::multipart::Part::text(val.to_string()));
         }
-        form_data = form_data
-            .part(
-                "language",
-                reqwest::multipart::Part::text(request.data.language.to_string()),
-            );
-        form_data = form_data
-            .part("openapi", reqwest::multipart::Part::from(&request.data.openapi));
+        form_data = form_data.part(
+            "language",
+            reqwest::multipart::Part::text(request.data.language.to_string()),
+        );
+        form_data = form_data.part(
+            "openapi",
+            reqwest::multipart::Part::from(&request.data.openapi),
+        );
         if let Some(val) = &request.data.package_name {
-            form_data = form_data
-                .part("package_name", reqwest::multipart::Part::text(val.to_string()));
+            form_data = form_data.part(
+                "package_name",
+                reqwest::multipart::Part::text(val.to_string()),
+            );
         }
         builder = builder.multipart(form_data);
         builder = self

@@ -33,11 +33,15 @@ impl ConfigClient {
         builder = builder.header("x-sideko-sdk-language", "rust");
         let mut form_data = reqwest::multipart::Form::new();
         if let Some(val) = &request.data.api_version {
-            form_data = form_data
-                .part("api_version", reqwest::multipart::Part::text(val.to_string()));
+            form_data = form_data.part(
+                "api_version",
+                reqwest::multipart::Part::text(crate::core::params::format_string_param(&val)),
+            );
         }
-        form_data = form_data
-            .part("config", reqwest::multipart::Part::from(&request.data.config));
+        form_data = form_data.part(
+            "config",
+            reqwest::multipart::Part::from(&request.data.config),
+        );
         builder = builder.multipart(form_data);
         builder = self
             .base_client
