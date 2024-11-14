@@ -1,53 +1,9 @@
 
-## SDK Usage Examples
+# SDK Usage Examples
 
 
-### Delete a API specification collection
-
-
-**API Endpoint**: `DELETE /api/{api_name}`
-
-
-#### Example Snippet
-
-```rust
-let client = sideko_rest_api::Client::default()
-    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
-    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
-let res = client
-    .api()
-    .delete(sideko_rest_api::resources::api::DeleteRequest {
-        api_name: "my-project".to_string(),
-    })
-    .await;
-```
-
-    
-### Delete an API Specification and it's associated metadata
-
-
-**API Endpoint**: `DELETE /api/{api_name}/spec/{api_version}`
-
-
-#### Example Snippet
-
-```rust
-let client = sideko_rest_api::Client::default()
-    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
-    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
-let res = client
-    .api()
-    .spec()
-    .delete(sideko_rest_api::resources::api::spec::DeleteRequest {
-        api_name: "my-project".to_string(),
-        api_version: sideko_rest_api::models::ApiVersion::StrEnum(
-            sideko_rest_api::models::VersionTypeEnum::Latest,
-        ),
-    })
-    .await;
-```
-
-    
+## Module 
+            
 ### Removes an API link
 
 
@@ -177,27 +133,6 @@ let res = client
 ```
 
     
-### Delete role and associated permissions
-
-
-**API Endpoint**: `DELETE /role/{id}`
-
-
-#### Example Snippet
-
-```rust
-let client = sideko_rest_api::Client::default()
-    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
-    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
-let res = client
-    .role()
-    .delete(sideko_rest_api::resources::role::DeleteRequest {
-        id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(),
-    })
-    .await;
-```
-
-    
 ### Delete a service account
 
 
@@ -213,172 +148,6 @@ let client = sideko_rest_api::Client::default()
 let res = client
     .delete_service_account(sideko_rest_api::DeleteServiceAccountRequest {
         id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(),
-    })
-    .await;
-```
-
-    
-### Health Check
-
-
-**API Endpoint**: `GET /_health`
-
-
-#### Example Snippet
-
-```rust
-let client = sideko_rest_api::Client::default()
-    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
-    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
-let res = client.health_check().await;
-```
-
-    
-### Ping Check
-
-
-**API Endpoint**: `GET /_ping`
-
-
-#### Example Snippet
-
-```rust
-let client = sideko_rest_api::Client::default()
-    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
-    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
-let res = client.ping_check().await;
-```
-
-    
-### List your API specification collections
-
-
-**API Endpoint**: `GET /api`
-
-
-#### Example Snippet
-
-```rust
-let client = sideko_rest_api::Client::default()
-    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
-    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
-let res = client.api().list().await;
-```
-
-    
-### Get a API Specification collection
-
-
-**API Endpoint**: `GET /api/{api_name}`
-
-
-#### Example Snippet
-
-```rust
-let client = sideko_rest_api::Client::default()
-    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
-    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
-let res = client
-    .api()
-    .get(sideko_rest_api::resources::api::GetRequest {
-        api_name: "my-project".to_string(),
-    })
-    .await;
-```
-
-    
-### List specs of a collection
-
-
-**API Endpoint**: `GET /api/{api_name}/spec`
-
-
-#### Example Snippet
-
-```rust
-let client = sideko_rest_api::Client::default()
-    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
-    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
-let res = client
-    .api()
-    .spec()
-    .list(sideko_rest_api::resources::api::spec::ListRequest {
-        api_name: "my-project".to_string(),
-    })
-    .await;
-```
-
-    
-### Get API specification metadata
-
-
-**API Endpoint**: `GET /api/{api_name}/spec/{api_version}`
-
-
-#### Example Snippet
-
-```rust
-let client = sideko_rest_api::Client::default()
-    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
-    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
-let res = client
-    .api()
-    .spec()
-    .get(sideko_rest_api::resources::api::spec::GetRequest {
-        api_name: "my-project".to_string(),
-        api_version: sideko_rest_api::models::ApiVersion::StrEnum(
-            sideko_rest_api::models::VersionTypeEnum::Latest,
-        ),
-    })
-    .await;
-```
-
-    
-### Get OpenAPI specification
-
-
-**API Endpoint**: `GET /api/{api_name}/spec/{api_version}/openapi`
-
-
-#### Example Snippet
-
-```rust
-let client = sideko_rest_api::Client::default()
-    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
-    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
-let res = client
-    .api()
-    .spec()
-    .get_openapi(sideko_rest_api::resources::api::spec::GetOpenapiRequest {
-        api_name: "my-project".to_string(),
-        api_version: sideko_rest_api::models::ApiVersion::StrEnum(
-            sideko_rest_api::models::VersionTypeEnum::Latest,
-        ),
-    })
-    .await;
-```
-
-    
-### Get Stats about the specification
-
-
-**API Endpoint**: `GET /api/{api_name}/spec/{api_version}/stats`
-
-
-#### Example Snippet
-
-```rust
-let client = sideko_rest_api::Client::default()
-    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
-    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
-let res = client
-    .api()
-    .spec()
-    .get_stats(sideko_rest_api::resources::api::spec::GetStatsRequest {
-        api_name: "my-project".to_string(),
-        api_version: sideko_rest_api::models::ApiVersion::StrEnum(
-            sideko_rest_api::models::VersionTypeEnum::Latest,
-        ),
     })
     .await;
 ```
@@ -607,26 +376,6 @@ let res = client
 ```
 
     
-### A simple check to see if the requesting user has access to the preview doc project
-
-
-**API Endpoint**: `GET /doc_project/{doc_name}/preview`
-
-
-#### Example Snippet
-
-```rust
-let client = sideko_rest_api::Client::default()
-    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
-    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
-let res = client
-    .check_preview(sideko_rest_api::CheckPreviewRequest {
-        doc_name: "my-project".to_string(),
-    })
-    .await;
-```
-
-    
 ### Get the theme attached to a documentation project
 
 
@@ -813,48 +562,6 @@ let res = client.get_organization_theme().await;
 ```
 
     
-### List roles
-
-
-**API Endpoint**: `GET /role`
-
-
-#### Example Snippet
-
-```rust
-let client = sideko_rest_api::Client::default()
-    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
-    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
-let res = client
-    .role()
-    .list(sideko_rest_api::resources::role::ListRequest {
-        ..Default::default()
-    })
-    .await;
-```
-
-    
-### 
-
-
-**API Endpoint**: `GET /sdk`
-
-
-#### Example Snippet
-
-```rust
-let client = sideko_rest_api::Client::default()
-    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
-    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
-let res = client
-    .sdk()
-    .list(sideko_rest_api::resources::sdk::ListRequest {
-        ..Default::default()
-    })
-    .await;
-```
-
-    
 ### Get current user profile
 
 
@@ -918,66 +625,6 @@ let client = sideko_rest_api::Client::default()
 let res = client
     .get_service_account(sideko_rest_api::GetServiceAccountRequest {
         id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(),
-    })
-    .await;
-```
-
-    
-### Update an existing API Specification collection
-
-
-**API Endpoint**: `PATCH /api/{api_name}`
-
-
-#### Example Snippet
-
-```rust
-let client = sideko_rest_api::Client::default()
-    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
-    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
-let res = client
-    .api()
-    .patch(sideko_rest_api::resources::api::PatchRequest {
-        api_name: "my-project".to_string(),
-        data: sideko_rest_api::models::UpdateApi {
-            name: Some("my-new-api-name".to_string()),
-        },
-    })
-    .await;
-```
-
-    
-### Update an API Specification and/or metadata
-
-
-**API Endpoint**: `PATCH /api/{api_name}/spec/{api_version}`
-
-
-#### Example Snippet
-
-```rust
-let client = sideko_rest_api::Client::default()
-    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
-    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
-let res = client
-    .api()
-    .spec()
-    .patch(sideko_rest_api::resources::api::spec::PatchRequest {
-        api_name: "my-project".to_string(),
-        api_version: sideko_rest_api::models::ApiVersion::StrEnum(
-            sideko_rest_api::models::VersionTypeEnum::Latest,
-        ),
-        data: sideko_rest_api::models::UpdateApiSpec {
-            mock_server_enabled: Some(true),
-            notes: Some(
-                "<p>This version includes a number of excellent improvements</p>"
-                    .to_string(),
-            ),
-            openapi: Some(
-                sideko_rest_api::UploadFile::from_path("tests/file.pdf").unwrap(),
-            ),
-            version: Some("string".to_string()),
-        },
     })
     .await;
 ```
@@ -1125,61 +772,6 @@ let res = client
         id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(),
         data: sideko_rest_api::models::UpdateAsset {
             name: Some("string".to_string()),
-        },
-    })
-    .await;
-```
-
-    
-### Create new API specification collection
-
-
-**API Endpoint**: `POST /api`
-
-
-#### Example Snippet
-
-```rust
-let client = sideko_rest_api::Client::default()
-    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
-    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
-let res = client
-    .api()
-    .create(sideko_rest_api::resources::api::CreateRequest {
-        data: sideko_rest_api::models::NewApi {
-            name: "my-api-spec".to_string(),
-        },
-    })
-    .await;
-```
-
-    
-### Add a new API specification
-
-
-**API Endpoint**: `POST /api/{api_name}/spec`
-
-
-#### Example Snippet
-
-```rust
-let client = sideko_rest_api::Client::default()
-    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
-    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
-let res = client
-    .api()
-    .spec()
-    .create(sideko_rest_api::resources::api::spec::CreateRequest {
-        api_name: "my-project".to_string(),
-        data: sideko_rest_api::models::NewApiSpec {
-            mock_server_enabled: Some(true),
-            notes: Some(
-                "<p>This version includes a number of excellent improvements</p>"
-                    .to_string(),
-            ),
-            openapi: sideko_rest_api::UploadFile::from_path("tests/file.pdf")
-                .unwrap(),
-            version: "patch".to_string(),
         },
     })
     .await;
@@ -1416,186 +1008,7 @@ let client = sideko_rest_api::Client::default()
 let res = client
     .upload_assets(sideko_rest_api::UploadAssetsRequest {
         data: sideko_rest_api::models::File {
-            file: sideko_rest_api::UploadFile::from_path("tests/file.pdf").unwrap(),
-        },
-    })
-    .await;
-```
-
-    
-### Create new role
-
-
-**API Endpoint**: `POST /role`
-
-
-#### Example Snippet
-
-```rust
-let client = sideko_rest_api::Client::default()
-    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
-    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
-let res = client
-    .role()
-    .create(sideko_rest_api::resources::role::CreateRequest {
-        data: sideko_rest_api::models::NewRole {
-            object_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(),
-            object_type: sideko_rest_api::models::ObjectTypeEnum::ApiProject,
-            role_definition_id: sideko_rest_api::models::RoleDefinitionIdEnum::ApiProjectAdmin,
-            user_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(),
-        },
-    })
-    .await;
-```
-
-    
-### 
-
-
-**API Endpoint**: `POST /sdk`
-
-
-#### Example Snippet
-
-```rust
-let client = sideko_rest_api::Client::default()
-    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
-    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
-let res = client
-    .sdk()
-    .generate(sideko_rest_api::resources::sdk::GenerateRequest {
-        data: sideko_rest_api::models::NewSdk {
-            api_version: Some(
-                sideko_rest_api::models::ApiVersion::StrEnum(
-                    sideko_rest_api::models::VersionTypeEnum::Latest,
-                ),
-            ),
-            config: sideko_rest_api::UploadFile::from_path("tests/file.pdf")
-                .unwrap(),
-            language: sideko_rest_api::models::SdkLanguageEnum::Go,
-            sdk_version: Some("0.1.0".to_string()),
-        },
-    })
-    .await;
-```
-
-    
-### 
-Creates a sdk config with default configurations for the api/api version
-
-**API Endpoint**: `POST /sdk/config/init`
-
-
-#### Example Snippet
-
-```rust
-let client = sideko_rest_api::Client::default()
-    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
-    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
-let res = client
-    .sdk()
-    .config()
-    .init()
-    .init(sideko_rest_api::resources::sdk::config::init::InitRequest {
-        data: sideko_rest_api::models::InitSdkConfig {
-            api_name: "my-project".to_string(),
-            api_version: Some(
-                sideko_rest_api::models::ApiVersion::StrEnum(
-                    sideko_rest_api::models::VersionTypeEnum::Latest,
-                ),
-            ),
-        },
-    })
-    .await;
-```
-
-    
-### 
-Updates provided config with missing default configurations for the api version
-
-**API Endpoint**: `POST /sdk/config/sync`
-
-
-#### Example Snippet
-
-```rust
-let client = sideko_rest_api::Client::default()
-    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
-    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
-let res = client
-    .sdk()
-    .config()
-    .sync()
-    .sync(sideko_rest_api::resources::sdk::config::sync::SyncRequest {
-        data: sideko_rest_api::models::SyncSdkConfig {
-            api_version: Some(
-                sideko_rest_api::models::ApiVersion::StrEnum(
-                    sideko_rest_api::models::VersionTypeEnum::Latest,
-                ),
-            ),
-            config: sideko_rest_api::UploadFile::from_path("tests/file.pdf").unwrap(),
-        },
-    })
-    .await;
-```
-
-    
-### 
-
-
-**API Endpoint**: `POST /sdk/update`
-
-
-#### Example Snippet
-
-```rust
-let client = sideko_rest_api::Client::default()
-    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
-    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
-let res = client
-    .sdk()
-    .update()
-    .update(sideko_rest_api::resources::sdk::update::UpdateRequest {
-        data: sideko_rest_api::models::UpdateSdk {
-            api_version: Some(
-                sideko_rest_api::models::ApiVersion::StrEnum(
-                    sideko_rest_api::models::VersionTypeEnum::Latest,
-                ),
-            ),
-            config: sideko_rest_api::UploadFile::from_path("tests/file.pdf")
-                .unwrap(),
-            prev_sdk_git: sideko_rest_api::UploadFile::from_path("tests/file.pdf")
-                .unwrap(),
-            prev_sdk_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(),
-            sdk_version: "patch".to_string(),
-        },
-    })
-    .await;
-```
-
-    
-### Generate SDK outside of Sideko versioning flow
-
-
-**API Endpoint**: `POST /stateless/generate_sdk`
-
-
-#### Example Snippet
-
-```rust
-let client = sideko_rest_api::Client::default()
-    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
-    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
-let res = client
-    .stateless()
-    .generate_sdk()
-    .generate_stateless(sideko_rest_api::resources::stateless::generate_sdk::GenerateStatelessRequest {
-        data: sideko_rest_api::models::NewStatelessSdk {
-            base_url: Some("http://127.0.0.1:8080/api".to_string()),
-            language: sideko_rest_api::models::SdkLanguageEnum::Go,
-            openapi: sideko_rest_api::UploadFile::from_path("tests/file.pdf")
-                .unwrap(),
-            package_name: Some("my_sdk".to_string()),
+            file: sideko_rest_api::UploadFile::from_path("uploads/file.pdf").unwrap(),
         },
     })
     .await;
@@ -1649,26 +1062,6 @@ let res = client
                 sideko_rest_api::models::RoleDefinitionIdEnum::ApiProjectAdmin }
             ],
         },
-    })
-    .await;
-```
-
-    
-### webhooks sent to sideko by vercel
-
-
-**API Endpoint**: `POST /webhook/vercel`
-
-
-#### Example Snippet
-
-```rust
-let client = sideko_rest_api::Client::default()
-    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
-    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
-let res = client
-    .vercel_webhook(sideko_rest_api::VercelWebhookRequest {
-        data: serde_json::json!({}),
     })
     .await;
 ```
@@ -1733,6 +1126,558 @@ let res = client
             light_bg_color: Some("#FFFFFF".to_string()),
             light_navbar_color: Some("#FFFFFF".to_string()),
             light_navbar_text_color: Some("#FFFFFF".to_string()),
+        },
+    })
+    .await;
+```
+
+    
+## Module api
+            
+### Delete a API specification collection
+
+
+**API Endpoint**: `DELETE /api/{api_name}`
+
+
+#### Example Snippet
+
+```rust
+let client = sideko_rest_api::Client::default()
+    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
+    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
+let res = client
+    .api()
+    .delete(sideko_rest_api::resources::api::DeleteRequest {
+        api_name: "my-project".to_string(),
+    })
+    .await;
+```
+
+    
+### List your API specification collections
+
+
+**API Endpoint**: `GET /api`
+
+
+#### Example Snippet
+
+```rust
+let client = sideko_rest_api::Client::default()
+    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
+    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
+let res = client.api().list().await;
+```
+
+    
+### Get a API Specification collection
+
+
+**API Endpoint**: `GET /api/{api_name}`
+
+
+#### Example Snippet
+
+```rust
+let client = sideko_rest_api::Client::default()
+    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
+    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
+let res = client
+    .api()
+    .get(sideko_rest_api::resources::api::GetRequest {
+        api_name: "my-project".to_string(),
+    })
+    .await;
+```
+
+    
+### Update an existing API Specification collection
+
+
+**API Endpoint**: `PATCH /api/{api_name}`
+
+
+#### Example Snippet
+
+```rust
+let client = sideko_rest_api::Client::default()
+    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
+    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
+let res = client
+    .api()
+    .patch(sideko_rest_api::resources::api::PatchRequest {
+        api_name: "my-project".to_string(),
+        data: sideko_rest_api::models::UpdateApi {
+            name: Some("my-new-api-name".to_string()),
+        },
+    })
+    .await;
+```
+
+    
+### Create new API specification collection
+
+
+**API Endpoint**: `POST /api`
+
+
+#### Example Snippet
+
+```rust
+let client = sideko_rest_api::Client::default()
+    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
+    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
+let res = client
+    .api()
+    .create(sideko_rest_api::resources::api::CreateRequest {
+        data: sideko_rest_api::models::NewApi {
+            name: "my-api-spec".to_string(),
+        },
+    })
+    .await;
+```
+
+    
+## Module api.spec
+            
+### Delete an API Specification and it's associated metadata
+
+
+**API Endpoint**: `DELETE /api/{api_name}/spec/{api_version}`
+
+
+#### Example Snippet
+
+```rust
+let client = sideko_rest_api::Client::default()
+    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
+    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
+let res = client
+    .api()
+    .spec()
+    .delete(sideko_rest_api::resources::api::spec::DeleteRequest {
+        api_name: "my-project".to_string(),
+        api_version: sideko_rest_api::models::ApiVersion::StrEnum(
+            sideko_rest_api::models::VersionTypeEnum::Latest,
+        ),
+    })
+    .await;
+```
+
+    
+### List specs of a collection
+
+
+**API Endpoint**: `GET /api/{api_name}/spec`
+
+
+#### Example Snippet
+
+```rust
+let client = sideko_rest_api::Client::default()
+    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
+    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
+let res = client
+    .api()
+    .spec()
+    .list(sideko_rest_api::resources::api::spec::ListRequest {
+        api_name: "my-project".to_string(),
+    })
+    .await;
+```
+
+    
+### Get API specification metadata
+
+
+**API Endpoint**: `GET /api/{api_name}/spec/{api_version}`
+
+
+#### Example Snippet
+
+```rust
+let client = sideko_rest_api::Client::default()
+    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
+    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
+let res = client
+    .api()
+    .spec()
+    .get(sideko_rest_api::resources::api::spec::GetRequest {
+        api_name: "my-project".to_string(),
+        api_version: sideko_rest_api::models::ApiVersion::StrEnum(
+            sideko_rest_api::models::VersionTypeEnum::Latest,
+        ),
+    })
+    .await;
+```
+
+    
+### Update an API Specification and/or metadata
+
+
+**API Endpoint**: `PATCH /api/{api_name}/spec/{api_version}`
+
+
+#### Example Snippet
+
+```rust
+let client = sideko_rest_api::Client::default()
+    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
+    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
+let res = client
+    .api()
+    .spec()
+    .patch(sideko_rest_api::resources::api::spec::PatchRequest {
+        api_name: "my-project".to_string(),
+        api_version: sideko_rest_api::models::ApiVersion::StrEnum(
+            sideko_rest_api::models::VersionTypeEnum::Latest,
+        ),
+        data: sideko_rest_api::models::UpdateApiSpec {
+            mock_server_enabled: Some(true),
+            notes: Some(
+                "<p>This version includes a number of excellent improvements</p>"
+                    .to_string(),
+            ),
+            openapi: Some(
+                sideko_rest_api::UploadFile::from_path("openapi.yaml").unwrap(),
+            ),
+            version: Some("string".to_string()),
+        },
+    })
+    .await;
+```
+
+    
+### Add a new API specification
+
+
+**API Endpoint**: `POST /api/{api_name}/spec`
+
+
+#### Example Snippet
+
+```rust
+let client = sideko_rest_api::Client::default()
+    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
+    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
+let res = client
+    .api()
+    .spec()
+    .create(sideko_rest_api::resources::api::spec::CreateRequest {
+        api_name: "my-project".to_string(),
+        data: sideko_rest_api::models::NewApiSpec {
+            mock_server_enabled: Some(true),
+            notes: Some(
+                "<p>This version includes a number of excellent improvements</p>"
+                    .to_string(),
+            ),
+            openapi: sideko_rest_api::UploadFile::from_path("openapi.yaml").unwrap(),
+            version: sideko_rest_api::models::VersionOrBump::StrEnum(
+                sideko_rest_api::models::VersionBumpEnum::Major,
+            ),
+        },
+    })
+    .await;
+```
+
+    
+## Module role
+            
+### Delete role and associated permissions
+
+
+**API Endpoint**: `DELETE /role/{id}`
+
+
+#### Example Snippet
+
+```rust
+let client = sideko_rest_api::Client::default()
+    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
+    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
+let res = client
+    .role()
+    .delete(sideko_rest_api::resources::role::DeleteRequest {
+        id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(),
+    })
+    .await;
+```
+
+    
+### List roles
+
+
+**API Endpoint**: `GET /role`
+
+
+#### Example Snippet
+
+```rust
+let client = sideko_rest_api::Client::default()
+    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
+    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
+let res = client
+    .role()
+    .list(sideko_rest_api::resources::role::ListRequest {
+        ..Default::default()
+    })
+    .await;
+```
+
+    
+### Create new role
+
+
+**API Endpoint**: `POST /role`
+
+
+#### Example Snippet
+
+```rust
+let client = sideko_rest_api::Client::default()
+    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
+    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
+let res = client
+    .role()
+    .create(sideko_rest_api::resources::role::CreateRequest {
+        data: sideko_rest_api::models::NewRole {
+            object_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(),
+            object_type: sideko_rest_api::models::ObjectTypeEnum::ApiProject,
+            role_definition_id: sideko_rest_api::models::RoleDefinitionIdEnum::ApiProjectAdmin,
+            user_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(),
+        },
+    })
+    .await;
+```
+
+    
+## Module api.spec.openapi
+            
+### Get OpenAPI specification
+
+
+**API Endpoint**: `GET /api/{api_name}/spec/{api_version}/openapi`
+
+
+#### Example Snippet
+
+```rust
+let client = sideko_rest_api::Client::default()
+    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
+    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
+let res = client
+    .api()
+    .spec()
+    .openapi()
+    .get_openapi(sideko_rest_api::resources::api::spec::openapi::GetOpenapiRequest {
+        api_name: "my-project".to_string(),
+        api_version: sideko_rest_api::models::ApiVersion::StrEnum(
+            sideko_rest_api::models::VersionTypeEnum::Latest,
+        ),
+    })
+    .await;
+```
+
+    
+## Module api.spec.stats
+            
+### Get Stats about the specification
+
+
+**API Endpoint**: `GET /api/{api_name}/spec/{api_version}/stats`
+
+
+#### Example Snippet
+
+```rust
+let client = sideko_rest_api::Client::default()
+    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
+    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
+let res = client
+    .api()
+    .spec()
+    .stats()
+    .get_stats(sideko_rest_api::resources::api::spec::stats::GetStatsRequest {
+        api_name: "my-project".to_string(),
+        api_version: sideko_rest_api::models::ApiVersion::StrEnum(
+            sideko_rest_api::models::VersionTypeEnum::Latest,
+        ),
+    })
+    .await;
+```
+
+    
+## Module sdk
+            
+### 
+
+
+**API Endpoint**: `GET /sdk`
+
+
+#### Example Snippet
+
+```rust
+let client = sideko_rest_api::Client::default()
+    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
+    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
+let res = client
+    .sdk()
+    .list(sideko_rest_api::resources::sdk::ListRequest {
+        ..Default::default()
+    })
+    .await;
+```
+
+    
+### 
+
+
+**API Endpoint**: `POST /sdk`
+
+
+#### Example Snippet
+
+```rust
+let client = sideko_rest_api::Client::default()
+    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
+    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
+let res = client
+    .sdk()
+    .generate(sideko_rest_api::resources::sdk::GenerateRequest {
+        data: sideko_rest_api::models::NewSdk {
+            api_version: Some(
+                sideko_rest_api::models::ApiVersion::StrEnum(
+                    sideko_rest_api::models::VersionTypeEnum::Latest,
+                ),
+            ),
+            config: sideko_rest_api::UploadFile::from_path("uploads/file.pdf")
+                .unwrap(),
+            language: sideko_rest_api::models::SdkLanguageEnum::Go,
+            sdk_version: Some("0.1.0".to_string()),
+        },
+    })
+    .await;
+```
+
+    
+### 
+
+
+**API Endpoint**: `POST /sdk/update`
+
+
+#### Example Snippet
+
+```rust
+let client = sideko_rest_api::Client::default()
+    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
+    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
+let res = client
+    .sdk()
+    .update(sideko_rest_api::resources::sdk::UpdateRequest {
+        data: sideko_rest_api::models::UpdateSdk {
+            api_version: Some(
+                sideko_rest_api::models::ApiVersion::StrEnum(
+                    sideko_rest_api::models::VersionTypeEnum::Latest,
+                ),
+            ),
+            config: sideko_rest_api::UploadFile::from_path("uploads/file.pdf")
+                .unwrap(),
+            prev_sdk_git: sideko_rest_api::UploadFile::from_path("uploads/file.pdf")
+                .unwrap(),
+            prev_sdk_id: "3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a".to_string(),
+            sdk_version: sideko_rest_api::models::VersionOrBump::StrEnum(
+                sideko_rest_api::models::VersionBumpEnum::Major,
+            ),
+        },
+    })
+    .await;
+```
+
+    
+### Generate SDK outside of Sideko versioning flow
+
+
+**API Endpoint**: `POST /stateless/generate_sdk`
+
+
+#### Example Snippet
+
+```rust
+let client = sideko_rest_api::Client::default()
+    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
+    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
+let res = client
+    .sdk()
+    .generate_stateless(sideko_rest_api::resources::sdk::GenerateStatelessRequest {
+        data: sideko_rest_api::models::NewStatelessSdk {
+            base_url: Some("http://127.0.0.1:8080/api".to_string()),
+            language: sideko_rest_api::models::SdkLanguageEnum::Go,
+            openapi: sideko_rest_api::UploadFile::from_path("openapi.yaml").unwrap(),
+            package_name: Some("my_sdk".to_string()),
+        },
+    })
+    .await;
+```
+
+    
+## Module sdk.config
+            
+### 
+Creates a sdk config with default configurations for the api/api version
+
+**API Endpoint**: `POST /sdk/config/init`
+
+
+#### Example Snippet
+
+```rust
+let client = sideko_rest_api::Client::default()
+    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
+    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
+let res = client
+    .sdk()
+    .config()
+    .init(sideko_rest_api::resources::sdk::config::InitRequest {
+        data: sideko_rest_api::models::InitSdkConfig {
+            api_name: "my-project".to_string(),
+            api_version: Some(
+                sideko_rest_api::models::ApiVersion::StrEnum(
+                    sideko_rest_api::models::VersionTypeEnum::Latest,
+                ),
+            ),
+        },
+    })
+    .await;
+```
+
+    
+### 
+Updates provided config with missing default configurations for the api version
+
+**API Endpoint**: `POST /sdk/config/sync`
+
+
+#### Example Snippet
+
+```rust
+let client = sideko_rest_api::Client::default()
+    .with_api_key_auth(&std::env::var("API_KEY").unwrap())
+    .with_cookie_auth(&std::env::var("API_KEY").unwrap());
+let res = client
+    .sdk()
+    .config()
+    .sync(sideko_rest_api::resources::sdk::config::SyncRequest {
+        data: sideko_rest_api::models::SyncSdkConfig {
+            api_version: Some(
+                sideko_rest_api::models::ApiVersion::StrEnum(
+                    sideko_rest_api::models::VersionTypeEnum::Latest,
+                ),
+            ),
+            config: sideko_rest_api::UploadFile::from_path("uploads/file.pdf")
+                .unwrap(),
         },
     })
     .await;

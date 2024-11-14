@@ -16,7 +16,14 @@ impl ApiClient {
         &self,
         request: super::request_types::DeleteRequest,
     ) -> crate::SdkResult<()> {
-        let url = self.base_client.build_url(&format!("/api/{}", & request.api_name));
+        let url = self
+            .base_client
+            .build_url(
+                &format!(
+                    "/api/{}", crate ::core::params::format_string_param(& request
+                    .api_name)
+                ),
+            );
         let mut builder = reqwest::Client::default().delete(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         builder = self
@@ -43,7 +50,14 @@ impl ApiClient {
         &self,
         request: super::request_types::GetRequest,
     ) -> crate::SdkResult<crate::models::Api> {
-        let url = self.base_client.build_url(&format!("/api/{}", & request.api_name));
+        let url = self
+            .base_client
+            .build_url(
+                &format!(
+                    "/api/{}", crate ::core::params::format_string_param(& request
+                    .api_name)
+                ),
+            );
         let mut builder = reqwest::Client::default().get(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         builder = self
@@ -58,7 +72,14 @@ impl ApiClient {
         &self,
         request: super::request_types::PatchRequest,
     ) -> crate::SdkResult<crate::models::Api> {
-        let url = self.base_client.build_url(&format!("/api/{}", & request.api_name));
+        let url = self
+            .base_client
+            .build_url(
+                &format!(
+                    "/api/{}", crate ::core::params::format_string_param(& request
+                    .api_name)
+                ),
+            );
         let mut builder = reqwest::Client::default().patch(&url);
         builder = builder.header("x-sideko-sdk-language", "rust");
         builder = builder.header("content-type", "application/json");
